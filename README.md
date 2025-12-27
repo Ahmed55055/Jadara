@@ -4,13 +4,23 @@
 [![SQL Server](https://img.shields.io/badge/SQL%20Server-2022-CC2927?style=flat&logo=microsoft-sql-server)](https://www.microsoft.com/sql-server)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=flat&logo=docker)](https://www.docker.com/)
 
-Employee reward management system for Fayoum University. Automates reward calculations based on teaching sessions, type of the reward. and generates Ministry of Finance documentation.
+![Status](https://img.shields.io/badge/Status-In%20Development-yellow)
+![Backend](https://img.shields.io/badge/Backend-Testing%20Phase-blue)
+![Frontend](https://img.shields.io/badge/Frontend-Planned-orange)
+
+Employee reward management system for Fayoum University. Automates reward calculations based on teaching sessions, reward types, and generates Ministry of Finance documentation.
+
+## Background
+
+This system was developed to automate repetitive administrative tasks at Fayoum University, specifically targeting the manual process of calculating employee rewards, applying business rules, and generating financial documentation. The solution transforms hours of manual calculations, rule application, and Excel/legal document preparation into an automated workflow requiring only simple input parameters.
+
+**Problem Solved:** Eliminates time-intensive manual processes including repeated calculations, rule validation, spreadsheet preparation, and legal document generation for employee reward management.
 
 ## Overview
 
-This is a REST API backend for managing employee rewards at educational institutions. The system handles employee data, calculates rewards based on teaching sessions, and prepares documentation for financial submission.
+REST API backend for managing employee rewards at educational institutions. The system handles employee data, calculates rewards based on teaching sessions, and prepares documentation for financial submission.
 
-**Status**: Pre-production. Requires extensive testing before deployment due to handling sensitive financial data and regulatory requirements.
+*Current Status:** Backend API complete and undergoing testing. Frontend web application in planning phase. System handles sensitive financial data and requires thorough validation before production deployment.
 
 ## Tech Stack
 
@@ -70,7 +80,7 @@ This starts:
 - SQL Server at `localhost:1434`
 - API at `http://localhost:5000` (redirects to API documentation)
 
-Default credentials: `sa` / `Test123!@#`
+Default credentials (Demo Only): `sa` / `Test123!@#`
 
 ### Local Development
 
@@ -163,6 +173,30 @@ dotnet test
 cd RewardFlow.UnitTest
 dotnet test
 ```
+
+## Roadmap
+
+### Completed ✅
+- [x] Backend API with JWT authentication
+- [x] Employee management with AES-256 encryption
+- [x] Automated reward calculation engine
+- [x] Fuzzy search for Arabic names (N-gram tokenization)
+- [x] Multi-context database architecture
+- [x] Docker containerization
+- [x] Integration and unit tests
+
+### In Progress 🔄
+- [ ] Backend testing and validation
+- [ ] Frontend web application
+
+### Planned 📋
+- [ ] PDF/Excel export functionality
+- [ ] Enhanced audit logging
+- [ ] Caching layer for performance
+- [ ] Rate limiting
+- [ ] External business rule configuration
+- [ ] Production deployment
+
 
 ## Known Limitations
 
