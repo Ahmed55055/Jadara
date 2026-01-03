@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Reward_Flow_v2.Employees.Data.Database;
@@ -12,6 +13,7 @@ using Testcontainers.MsSql;
 using Reward_Flow_v2;
 using Xunit;
 using RewardFlow.IntegrationTests.Infrastructure;
+using System.Data.Common;
 
 namespace RewardFlow.IntegrationTests.Infrastructure;
 
@@ -29,6 +31,8 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncL
             .UntilInternalTcpPortIsAvailable(1433))
         .Build();
 
+    public IConfiguration _configuration;
+    public DbConnection _connection;
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureServices(services =>
@@ -47,7 +51,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncL
             }
 
             // Add test database contexts
-            var connectionString = _dbContainer.GetConnectionString();
+            var connectionString = _dbContainer.GetConnectionString()+";Initial Catalog=RewardFlow";
             
             services.AddDbContext<UserDbContext>(options =>
                 options.UseSqlServer(connectionString, o => o.CommandTimeout(120)));
@@ -62,11 +66,9 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncL
                 options.UseSqlServer(connectionString, o => o.CommandTimeout(120)));
 
             // Replace authentication with test authentication
-            services.AddAuthentication("Test")
-                .AddScheme<TestAuthenticationSchemeOptions, TestAuthenticationHandler>(
-                    "Test", options => { });
+           
+            
         });
-
         builder.UseEnvironment("Test");
     }
 
@@ -85,6 +87,8 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncL
         await userDbContext.Database.MigrateAsync();
         await employeeDbContext.Database.MigrateAsync();
         await rewardDbContext.Database.MigrateAsync();
+        
+        _configuration = Services.GetService<IConfiguration>();
     }
 
     public new async Task DisposeAsync()
