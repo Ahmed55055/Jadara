@@ -1,0 +1,51 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver-reward-flow-debug
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Test123!@#
+      #- MSSQL_PID=Express
+    ports:
+      - "1434:1433"
+    volumes:
+      - dbdata:/var/opt/mssql
+
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P Test123!@# -C -Q 'SELECT 1'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    networks:
+      - rewardflow-network
+
+  migrate:
+    image: mcr.microsoft.com/dotnet/sdk:9.0
+    container_name: rewardflow-migrate
+    working_dir: /src
+    volumes:
+      - ..:/src
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=RewardFlow;User=sa;Password=Test123!@#;TrustServerCertificate=true
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    command: >
+      bash -c "        
+        cd src/RewardFlow.API &&       
+        dotnet restore &&
+        dotnet ef database update --context UserDbContext &&
+        dotnet ef database update --context EmployeeDbContext &&
+        dotnet ef database update --context RewardDbContext
+      "
+    networks:
+      - rewardflow-network
+
+volumes:
+  dbdata:
+    name: sql-data
+
+networks:
+  rewardflow-network:
+    driver: bridge

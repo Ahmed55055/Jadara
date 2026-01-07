@@ -23,7 +23,7 @@ public class EmployeeEntityConfiguration : IEntityTypeConfiguration<Employee>
                 v => AesEncryptionService.EncryptString(v),
                 v => AesEncryptionService.DecryptString(v));
         
-        builder.Property(e => e.AccountNumber).HasColumnName("account_number").HasMaxLength(50).IsUnicode(false)
+        builder.Property(e => e.AccountNumber).HasColumnName("account_number").HasMaxLength(255).IsUnicode(false)
             .HasConversion(
                 v => AesEncryptionService.EncryptString(v),
                 v => AesEncryptionService.DecryptString(v));
@@ -35,8 +35,8 @@ public class EmployeeEntityConfiguration : IEntityTypeConfiguration<Employee>
         builder.Property(e => e.JobTitle).HasColumnName("job_title");
         builder.Property(e => e.IsActive).HasColumnName("is_active").HasDefaultValue(true);
         builder.Property(e => e.Status).HasColumnName("status");
-        builder.Property(e => e.NationalNumberHash).HasColumnName("national_number_hash").HasMaxLength(64).IsRequired(false);
-        builder.Property(e => e.AccountNumberHash).HasColumnName("account_number_hash").HasMaxLength(64);
+        builder.Property(e => e.NationalNumberHash).HasColumnName("national_number_hash").HasMaxLength(255).IsRequired(false);
+        builder.Property(e => e.AccountNumberHash).HasColumnName("account_number_hash").HasMaxLength(255);
 
         builder.HasIndex(e => new { e.CreatedBy, e.NationalNumberHash })
             .IsUnique()
