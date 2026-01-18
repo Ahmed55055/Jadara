@@ -25,6 +25,7 @@ public class UserClient
         _factory = factory;
         Client = _factory.CreateClient();
         User = user;
+        Authanticate();
     }
     
     public void Authanticate()

@@ -1,3 +1,4 @@
+using EntityFramework.Exceptions.Common;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Reward_Flow_v2.Common;
@@ -13,13 +14,11 @@ namespace Reward_Flow_v2.Employees.BulkInsertEmployees;
 
 public static class BulkInsert
 {
-    public record emp
-    {
-        public string Name = null!;
-        public string? NationalNumber;
-        public string? AccountNumber;
-        public float? Salary;
-    }
+    public record emp(
+        string Name,
+        string? NationalNumber = null,
+        string? AccountNumber = null,
+        float?   Salary = null);
     public record Request(List<emp> Employees);
     public record Response(int Success, List<int> FailsIndexes);
 
@@ -38,7 +37,7 @@ public static class BulkInsert
     {
         var CurrentUserId = await httpContextAccessor.GetCurrentUserIntIdAsync();
 
-        if (CurrentUserId >= 0)
+        if (CurrentUserId <= 0)
             Results.BadRequest();
 
         var EmployeeList =
@@ -60,14 +59,19 @@ public static class BulkInsert
                 FailIndexes.Add(i);
                 continue;
             }
+
             try
             {
                 dbContext.Add(EmployeeList[i]);
-                await dbContext.SaveChangesAsync(cancellationToken);
+                await dbContext.SaveChangesAsync();
 
-                await tokenService.CreateTokensAsync(EmployeeList[i], CurrentUserId, cancellationToken);
+                await tokenService.CreateTokensAsync(EmployeeList[i], CurrentUserId);
 
                 Success += 1;
+            }
+            catch (UniqueConstraintException)
+            {
+                FailIndexes.Add(i);
             }
             catch (Exception)
             {
@@ -76,9 +80,9 @@ public static class BulkInsert
             }
         }
 
-
+        var response = new Response(Success, FailIndexes);
         if (Success > 0)
-            return Results.Accepted(value: new Response(Success, FailIndexes));
+            return Results.Accepted(value: response);
 
         // No Entities is added and throwed exception at addtion
         if (IsExceptionThrown)
@@ -87,7 +91,8 @@ public static class BulkInsert
         // No Exception Happened And No Insertions, Possible Reasons
         // 1. Data Was Corrupted
         // 2. Wrong Data And Cleaned Up
-        return Results.UnprocessableEntity();
+        // 3. Conflict with unique constraint
+        return Results.BadRequest(response);
     }
 
     private static Employee PrepareEmployee(emp employee, int currentUserId)

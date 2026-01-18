@@ -7,6 +7,6 @@ public class UpdateEmployeeRequestValidator : AbstractValidator<Request>
 {
     public UpdateEmployeeRequestValidator()
     {
-        RuleFor(x => x.Salary).GreaterThanOrEqualTo(0).When(x => x.Salary.HasValue);
+        RuleFor(x => x.Salary.Value).GreaterThanOrEqualTo(0).When(x => x.Salary.HasValue);
     }
 }

@@ -4,6 +4,7 @@ using Reward_Flow_v2.Employees.Data.Database;
 using Reward_Flow_v2.Rewards.Data.Database;
 using Reward_Flow_v2.User.Data.Database;
 using System.Collections.Immutable;
+using System.Linq.Expressions;
 
 namespace RewardFlow.IntegrationTests.Infrastructure;
 
@@ -46,19 +47,9 @@ public class DbUtility: IDisposable
         context.Set<T>().AddRange(entities);
         await context.SaveChangesAsync();
     }
-
-    public async Task<bool> AnyAsync<T>() where T : class
-    {
-        var context = GetContext<T>();
-        return await context.Set<T>().AnyAsync();
-    }
     
-    public async Task<List<T>> GetAllAsync<T>() where T : class
-    {
-        var context = GetContext<T>();
-        return await context.Set<T>().ToListAsync();
-    }
-    
+    public DbSet<T> Set<T>() where T : class
+    => GetContext<T>().Set<T>();
     
     public void Dispose()
     {

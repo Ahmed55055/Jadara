@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Reward_Flow_v2.Employees.Data;
 using Xunit;
 
@@ -13,11 +14,11 @@ public class EmployeeTestFixture : TestWebApplicationFactory, IAsyncLifetime
 
         dbUtility = new DbUtility(this);
 
-        var faculties = await dbUtility.AnyAsync<Faculty>()
-            ? await dbUtility.GetAllAsync<Faculty>()
+        var faculties = await dbUtility.Set<Faculty>().AnyAsync()
+            ? await dbUtility.Set<Faculty>().ToListAsync()
             : await AddFaculities();
 
-        if (!await dbUtility.AnyAsync<Department>())
+        if (!await dbUtility.Set<Department>().AnyAsync())
             await AddDepartments(faculties);
     }
 

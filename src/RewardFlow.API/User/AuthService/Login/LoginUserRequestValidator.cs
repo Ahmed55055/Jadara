@@ -4,7 +4,7 @@ using static Reward_Flow_v2.User.AuthService.Login.Login;
 namespace Reward_Flow_v2.User.AuthService.Login;
 
 
-public class LoginUserRequestValidator : AbstractValidator<Request>
+public class LoginUserRequestValidator : AbstractValidator<Login.Request>
 {
     public LoginUserRequestValidator()
     {
