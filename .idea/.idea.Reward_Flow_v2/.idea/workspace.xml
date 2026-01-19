@@ -10,38 +10,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="122934b0-07bf-4213-8299-df7b9ea03e04" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.Reward_Flow_v2/.idea/projectSettingsUpdater.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.Reward_Flow_v2/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/Common/RequestCreator.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/EmployeeBulkInsertionTests.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/EmployeeSearchTests.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/DataGenerators/FakerRule.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/DataGenerators/UserGenerator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Doc/.obsidian/app.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Doc/.obsidian/appearance.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Doc/.obsidian/core-plugins.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Doc/.obsidian/themes/GitHub Theme/manifest.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Doc/.obsidian/themes/GitHub Theme/theme.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Doc/.obsidian/workspace.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Common/OptionalApiRequestStruct.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Common/OptionalApiRequestStruct.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Employees/BulkInsertEmployees/BulkInsert.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Employees/BulkInsertEmployees/BulkInsert.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Employees/CreateEmployee/CreateEmployee.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Employees/CreateEmployee/CreateEmployee.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Employees/GetEmployeeByName/GetEmployeeByName.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Employees/GetEmployeeByName/GetEmployeeByName.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Employees/UpdateEmployee/UpdateEmployee.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Employees/UpdateEmployee/UpdateEmployee.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Employees/UpdateEmployee/UpdateEmployeeRequestValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Employees/UpdateEmployee/UpdateEmployeeRequestValidator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/RewardFlow.API.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/RewardFlow.API.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/User/AuthService/Login/Login.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/User/AuthService/Login/Login.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/User/AuthService/Login/LoginUserRequestValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/User/AuthService/Login/LoginUserRequestValidator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/CreateEmployeeTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/CreateEmployeeTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/DeleteEmployeeTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/DeleteEmployeeTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/EmployeeSearchAndBulkTests.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/GetEmployeeTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/GetEmployeeTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/UpdateEmployeeTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/UpdateEmployeeTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/BaseIntegrationTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/BaseIntegrationTest.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/BulkOperations/BulkCreateTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/BulkOperations/BulkDeleteTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/BulkOperations/BulkUpdateTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/Common/ApiManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Reward_Flow_v2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Reward_Flow_v2/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/EmployeeIntegrationTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/EmployeeFullLifecycleTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/DataGenerators/EmployeeFaker.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/DataGenerators/EmployeeFaker.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/DbUtility.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/DbUtility.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/EmployeeTestFixture.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/EmployeeTestFixture.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/TestAuthenticationHandler.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/TestDataBuilder.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/TestDataGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/TestDataGenerator.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/UserClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/UserClient.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -326,6 +303,7 @@
       <workItem from="1768724993137" duration="13000" />
       <workItem from="1768726096729" duration="7236000" />
       <workItem from="1768756548615" duration="7033000" />
+      <workItem from="1768816177009" duration="4340000" />
     </task>
     <task id="LOCAL-00001" summary="introduce src folder and clean up duplicate folders">
       <option name="closed" value="true" />
@@ -351,7 +329,15 @@
       <option name="project" value="LOCAL" />
       <updated>1767763700111</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="refactor(integration): update employee test to use api manager and employee dto&#10;&#10;- Replace anonymous objects with Employee and EmployeeDto types&#10;- Use ApiManager.CreateEmployee for employee creation&#10;- Update HTTP methods from Put to Patch for employee updates&#10;- Change response expectations from OK to NoContent for updates&#10;- Update property access from EmployeeId to Id&#10;- Add necessary using directives for new types">
+      <option name="closed" value="true" />
+      <created>1768816543260</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1768816543260</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -388,7 +374,8 @@
     <MESSAGE value="introduce src folder and clean up duplicate folders" />
     <MESSAGE value="refactor(test): update test web application factory for configuration and database setup&#10;&#10;- Fix Generating new tables at master database. now creates the correct saperate database&#10;- Add IConfiguration and DbConnection fields&#10;- Append Initial Catalog to connection string&#10;- Remove test authentication setup&#10;- Retrieve configuration service in InitializeAsync" />
     <MESSAGE value="feat(integration): add docker configuration and enhance test infrastructure&#10;&#10;- Add .dockerignore file for Docker builds&#10;- Create compose.yaml for Docker Compose setup&#10;- Enhance DbUtility class with comprehensive database operations&#10;- Implement EmployeeTestFixture for test data setup&#10;- Add EmployeeFaker for generating test employee data&#10;- Update TestWebApplicationFactory with Respawn for database reset&#10;- Increase max length for employee properties (AccountNumber, NationalNumber, etc.)&#10;- Add EntityFramework.Exceptions.SqlServer for better error handling&#10;- Configure test parallelization and database initialization&#10;&#10;BREAKING CHANGE: Test infrastructure has been significantly refactored, requiring updates to existing test implementations" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(integration): add docker configuration and enhance test infrastructure&#10;&#10;- Add .dockerignore file for Docker builds&#10;- Create compose.yaml for Docker Compose setup&#10;- Enhance DbUtility class with comprehensive database operations&#10;- Implement EmployeeTestFixture for test data setup&#10;- Add EmployeeFaker for generating test employee data&#10;- Update TestWebApplicationFactory with Respawn for database reset&#10;- Increase max length for employee properties (AccountNumber, NationalNumber, etc.)&#10;- Add EntityFramework.Exceptions.SqlServer for better error handling&#10;- Configure test parallelization and database initialization&#10;&#10;BREAKING CHANGE: Test infrastructure has been significantly refactored, requiring updates to existing test implementations" />
+    <MESSAGE value="refactor(integration): update employee test to use api manager and employee dto&#10;&#10;- Replace anonymous objects with Employee and EmployeeDto types&#10;- Use ApiManager.CreateEmployee for employee creation&#10;- Update HTTP methods from Put to Patch for employee updates&#10;- Change response expectations from OK to NoContent for updates&#10;- Update property access from EmployeeId to Id&#10;- Add necessary using directives for new types" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor(integration): update employee test to use api manager and employee dto&#10;&#10;- Replace anonymous objects with Employee and EmployeeDto types&#10;- Use ApiManager.CreateEmployee for employee creation&#10;- Update HTTP methods from Put to Patch for employee updates&#10;- Change response expectations from OK to NoContent for updates&#10;- Update property access from EmployeeId to Id&#10;- Add necessary using directives for new types" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -7,6 +7,9 @@ using Bogus;
 
 public class EmployeeFaker : Faker<Employee>
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EmployeeFaker"/> class.
+    /// </summary>
     public EmployeeFaker()
     {
         this.Locale = "ar";

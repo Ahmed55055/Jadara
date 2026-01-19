@@ -12,6 +12,10 @@ public class DbUtility: IDisposable
 {
     private readonly DbContext[] _contexts;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DbUtility"/> class.
+    /// </summary>
+    /// <param name="factory">The test web application factory used to create service scopes.</param>
     public DbUtility(TestWebApplicationFactory factory)
     {
         var scope = factory.Services.CreateScope();
