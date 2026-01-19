@@ -3,7 +3,10 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using FluentAssertions;
 using RewardFlow.IntegrationTests.Infrastructure;
+using Reward_Flow_v2.Employees.Common;
 using Reward_Flow_v2.Employees.Data;
+using Reward_Flow_v2.Employees.UpdateEmployee;
+using RewardFlow.IntegrationTests.Employees.Common;
 using Xunit;
 
 namespace RewardFlow.IntegrationTests.Employees;
@@ -21,7 +24,7 @@ public class EmployeeFullLifecycleTests : BaseIntegrationTest
     public async Task EmployeeOperations_FullWorkflow_ShouldWorkCorrectly()
     {
         // Test 1: Create Employee
-        var createRequest = new
+        var employeeData = new Employee
         {
             Name = "John Doe",
             NationalNumber = "12345678901",
@@ -33,39 +36,36 @@ public class EmployeeFullLifecycleTests : BaseIntegrationTest
             Status = (byte)1
         };
 
-        var createResponse = await Client.PostAsJsonAsync("/api/Employees", createRequest);
-        createResponse.StatusCode.Should().Be(HttpStatusCode.Created);
-        
-        var createdEmployee = await createResponse.Content.ReadFromJsonAsync<Employee>(_jsonOptions);
+        var createdEmployee = await ApiManager.CreateEmployee(employeeData, Client);
         createdEmployee.Should().NotBeNull();
-        createdEmployee!.EmployeeId.Should().BeGreaterThan(0);
+        createdEmployee!.Id.Should().BeGreaterThan(0);
         createdEmployee.Name.Should().Be("John Doe");
 
-        var employeeId = createdEmployee.EmployeeId;
+        var employeeId = createdEmployee.Id;
 
         // Test 2: Get Employee by ID
         var getByIdResponse = await Client.GetAsync($"/api/Employees/{employeeId}");
         getByIdResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         
-        var retrievedEmployee = await getByIdResponse.Content.ReadFromJsonAsync<Employee>(_jsonOptions);
+        var retrievedEmployee = await getByIdResponse.Content.ReadFromJsonAsync<EmployeeDto>(_jsonOptions);
         retrievedEmployee.Should().NotBeNull();
-        retrievedEmployee!.EmployeeId.Should().Be(employeeId);
+        retrievedEmployee!.Id.Should().Be(employeeId);
         retrievedEmployee.Name.Should().Be("John Doe");
 
         // Test 3: Get Employee by National Number
-        var getByNationalResponse = await Client.GetAsync($"/api/Employees/national/{createRequest.NationalNumber}");
+        var getByNationalResponse = await Client.GetAsync($"/api/Employees/national/{employeeData.NationalNumber}");
         getByNationalResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         
-        var employeeByNational = await getByNationalResponse.Content.ReadFromJsonAsync<Employee>(_jsonOptions);
+        var employeeByNational = await getByNationalResponse.Content.ReadFromJsonAsync<EmployeeDto>(_jsonOptions);
         employeeByNational.Should().NotBeNull();
-        employeeByNational!.NationalNumber.Should().Be(createRequest.NationalNumber);
+        employeeByNational!.NationalNumber.Should().Be(employeeData.NationalNumber);
 
         // Test 4: Get Employee by Name
-        var getByNameResponse = await Client.GetAsync($"/api/Employees/name/{Uri.EscapeDataString("John Doe")}");
+        var getByNameResponse = await Client.GetAsync($"/api/Employees/name/{Uri.EscapeDataString(employeeData.Name)}");
         getByNameResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
         // Test 5: Update Employee
-        var updateRequest = new
+        var updateRequest = new UpdateEmployee.Request
         {
             Name = "John Smith",
             NationalNumber = "12345678901",
@@ -77,32 +77,32 @@ public class EmployeeFullLifecycleTests : BaseIntegrationTest
             Status = (byte)1
         };
 
-        var updateResponse = await Client.PutAsJsonAsync($"/api/Employees/{employeeId}", updateRequest);
-        updateResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        var updateResponse = await Client.PatchAsJsonAsync($"/api/Employees/{employeeId}", updateRequest);
+        updateResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         // Verify update
         var updatedGetResponse = await Client.GetAsync($"/api/Employees/{employeeId}");
-        var updatedEmployee = await updatedGetResponse.Content.ReadFromJsonAsync<Employee>(_jsonOptions);
+        var updatedEmployee = await updatedGetResponse.Content.ReadFromJsonAsync<EmployeeDto>(_jsonOptions);
         updatedEmployee!.Name.Should().Be("John Smith");
         updatedEmployee.Salary.Should().Be(6000.0f);
 
         // Test 6: Create additional employees for bulk operations
         var bulkEmployees = new[]
         {
-            new { Name = "Jane Doe", NationalNumber = "98765432101", AccountNumber = "ACC789", Salary = 4500.0f, FacultyId = 1, DepartmentId = 1, JobTitle = (byte)1, Status = (byte)1 },
-            new { Name = "Bob Wilson", NationalNumber = "11223344556", AccountNumber = "ACC456", Salary = 5500.0f, FacultyId = 1, DepartmentId = 1, JobTitle = (byte)1, Status = (byte)1 }
+            new Employee { Name = "Jane Doe", NationalNumber = "98765432101", AccountNumber = "ACC789", Salary = 4500.0f, FacultyId = 1, DepartmentId = 1, JobTitle = (byte)1, Status = (byte)1 },
+            new Employee { Name = "Bob Wilson", NationalNumber = "11223344556", AccountNumber = "ACC456", Salary = 5500.0f, FacultyId = 1, DepartmentId = 1, JobTitle = (byte)1, Status = (byte)1 }
         };
 
         foreach (var emp in bulkEmployees)
         {
-            await Client.PostAsJsonAsync("/api/Employees", emp);
+            await ApiManager.CreateEmployee(emp, Client);
         }
 
         // Test 7: Get All Employees
         var getAllResponse = await Client.GetAsync("/api/Employees");
         getAllResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         
-        var allEmployees = await getAllResponse.Content.ReadFromJsonAsync<List<Employee>>(_jsonOptions);
+        var allEmployees = await getAllResponse.Content.ReadFromJsonAsync<List<EmployeeDto>>(_jsonOptions);
         allEmployees.Should().NotBeNull();
         allEmployees!.Count.Should().BeGreaterThanOrEqualTo(3);
 
@@ -110,7 +110,7 @@ public class EmployeeFullLifecycleTests : BaseIntegrationTest
         var searchResponse = await Client.GetAsync("/api/Employees/search?name=John");
         searchResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         
-        var searchResults = await searchResponse.Content.ReadFromJsonAsync<List<Employee>>(_jsonOptions);
+        var searchResults = await searchResponse.Content.ReadFromJsonAsync<List<EmployeeDto>>(_jsonOptions);
         searchResults.Should().NotBeNull();
         searchResults!.Should().HaveCountGreaterThanOrEqualTo(1);
         searchResults.Should().Contain(e => e.Name.Contains("John"));
@@ -118,8 +118,8 @@ public class EmployeeFullLifecycleTests : BaseIntegrationTest
         // Test 9: Bulk Insert Employees
         var bulkInsertEmployees = new[]
         {
-            new { Name = "Alice Johnson", NationalNumber = "55566677788", AccountNumber = "ACC999", Salary = 4800.0f, FacultyId = 1, DepartmentId = 1, JobTitle = (byte)1, Status = (byte)1 },
-            new { Name = "Charlie Brown", NationalNumber = "99988877766", AccountNumber = "ACC888", Salary = 5200.0f, FacultyId = 1, DepartmentId = 1, JobTitle = (byte)1, Status = (byte)1 }
+            new Employee { Name = "Alice Johnson", NationalNumber = "55566677788", AccountNumber = "ACC999", Salary = 4800.0f, FacultyId = 1, DepartmentId = 1, JobTitle = (byte)1, Status = (byte)1 },
+            new Employee { Name = "Charlie Brown", NationalNumber = "99988877766", AccountNumber = "ACC888", Salary = 5200.0f, FacultyId = 1, DepartmentId = 1, JobTitle = (byte)1, Status = (byte)1 }
         };
 
         var bulkInsertResponse = await Client.PostAsJsonAsync("/api/Employees/BulkInsert", bulkInsertEmployees);
@@ -127,7 +127,7 @@ public class EmployeeFullLifecycleTests : BaseIntegrationTest
 
         // Verify bulk insert worked
         var finalGetAllResponse = await Client.GetAsync("/api/Employees");
-        var finalAllEmployees = await finalGetAllResponse.Content.ReadFromJsonAsync<List<Employee>>(_jsonOptions);
+        var finalAllEmployees = await finalGetAllResponse.Content.ReadFromJsonAsync<List<EmployeeDto>>(_jsonOptions);
         finalAllEmployees!.Count.Should().BeGreaterThanOrEqualTo(5);
 
         // Test 10: Delete Employee (should be last test)
