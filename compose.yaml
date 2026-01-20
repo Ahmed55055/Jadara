@@ -1,0 +1,7 @@
+﻿services:
+  rewardflow.api:
+    image: rewardflow.api
+    build:
+      context: .
+      dockerfile: src/RewardFlow.API/Dockerfile
+

@@ -1,3 +1,4 @@
+using EntityFramework.Exceptions.SqlServer;
 using Microsoft.EntityFrameworkCore;
 
 namespace Reward_Flow_v2.Employees.Data.Database;
@@ -12,6 +13,11 @@ public sealed class EmployeeDbContext(DbContextOptions<EmployeeDbContext> option
     public DbSet<Faculty> Faculty => Set<Faculty>();
     public DbSet<JobTitle> JobTitle => Set<JobTitle>();
     public DbSet<EmployeeNameToken> EmployeeNameToken => Set<EmployeeNameToken>();
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseExceptionProcessor();
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

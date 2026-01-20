@@ -30,7 +30,7 @@ public static partial class GetEmployeeByName
         try
         {
             var employee = await dbContext.Employee
-                .Where(e => e.Name.Contains(name) && e.CreatedBy == currentUserId)
+                .Where(e => e.Name == name && e.CreatedBy == currentUserId)
                 .FirstOrDefaultAsync(cancellationToken);
 
             return employee == null ? Results.NotFound() : Results.Ok(employee);

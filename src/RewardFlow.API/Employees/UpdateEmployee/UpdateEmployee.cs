@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Reward_Flow_v2.Common;
 using Reward_Flow_v2.Common.EndpointValidation;
 using Reward_Flow_v2.Employees.Common;
+using Reward_Flow_v2.Employees.Data;
 using Reward_Flow_v2.Employees.Data.Database;
 using System.Security.Claims;
 
@@ -11,18 +12,17 @@ namespace Reward_Flow_v2.Employees.UpdateEmployee;
 
 public static partial class UpdateEmployee
 {
-    //public struct HasValue<T>
-    //{
-    //    public bool IsSet;
-    //    public T Value;
-    //}
-    //public record reqest
-    //{
-    //    HasValue<string?> Name;
-    //    HasValue<string?> NationalNumber;
-    //}
-    public record Request(string? Name, string? NationalNumber, string? AccountNumber, float? Salary, int? FacultyId, int? DepartmentId, byte? JobTitle, byte? Status);
-
+    public record Request
+    {
+        public Optional<string> Name { get; init; }
+        public Optional<string?> NationalNumber { get; init; }
+        public Optional<string?> AccountNumber { get; init; }
+        public Optional<float?> Salary { get; init; }
+        public Optional<int?> FacultyId { get; init; }
+        public Optional<int?> DepartmentId { get; init; }
+        public Optional<byte?> JobTitle { get; init; }
+        public Optional<byte?> Status { get; init; }
+    }
     public static void MapUpdateEmployee(this IEndpointRouteBuilder app)
     {
         app.MapPatch(EmployeeApiPath.Update, HandlerAsync)
@@ -52,23 +52,13 @@ public static partial class UpdateEmployee
             if (employee == null)
                 return Results.NotFound();
 
-            bool nameChanged = request.Name != null && employee.Name != request.Name;
-            
-            if (request.Name != null) employee.Name = request.Name;
-            if (request.NationalNumber != null) employee.NationalNumber = request.NationalNumber;
-            if (request.AccountNumber != null) employee.AccountNumber = request.AccountNumber;
-            if (request.Salary.HasValue) employee.Salary = request.Salary;
-            if (request.FacultyId.HasValue) employee.FacultyId = request.FacultyId;
-            if (request.DepartmentId.HasValue) employee.DepartmentId = request.DepartmentId;
-            if (request.JobTitle.HasValue) employee.JobTitle = request.JobTitle;
-            if (request.Status.HasValue) employee.Status = request.Status;
+            MapUpdateFieldsToEmployee(employee, request);
 
             await dbContext.SaveChangesAsync(cancellationToken);
             
-            if (nameChanged)
+            if (request.Name.HasValue)
             {
-                await tokenService.UpdateTokensAsync(employee, currentUserId, cancellationToken);
-            }
+                await tokenService.UpdateTokensAsync(employee, currentUserId, cancellationToken); }
             
             return Results.NoContent();
         }
@@ -76,5 +66,18 @@ public static partial class UpdateEmployee
         {
             return Results.InternalServerError();
         }
+        
+    }
+    
+    private static void MapUpdateFieldsToEmployee(Employee employee, Request request)
+    {
+        if (request.Name.HasValue) employee.Name = request.Name;
+        if (request.NationalNumber.HasValue) employee.NationalNumber = request.NationalNumber;
+        if (request.AccountNumber.HasValue) employee.AccountNumber = request.AccountNumber;
+        if (request.Salary.HasValue) employee.Salary = request.Salary;
+        if (request.FacultyId.HasValue) employee.FacultyId = request.FacultyId;
+        if (request.DepartmentId.HasValue) employee.DepartmentId = request.DepartmentId;
+        if (request.JobTitle.HasValue) employee.JobTitle = request.JobTitle;
+        if (request.Status.HasValue) employee.Status = request.Status;
     }
 }

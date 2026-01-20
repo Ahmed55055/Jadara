@@ -1,0 +1,21 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  api:
+    build:
+      context: "/media/ahmed/54d07f6a-5b2f-4c8f-a919-c812fce84cab/Projects/Reward_Flow_v2"
+      dockerfile: "src/RewardFlow.API/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net9.0/RewardFlow.API.dll"
+    environment:
+      ASPNETCORE_STATICWEBASSETS: "/app/bin/Debug/net9.0/RewardFlow.API.staticwebassets.runtime.CT.json"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "rewardflow.api:dev"
+    ports: []
+    volumes:
+    - "/media/ahmed/54d07f6a-5b2f-4c8f-a919-c812fce84cab/Projects/Reward_Flow_v2/src/RewardFlow.API:/app:rw"
+    - "/media/ahmed/54d07f6a-5b2f-4c8f-a919-c812fce84cab/Projects/Reward_Flow_v2:/src:rw"
+    - "/home/ahmed/.nuget/packages:/root/.nuget/packages"
+    working_dir: "/app"

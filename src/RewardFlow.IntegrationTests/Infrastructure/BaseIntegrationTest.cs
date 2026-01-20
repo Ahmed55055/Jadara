@@ -11,6 +11,7 @@ public abstract class BaseIntegrationTest : IClassFixture<TestWebApplicationFact
 {
     protected readonly TestWebApplicationFactory Factory;
     protected readonly HttpClient Client;
+    protected User _user;
 
     protected BaseIntegrationTest(TestWebApplicationFactory factory)
     {
@@ -35,25 +36,7 @@ public abstract class BaseIntegrationTest : IClassFixture<TestWebApplicationFact
         using var scope = Factory.Services.CreateScope();
         var employeeDbContext = scope.ServiceProvider.GetRequiredService<EmployeeDbContext>();
         var userDbContext = scope.ServiceProvider.GetRequiredService<UserDbContext>();
-
-// Seed test user if not exists
-        if (!userDbContext.User.Any(u => u.UUID == TestAuthenticationHandler.TestUserGuid))
-        {
-            var user = new User
-            {
-                Username = Guid.NewGuid().ToString(), 
-                PasswordHash = "test-hash",
-                Email = "test@example.com",
-                RoleId = 3, // User role
-                CreatedAt = DateTime.UtcNow,
-                IsActive = true,
-                PlanId = 1 // Free plan
-            };
-
-            userDbContext.User.Add(user);
-            await userDbContext.SaveChangesAsync();
-            TestAuthenticationHandler.TestUserGuid = user.UUID;
-        }
+        
         
         // Seed Faculty if not exists
         if (!employeeDbContext.Faculty.Any())
@@ -77,8 +60,37 @@ public abstract class BaseIntegrationTest : IClassFixture<TestWebApplicationFact
         }
     }
 
+    protected User GenerateRandomUser()
+    {
+        return new User
+        {
+            Username = Guid.NewGuid().ToString(),
+            PasswordHash = Guid.NewGuid().ToString()[..12],
+            Email = $"test.user{Guid.NewGuid().ToString()[..4]}@example.com",
+            RoleId = 3, // User role
+            IsActive = true,
+            PlanId = 1 // Free plan
+        };
+    }
+
+    private async Task AddUserToDb(User user)
+    {
+        using var scope = Factory.Services.CreateScope();
+        var userDbContext = scope.ServiceProvider.GetRequiredService<UserDbContext>();
+        
+        userDbContext.User.Add(user);
+        await userDbContext.SaveChangesAsync();
+    }
+    public async Task<User> CreateTestUserAsync()
+    {
+        var user = GenerateRandomUser();
+        await AddUserToDb(user);
+        
+        return user;
+    }
+    
     protected async Task<Employee> CreateTestEmployeeAsync(string name = "Test Employee",
-        string nationalNumber = "12345678901")
+        string nationalNumber = "12345678901",int createdBy = 1)
     {
         using var scope = Factory.Services.CreateScope();
         var employeeDbContext = scope.ServiceProvider.GetRequiredService<EmployeeDbContext>();
@@ -93,7 +105,7 @@ public abstract class BaseIntegrationTest : IClassFixture<TestWebApplicationFact
             DepartmentId = 1,
             JobTitle = 1,
             Status = 1,
-            CreatedBy = 1,
+            CreatedBy = createdBy,
             CreatedAt = DateTime.UtcNow,
             IsActive = true
         };

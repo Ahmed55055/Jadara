@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Reward_Flow_v2.User.Data;
 using Reward_Flow_v2.User.Data.Database;
+using RewardFlow_API.User.AuthService;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -21,12 +22,12 @@ public static class Login
     public static void MapUserLogin(this IEndpointRouteBuilder builder)
     {
         builder.MapPost(AuthApiPath.Login, HandlerAsync)
-            .Produces<Response>(StatusCodes.Status200OK)
+            .Produces<Login.Response>(StatusCodes.Status200OK)
             .Produces<IEnumerable<FluentValidation.Results.ValidationFailure>>(StatusCodes.Status400BadRequest)
             .WithTags(AuthApiPath.Tag);
     }
 
-    private static async Task<IResult> HandlerAsync(Request request, UserDbContext _dbContext, IConfiguration configuration, CancellationToken cancellationToken)
+    private static async Task<IResult> HandlerAsync(Login.Request request, UserDbContext _dbContext, IConfiguration configuration, CancellationToken cancellationToken)
     {
         var validationResult = new LoginUserRequestValidator().Validate(request);
         
@@ -45,8 +46,8 @@ public static class Login
         if (result == PasswordVerificationResult.Failed)
             return Results.BadRequest("Invalid username or password");
 
-        var token = CreateToken(user, configuration);
-        var refreshToken = GenerateRefreshToken();
+        var token = TokenService.CreateToken(user, configuration);
+        var refreshToken = TokenService.GenerateRefreshToken();
         
         user.LastVisit = DateTime.UtcNow;
         user.RefreshToken = refreshToken;
@@ -54,39 +55,6 @@ public static class Login
         _dbContext.Update(user);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return Results.Ok(new Response(token, refreshToken));
-    }
-
-    private static string CreateToken(Data.User user, IConfiguration configuration)
-    {
-        var Claims = new Claim[]
-        {
-            new Claim (ClaimTypes.NameIdentifier, user.UUID.ToString()),
-            new Claim (ClaimTypes.Name, user.Username),
-            new Claim (ClaimTypes.Role, Enum.GetName(typeof( UserRoleEnum),user.RoleId)!)
-        };
-
-        var key = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(configuration.GetValue<string>("JWT:Token")!));
-
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
-
-        var tokenDescripter = new JwtSecurityToken(
-            issuer: configuration.GetValue<string>("JWT:Issuer"),
-            audience: configuration.GetValue<string>("JWT:Audience"),
-            claims: Claims,
-            expires: DateTime.UtcNow.AddHours(1),
-            signingCredentials: creds
-            );
-
-        return new JwtSecurityTokenHandler().WriteToken(tokenDescripter);
-    }
-
-    private static string GenerateRefreshToken()
-    {
-        var randomBytes = new byte[32];
-        using var rng = System.Security.Cryptography.RandomNumberGenerator.Create();
-        rng.GetBytes(randomBytes);
-        return Convert.ToBase64String(randomBytes);
+        return Results.Ok(new Login.Response(token, refreshToken));
     }
 }

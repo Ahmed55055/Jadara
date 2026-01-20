@@ -1,11 +1,9 @@
-using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
+using EntityFramework.Exceptions.Common;
 using Microsoft.EntityFrameworkCore;
 using Reward_Flow_v2.Common;
 using Reward_Flow_v2.Common.EndpointValidation;
 using Reward_Flow_v2.Employees.Common;
 using Reward_Flow_v2.Employees.Data.Database;
-using System.Security.Claims;
 using Reward_Flow_v2.Employees.Data;
 
 namespace Reward_Flow_v2.Employees.CreateEmployee;
@@ -62,6 +60,10 @@ public static class CreateEmployee
 
             return Results.Created($"{EmployeeApiPath.GetById.Replace("{id}", employee.EmployeeId.ToString())}",
                 employee);
+        }
+        catch (UniqueConstraintException)
+        {
+            return Results.Conflict("Duplicate National Number or Account Number for this user");
         }
         catch (Exception)
         {
