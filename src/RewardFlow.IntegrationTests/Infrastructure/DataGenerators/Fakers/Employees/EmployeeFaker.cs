@@ -1,9 +1,8 @@
+using Bogus;
 using Reward_Flow_v2.Employees.Data;
 using System.Linq.Expressions;
 
-namespace RewardFlow.IntegrationTests.Infrastructure.DataGenerators;
-
-using Bogus;
+namespace RewardFlow.IntegrationTests.Infrastructure.DataGenerators.Fakers.Employees;
 
 public class EmployeeFaker : Faker<Employee>
 {

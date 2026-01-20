@@ -8,6 +8,9 @@ using System.Linq.Expressions;
 
 namespace RewardFlow.IntegrationTests.Infrastructure;
 
+/// <summary>
+/// Utility class for managing database operations in integration tests.
+/// </summary>
 public class DbUtility: IDisposable
 {
     private readonly DbContext[] _contexts;
