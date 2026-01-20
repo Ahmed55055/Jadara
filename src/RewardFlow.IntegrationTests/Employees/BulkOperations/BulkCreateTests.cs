@@ -8,6 +8,7 @@ using RewardFlow.IntegrationTests.Infrastructure.DataGenerators;
 using Reward_Flow_v2.Employees.CreateEmployee;
 using Reward_Flow_v2.Employees.BulkInsertEmployees;
 using RewardFlow.IntegrationTests.Employees.Common;
+using RewardFlow.IntegrationTests.Infrastructure.DataGenerators.Fakers.Employees;
 using Xunit;
 
 namespace RewardFlow.IntegrationTests.Employees.BulkOperations;

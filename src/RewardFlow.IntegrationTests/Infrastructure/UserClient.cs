@@ -13,6 +13,9 @@ using System.Net.Http.Headers;
 
 namespace RewardFlow.IntegrationTests.Infrastructure;
 
+/// <summary>
+/// Client for managing user authentication and HTTP requests in integration tests.
+/// </summary>
 public class UserClient
 {
     private readonly TestWebApplicationFactory _factory;
@@ -20,11 +23,13 @@ public class UserClient
     /// <summary>
     /// Gets the HTTP client configured for making authenticated requests.
     /// </summary>
+    /// <value>The HTTP client used for authenticated requests.</value>
     public HttpClient Client { get; private set; }
     
     /// <summary>
     /// Gets the user associated with this client.
     /// </summary>
+    /// <value>The user associated with this client.</value>
     public User User { get; private set; }
 
     /// <summary>
