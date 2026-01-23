@@ -1,10 +1,9 @@
 namespace RewardFlow.IntegrationTests.Auth.Common;
 
-public static class VerifyResetToken
+public static class ConfirmResetPassword
 {
-    public record Request(string Token);
-    public record Response(bool IsValid, string Message);
-    
+    public record Request(string Token, string NewPassword);
+    public record  Response(bool IsSuccess, string? ErrorMessage );
     public static void MapUserLogin(this IEndpointRouteBuilder builder)
     {
         throw new NotImplementedException();

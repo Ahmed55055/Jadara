@@ -30,4 +30,8 @@
       <ProjectReference Include="..\RewardFlow.API\RewardFlow.API.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Users\" />
+    </ItemGroup>
+
 </Project>

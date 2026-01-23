@@ -18,10 +18,11 @@ namespace RewardFlow.IntegrationTests.Auth;
 [Collection("UserTests")]
 public class LoginTests : IAsyncLifetime
 {
+    private readonly Faker _faker = new();
     private readonly TestWebApplicationFactory _factory;
     private HttpClient _client;
     private Reward_Flow_v2.User.Data.User _testUser;
-    private string _testPassword = "TestPassword123!";
+    private string _testPassword;
 
     public LoginTests(UserTestFixture factory)
     {
@@ -34,8 +35,8 @@ public class LoginTests : IAsyncLifetime
 
         // Register a test user
         _testUser = TestDataGenerator.User.Generate();
-        _testUser.Password = _testPassword;
-        var registerRequest = RequestCreator.CreateRegisterRequest(_testUser);
+        _testPassword = _faker.Internet.Password();
+        var registerRequest = RequestCreator.CreateRegisterRequest(_testUser, _testPassword);
         var registerResponse = await _client.PostAsJsonAsync("/api/Auth/Register", registerRequest);
         registerResponse.StatusCode.Should().Be(HttpStatusCode.Created);
     }

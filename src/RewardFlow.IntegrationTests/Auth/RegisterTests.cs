@@ -19,6 +19,7 @@ namespace RewardFlow.IntegrationTests.Auth;
 [Collection("UserTests")]
 public class RegisterTests : IAsyncLifetime
 {
+    private readonly Faker _faker = new();
     private readonly TestWebApplicationFactory _factory;
     private readonly DbUtility _dbUtility;
     private HttpClient _client;
@@ -41,8 +42,8 @@ public class RegisterTests : IAsyncLifetime
     {
         // Arrange
         var userData = TestDataGenerator.User.Generate();
-        userData.Password = "ValidPassword123!";
-        var request = RequestCreator.CreateRegisterRequest(userData);
+        var password = _faker.Internet.Password();
+        var request = RequestCreator.CreateRegisterRequest(userData, password);
 
         // Act
         var response = await _client.PostAsJsonAsync("/api/Auth/Register", request);
@@ -52,7 +53,7 @@ public class RegisterTests : IAsyncLifetime
         var result = await response.Content.ReadFromJsonAsync<Register.Response>();
         result.Should().NotBeNull();
         result.User.Should().NotBeNull();
-        result.JWTToken.Should().NotBeNullOrEmpty();
+        result.JwtToken.Should().NotBeNullOrEmpty();
         result.RefreshToken.Should().NotBeNullOrEmpty();
 
         // Assert user data matches
@@ -66,8 +67,8 @@ public class RegisterTests : IAsyncLifetime
         // Arrange
         var userData = TestDataGenerator.User.Generate();
         userData.Email = null;
-        userData.Password = "ValidPassword123!";
-        var request = RequestCreator.CreateRegisterRequest(userData);
+        var password = _faker.Internet.Password();
+        var request = RequestCreator.CreateRegisterRequest(userData, password);
 
         // Act
         var response = await _client.PostAsJsonAsync("/api/Auth/Register", request);
@@ -84,12 +85,12 @@ public class RegisterTests : IAsyncLifetime
     {
         // Arrange
         var userData = TestDataGenerator.User.Generate();
-        userData.Password = "ValidPassword123!";
-        var request1 = RequestCreator.CreateRegisterRequest(userData);
+        var password1 = _faker.Internet.Password();
+        var request1 = RequestCreator.CreateRegisterRequest(userData, password1);
         await _client.PostAsJsonAsync("/api/Auth/Register", request1); // Create first
 
-        userData.Password = "DifferentPassword123!";
-        var request2 = RequestCreator.CreateRegisterRequest(userData);
+        var password2 = _faker.Internet.Password();
+        var request2 = RequestCreator.CreateRegisterRequest(userData, password2);
 
         // Act
         var response = await _client.PostAsJsonAsync("/api/Auth/Register", request2);
@@ -104,8 +105,8 @@ public class RegisterTests : IAsyncLifetime
         // Arrange
         var userData = TestDataGenerator.User.Generate();
         userData.Username = "";
-        userData.Password = "ValidPassword123!";
-        var request = RequestCreator.CreateRegisterRequest(userData);
+        var password = _faker.Internet.Password();
+        var request = RequestCreator.CreateRegisterRequest(userData, password);
 
         // Act
         var response = await _client.PostAsJsonAsync("/api/Auth/Register", request);
@@ -119,8 +120,8 @@ public class RegisterTests : IAsyncLifetime
     {
         // Arrange
         var userData = TestDataGenerator.User.Generate();
-        userData.Password = "123";
-        var request = RequestCreator.CreateRegisterRequest(userData);
+        var password = "123";
+        var request = RequestCreator.CreateRegisterRequest(userData, password);
 
         // Act
         var response = await _client.PostAsJsonAsync("/api/Auth/Register", request);
@@ -135,8 +136,8 @@ public class RegisterTests : IAsyncLifetime
         // Arrange
         var userData = TestDataGenerator.User.Generate();
         userData.Email = "invalid-email";
-        userData.Password = "ValidPassword123!";
-        var request = RequestCreator.CreateRegisterRequest(userData);
+        var password = _faker.Internet.Password();
+        var request = RequestCreator.CreateRegisterRequest(userData, password);
 
         // Act
         var response = await _client.PostAsJsonAsync("/api/Auth/Register", request);
@@ -155,18 +156,22 @@ public class RegisterTests : IAsyncLifetime
         // Act
         foreach (var user in users)
         {
-            user.Password = password;
-            var request = RequestCreator.CreateRegisterRequest(user);
+            var request = RequestCreator.CreateRegisterRequest(user, password);
             await _client.PostAsJsonAsync("/api/Auth/Register", request);
         }
 
         // Assert
+        var hashes = new List<string>();
         foreach (var user in users)
         {
             var dbUser = await _dbUtility.Set<User>().FirstOrDefaultAsync(u => u.Username == user.Username);
             dbUser.Should().NotBeNull();
             dbUser.PasswordHash.Should().NotBe(password); // Should be hashed
             dbUser.PasswordHash.Should().NotBeNullOrEmpty();
+            hashes.Add(dbUser.PasswordHash);
         }
+
+        // Ensure all hashes are unique (salting)
+        hashes.Should().OnlyHaveUniqueItems();
     }
 }

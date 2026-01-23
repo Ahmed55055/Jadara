@@ -10,24 +10,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="122934b0-07bf-4213-8299-df7b9ea03e04" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/DataGenerators/Fakers/Users/UserFaker.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/DataGenerators/Fakers/Users/UserFields.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.API/User/AuthService/ResetPassword/ConfirmResetPassword.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.API/User/AuthService/ResetPassword/IResetPasswordMessageSender.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.API/User/AuthService/ResetPassword/RequestResetPassword.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.API/User/Data/Dtos/UserDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/Common/RequestCreator.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/ResetPasswordTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/SpyEmailSender.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/UserFullLifecycleTests.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Reward_Flow_v2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Reward_Flow_v2/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/BulkOperations/BulkCreateTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/BulkOperations/BulkCreateTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/CreateEmployeeTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/CreateEmployeeTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/EmployeeBulkInsertionTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/EmployeeBulkInsertionTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/EmployeeSearchTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/EmployeeSearchTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/GetEmployeeTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/GetEmployeeTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/BaseIntegrationTest.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/DataGenerators/EmployeeFaker.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/DataGenerators/Fakers/Employees/EmployeeFaker.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/DataGenerators/EmployeeFields.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/DataGenerators/Fakers/Employees/EmployeeFields.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/DataGenerators/FakerRule.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/DataGenerators/UserGenerator.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/DbUtility.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/DbUtility.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/EmployeeTestCollection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/Employee/EmployeeTestCollection.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/EmployeeTestFixture.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/Employee/EmployeeTestFixture.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/TestDataGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/DataGenerators/TestDataGenerator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/UserClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/UserClient.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/User/AuthService/Register/Register.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/User/AuthService/Register/Register.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/User/AuthService/ResetPassword/VerifyResetToken.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/User/AuthService/ResetPassword/VerifyResetToken.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/User/UserManagementService/HomeController.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/LoginTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/LoginTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/RegisterTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/RegisterTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/TestWebApplicationFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/TestWebApplicationFactory.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/RewardFlow.IntegrationTests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/RewardFlow.IntegrationTests.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,11 +73,14 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/85e97f467d698c9e98eae9e3a1b39d58541173e57992d8f7111eabdd3db3526/HttpResponseMessage.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f37a879c75bf3f9b17985180c72d23a4cd0501ac79ae98ed8e74f9a5d823/IAsyncLifetime.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/RewardFlow.API/Employees/Common/EmployeeDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/Common/RequestCreator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/LoginTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/BulkOperations/BulkDeleteTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/BulkOperations/BulkUpdateTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/Common/ApiManager.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/EmployeeTestFixture.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/GlobalTestSetup.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/User/UserTestCollection.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/User/UserTestFixture.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
@@ -93,34 +94,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.RewardFlow.API: https.executor&quot;: &quot;Run&quot;,
-    &quot;5921cb4c-4439-4b1b-8e8e-8ed8576ac015.executor&quot;: &quot;Debug&quot;,
-    &quot;ATTACH_DIALOG_SELECTED_CONTAINER&quot;: &quot;sqlserver-reward-flow-debug&quot;,
-    &quot;Docker.deploy/docker-compose.debug.yaml.migrate: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.deploy/docker-compose.debug.yaml.sqlserver: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.deploy/docker-compose.debug.yaml: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.deploy/docker-compose.dev.yaml: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.deploy/docker-compose.yaml: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;bedb83f7-5580-48af-9bc0-9ed41d22201e.executor&quot;: &quot;Debug&quot;,
-    &quot;c8ba7720-7892-481e-a505-58df8f6921a3.executor&quot;: &quot;Debug&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;test/integration-coverage&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/media/ahmed/54d07f6a-5b2f-4c8f-a919-c812fce84cab/Projects/Reward_Flow_v2/deploy/docker-compose.dev.yaml&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.statistic.project.settings&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.RewardFlow.API: https.executor": "Run",
+    "5921cb4c-4439-4b1b-8e8e-8ed8576ac015.executor": "Debug",
+    "6a995ea2-adb3-462a-8026-c33d164c2970.executor": "Debug",
+    "ATTACH_DIALOG_SELECTED_CONTAINER": "sqlserver-reward-flow-debug",
+    "Docker.deploy/docker-compose.debug.yaml.migrate: Compose Deployment.executor": "Run",
+    "Docker.deploy/docker-compose.debug.yaml.sqlserver: Compose Deployment.executor": "Run",
+    "Docker.deploy/docker-compose.debug.yaml: Compose Deployment.executor": "Run",
+    "Docker.deploy/docker-compose.dev.yaml: Compose Deployment.executor": "Run",
+    "Docker.deploy/docker-compose.yaml: Compose Deployment.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "bedb83f7-5580-48af-9bc0-9ed41d22201e.executor": "Debug",
+    "c8ba7720-7892-481e-a505-58df8f6921a3.executor": "Debug",
+    "git-widget-placeholder": "test/user-integration-tests",
+    "last_opened_file_path": "/media/ahmed/54d07f6a-5b2f-4c8f-a919-c812fce84cab/Projects/Reward_Flow_v2/deploy/docker-compose.dev.yaml",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "reference.settings.project.statistic.project.settings",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Docker.deploy/docker-compose.dev.yaml: Compose Deployment">
     <configuration name="RewardFlow.API: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/src/RewardFlow.API/RewardFlow.API.csproj" />
@@ -312,6 +314,10 @@
       <workItem from="1768726096729" duration="7236000" />
       <workItem from="1768756548615" duration="7033000" />
       <workItem from="1768816177009" duration="17491000" />
+      <workItem from="1768989199723" duration="8574000" />
+      <workItem from="1769070149820" duration="2240000" />
+      <workItem from="1769089632897" duration="9328000" />
+      <workItem from="1769194561825" duration="2622000" />
     </task>
     <task id="LOCAL-00001" summary="introduce src folder and clean up duplicate folders">
       <option name="closed" value="true" />
@@ -353,7 +359,15 @@
       <option name="project" value="LOCAL" />
       <updated>1768823449514</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="feat(auth): add password reset API endpoints&#10;&#10;- Add new constants for request-reset-password, verify-reset-token, and confirm-reset-password in AuthApiPath&#10;- Update VerifyResetToken class to public static and add request record and mapping method&#10;- Refactor integration tests to set password on user object for register and login requests">
+      <option name="closed" value="true" />
+      <created>1769101110257</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1769101110257</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -392,7 +406,9 @@
     <MESSAGE value="feat(integration): add docker configuration and enhance test infrastructure&#10;&#10;- Add .dockerignore file for Docker builds&#10;- Create compose.yaml for Docker Compose setup&#10;- Enhance DbUtility class with comprehensive database operations&#10;- Implement EmployeeTestFixture for test data setup&#10;- Add EmployeeFaker for generating test employee data&#10;- Update TestWebApplicationFactory with Respawn for database reset&#10;- Increase max length for employee properties (AccountNumber, NationalNumber, etc.)&#10;- Add EntityFramework.Exceptions.SqlServer for better error handling&#10;- Configure test parallelization and database initialization&#10;&#10;BREAKING CHANGE: Test infrastructure has been significantly refactored, requiring updates to existing test implementations" />
     <MESSAGE value="refactor(integration): update employee test to use api manager and employee dto&#10;&#10;- Replace anonymous objects with Employee and EmployeeDto types&#10;- Use ApiManager.CreateEmployee for employee creation&#10;- Update HTTP methods from Put to Patch for employee updates&#10;- Change response expectations from OK to NoContent for updates&#10;- Update property access from EmployeeId to Id&#10;- Add necessary using directives for new types" />
     <MESSAGE value="refactor(test): enhance employee integration tests with improved structure and documentation&#10;&#10;- Add XML documentation comments to ApiManager, DbUtility, and UserClient classes&#10;- Refactor EmployeeFullLifecycleTests to use IAsyncLifetime and EmployeeTestFixture&#10;- Implement modular test methods for better organization and maintainability&#10;- Add TestDataGenerator class for centralized test data creation&#10;- Update test infrastructure to use proper authentication and database utilities&#10;- Improve test assertions and response handling throughout the test suite&#10;&#10;BREAKING CHANGE: Test infrastructure has been significantly refactored, requiring updates to existing test implementations" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor(test): enhance employee integration tests with improved structure and documentation&#10;&#10;- Add XML documentation comments to ApiManager, DbUtility, and UserClient classes&#10;- Refactor EmployeeFullLifecycleTests to use IAsyncLifetime and EmployeeTestFixture&#10;- Implement modular test methods for better organization and maintainability&#10;- Add TestDataGenerator class for centralized test data creation&#10;- Update test infrastructure to use proper authentication and database utilities&#10;- Improve test assertions and response handling throughout the test suite&#10;&#10;BREAKING CHANGE: Test infrastructure has been significantly refactored, requiring updates to existing test implementations" />
+    <MESSAGE value="feat(auth): add password reset API endpoints and refactor tests&#10;&#10;- Add new constants for request-reset-password, verify-reset-token, and confirm-reset-password endpoints&#10;- Change AuthApiPath class to public static&#10;- Update VerifyResetToken class to public static and add request record and mapping stub&#10;- Refactor integration tests to set password directly on user data objects instead of passing separately to request creators" />
+    <MESSAGE value="feat(auth): add password reset API endpoints&#10;&#10;- Add new constants for request-reset-password, verify-reset-token, and confirm-reset-password in AuthApiPath&#10;- Update VerifyResetToken class to public static and add request record and mapping method&#10;- Refactor integration tests to set password on user object for register and login requests" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(auth): add password reset API endpoints&#10;&#10;- Add new constants for request-reset-password, verify-reset-token, and confirm-reset-password in AuthApiPath&#10;- Update VerifyResetToken class to public static and add request record and mapping method&#10;- Refactor integration tests to set password on user object for register and login requests" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -431,14 +447,7 @@
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/EmployeeBulkInsertionTests.cs</url>
           <line>48</line>
-          <properties documentPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/EmployeeBulkInsertionTests.cs" containingFunctionPresentation="Method 'BulkInsertEmployees_WithValidData_ShouldReturnOk'">
-            <startOffsets>
-              <option value="1534" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1632" />
-            </endOffsets>
-          </properties>
+          <properties documentPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/EmployeeBulkInsertionTests.cs" containingFunctionPresentation="Method 'BulkInsertEmployees_WithValidData_ShouldReturnOk'" />
           <option name="timeStamp" value="62" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
@@ -453,6 +462,19 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="68" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/LoginTests.cs</url>
+          <line>58</line>
+          <properties documentPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/LoginTests.cs" containingFunctionPresentation="Method 'Login_WithValidCredentials_ShouldReturnOk'">
+            <startOffsets>
+              <option value="1997" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2041" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="69" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
