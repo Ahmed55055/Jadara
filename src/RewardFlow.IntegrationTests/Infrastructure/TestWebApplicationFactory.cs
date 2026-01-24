@@ -17,6 +17,8 @@ using RewardFlow.IntegrationTests.Infrastructure;
 using System.Data.Common;
 using Respawn;
 using Respawn.Graph;
+using RewardFlow.IntegrationTests.Auth;
+using RewardFlow.IntegrationTests.Auth.Common;
 
 namespace RewardFlow.IntegrationTests.Infrastructure;
 
@@ -49,7 +51,8 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncL
                     d.ServiceType == typeof(DbContextOptions<UserDbContext>) ||
                     d.ServiceType == typeof(DbContextOptions<EmployeeDbContext>) ||
                     d.ServiceType == typeof(DbContextOptions<RewardDbContext>) ||
-                    d.ServiceType == typeof(IDbContextFactory<RewardDbContext>))
+                    d.ServiceType == typeof(IDbContextFactory<RewardDbContext>)||
+                    d.ServiceType == typeof(IResetPasswordMessageSender))
                 .ToList();
 
             foreach (var descriptor in descriptors)
@@ -69,6 +72,8 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncL
 
             services.AddDbContextFactory<RewardDbContext>(options =>
                 options.UseSqlServer(_connectionString, o => o.CommandTimeout(120)));
+
+            services.AddScoped<IResetPasswordMessageSender,SpyEmailSender>();
         });
         builder.UseEnvironment("Test");
     }

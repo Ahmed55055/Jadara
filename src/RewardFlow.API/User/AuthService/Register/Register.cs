@@ -1,12 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Reward_Flow_v2.User.Data;
 using Reward_Flow_v2.User.Data.Database;
+using RewardFlow_API.User.Data.Dtos;
 
 namespace Reward_Flow_v2.User.AuthService.Register;
 
 public static class Register
 {
     public record Request(string username, string password, string? email);
+
+    public record Response(UserDto User, string JwtToken, string RefreshToken);
 
     public static void MapRegisterUser(this IEndpointRouteBuilder app)
     {
@@ -17,10 +21,11 @@ public static class Register
             .WithTags(AuthApiPath.Tag);
     }
 
-    private static async Task<IResult> HandlerAsync(Request request, UserDbContext _dbContext, CancellationToken cancellationToken)
+    private static async Task<IResult> HandlerAsync(Request request, UserDbContext _dbContext,
+        CancellationToken cancellationToken)
     {
         var ValidateRequest = new RegisterUserRequestValidator().Validate(request);
-        
+
         if (!ValidateRequest.IsValid)
             return Results.BadRequest(ValidateRequest.Errors);
 
@@ -56,4 +61,3 @@ public static class Register
         return user;
     }
 }
-
