@@ -11,4 +11,9 @@ public static class AuthApiPath
     public const string RequestResetPassword = $"{AuthRootApi}/request-reset-password";
     public const string VerifyResetToken = $"{AuthRootApi}/verify-reset-token";
     public const string ConfirmResetPassword = $"{AuthRootApi}/confirm-reset-password";
+
+    private const string UserRootApi = $"{ApiPath.Route}/Users";
+    public const string GetUserByUsername = $"{UserRootApi}/{{username}}";
+    public const string GetUserByEmail = $"{UserRootApi}/email/{{email}}";
+    public const string GetAllUsers = $"{UserRootApi}";
 }
