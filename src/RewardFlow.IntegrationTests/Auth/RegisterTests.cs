@@ -4,10 +4,10 @@ using System.Net.Http.Json;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using RewardFlow.IntegrationTests.Infrastructure;
-using RewardFlow.IntegrationTests.Infrastructure.DataGenerators;
 using RewardFlow.IntegrationTests.Auth.Common;
 using Reward_Flow_v2.User.AuthService.Register;
 using Reward_Flow_v2.User.Data;
+using RewardFlow.TestUtilities.DataGenerators;
 using Xunit;
 
 namespace RewardFlow.IntegrationTests.Auth;

@@ -2,9 +2,9 @@ using System.Net;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using RewardFlow.IntegrationTests.Infrastructure;
-using RewardFlow.IntegrationTests.Infrastructure.DataGenerators;
 using Reward_Flow_v2.Employees.Data;
 using RewardFlow.IntegrationTests.Employees.Common;
+using RewardFlow.TestUtilities.DataGenerators;
 using Xunit;
 
 namespace RewardFlow.IntegrationTests.Employees;

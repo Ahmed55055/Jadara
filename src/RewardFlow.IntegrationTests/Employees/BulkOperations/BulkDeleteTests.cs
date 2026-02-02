@@ -4,10 +4,10 @@ using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using RewardFlow.IntegrationTests.Infrastructure;
 using Reward_Flow_v2.Employees.Data;
-using RewardFlow.IntegrationTests.Infrastructure.DataGenerators;
 using Reward_Flow_v2.Employees.CreateEmployee;
 using Reward_Flow_v2.Employees.BulkInsertEmployees;
 using RewardFlow.IntegrationTests.Employees.Common;
+using RewardFlow.TestUtilities.DataGenerators;
 using Xunit;
 
 namespace RewardFlow.IntegrationTests.Employees.BulkOperations;

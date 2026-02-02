@@ -27,10 +27,13 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\RewardFlow.TestUtilities\RewardFlow.TestUtilities.csproj" />
       <ProjectReference Include="..\RewardFlow.API\RewardFlow.API.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Infrastructure\DataGenerators\Fakers\Employees\" />
+      <Folder Include="Infrastructure\DataGenerators\Fakers\Users\" />
       <Folder Include="Users\" />
     </ItemGroup>
 

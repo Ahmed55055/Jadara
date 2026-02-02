@@ -3,10 +3,10 @@ using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
 using RewardFlow.IntegrationTests.Infrastructure;
-using RewardFlow.IntegrationTests.Infrastructure.DataGenerators;
 using Reward_Flow_v2.User;
 using Reward_Flow_v2.User.Data;
 using RewardFlow_API.User.Data.Dtos;
+using RewardFlow.TestUtilities.DataGenerators;
 using Xunit;
 
 namespace RewardFlow.IntegrationTests.Users;

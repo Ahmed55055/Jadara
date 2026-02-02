@@ -8,8 +8,8 @@ using Reward_Flow_v2.Employees.CreateEmployee;
 using RewardFlow.IntegrationTests.Infrastructure;
 using Reward_Flow_v2.Employees.Data;
 using RewardFlow.IntegrationTests.Employees.Common;
-using RewardFlow.IntegrationTests.Infrastructure.DataGenerators;
-using RewardFlow.IntegrationTests.Infrastructure.DataGenerators.Fakers.Employees;
+using RewardFlow.TestUtilities.DataGenerators;
+using RewardFlow.TestUtilities.DataGenerators.Fakers.Employees;
 using Xunit;
 
 namespace RewardFlow.IntegrationTests.Employees;
