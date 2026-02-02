@@ -2,7 +2,7 @@ using Bogus;
 using Reward_Flow_v2.User.Data;
 using System.Linq.Expressions;
 
-namespace RewardFlow.IntegrationTests.Infrastructure.DataGenerators.Fakers.Users;
+namespace RewardFlow.TestUtilities.DataGenerators.Fakers.Users;
 
 /// <summary>
 /// Generates fake user data for testing purposes, inheriting from <see cref="Faker{T}"/>.

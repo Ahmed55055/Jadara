@@ -5,10 +5,10 @@ using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Reward_Flow_v2.User;
 using RewardFlow.IntegrationTests.Infrastructure;
-using RewardFlow.IntegrationTests.Infrastructure.DataGenerators;
 using Reward_Flow_v2.User.Data;
 using RewardFlow_API.User.Data.Dtos;
 using RewardFlow.IntegrationTests.Auth.Common;
+using RewardFlow.TestUtilities.DataGenerators;
 using Xunit;
 
 namespace RewardFlow.IntegrationTests.Users;

@@ -4,7 +4,7 @@ using Reward_Flow_v2.Employees.CreateEmployee;
 using Reward_Flow_v2.Employees.Data;
 using RewardFlow.IntegrationTests.Employees.Common;
 using RewardFlow.IntegrationTests.Infrastructure;
-using RewardFlow.IntegrationTests.Infrastructure.DataGenerators;
+using RewardFlow.TestUtilities.DataGenerators;
 using System.Net;
 using System.Net.Http.Json;
 using Xunit;

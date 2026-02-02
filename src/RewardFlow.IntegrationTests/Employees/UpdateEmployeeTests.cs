@@ -7,7 +7,7 @@ using RewardFlow.IntegrationTests.Infrastructure;
 using Reward_Flow_v2.Employees.Data;
 using Reward_Flow_v2.Employees.UpdateEmployee;
 using RewardFlow.IntegrationTests.Employees.Common;
-using RewardFlow.IntegrationTests.Infrastructure.DataGenerators;
+using RewardFlow.TestUtilities.DataGenerators;
 using System.Reflection;
 using Xunit;
 

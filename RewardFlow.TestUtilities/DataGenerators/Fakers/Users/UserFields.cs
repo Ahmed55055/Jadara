@@ -1,4 +1,4 @@
-namespace RewardFlow.IntegrationTests.Infrastructure.DataGenerators.Fakers.Users;
+namespace RewardFlow.TestUtilities.DataGenerators.Fakers.Users;
 
 [Flags]
 public enum UserFields

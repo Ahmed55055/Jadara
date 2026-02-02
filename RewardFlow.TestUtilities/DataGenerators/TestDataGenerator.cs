@@ -1,7 +1,7 @@
-using RewardFlow.IntegrationTests.Infrastructure.DataGenerators.Fakers.Employees;
-using RewardFlow.IntegrationTests.Infrastructure.DataGenerators.Fakers.Users;
+using RewardFlow.TestUtilities.DataGenerators.Fakers.Employees;
+using RewardFlow.TestUtilities.DataGenerators.Fakers.Users;
 
-namespace RewardFlow.IntegrationTests.Infrastructure.DataGenerators;
+namespace RewardFlow.TestUtilities.DataGenerators;
 
 public class TestDataGenerator
 {

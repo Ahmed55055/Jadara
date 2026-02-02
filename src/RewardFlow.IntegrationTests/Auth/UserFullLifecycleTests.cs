@@ -3,12 +3,12 @@ using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
 using RewardFlow.IntegrationTests.Infrastructure;
-using RewardFlow.IntegrationTests.Infrastructure.DataGenerators;
 using RewardFlow.IntegrationTests.Auth.Common;
 using Reward_Flow_v2.User;
 using Reward_Flow_v2.User.AuthService.Register;
 using Reward_Flow_v2.User.AuthService.Login;
-using RewardFlow.IntegrationTests.Infrastructure.DataGenerators.Fakers.Users;
+using RewardFlow.TestUtilities.DataGenerators;
+using RewardFlow.TestUtilities.DataGenerators.Fakers.Users;
 using Xunit;
 
 namespace RewardFlow.IntegrationTests.Auth;
