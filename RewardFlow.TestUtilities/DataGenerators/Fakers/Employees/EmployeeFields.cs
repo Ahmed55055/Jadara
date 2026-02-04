@@ -11,4 +11,5 @@ public enum EmployeeFields
     DepartmentId = 16,
     JobTitle = 32,
     Status = 64,
+    Name = 128
 }

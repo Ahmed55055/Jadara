@@ -38,6 +38,7 @@ public class EmployeeFaker : Faker<Employee>
     /// </summary>
     public EmployeeFaker WithNulls(EmployeeFields fields)
     {
+        if (fields.HasFlag(EmployeeFields.Name)) RuleFor(e => e.Name, _ => null);
         if (fields.HasFlag(EmployeeFields.NationalNumber)) RuleFor(e => e.NationalNumber, _ => null);
         if (fields.HasFlag(EmployeeFields.AccountNumber)) RuleFor(e => e.AccountNumber, _ => null);
         if (fields.HasFlag(EmployeeFields.Salary)) RuleFor(e => e.Salary, _ => null);
