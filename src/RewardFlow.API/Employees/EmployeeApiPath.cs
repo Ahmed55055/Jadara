@@ -1,6 +1,6 @@
 namespace Reward_Flow_v2.Employees;
 
-internal static class EmployeeApiPath
+public static class EmployeeApiPath
 {
     public const string Tag = "Employees";
     private const string EmployeeRootApi = $"{ApiPath.Route}/{Tag}";
