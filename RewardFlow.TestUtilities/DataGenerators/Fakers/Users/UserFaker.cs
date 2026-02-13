@@ -1,5 +1,6 @@
 using Bogus;
 using Reward_Flow_v2.User.Data;
+using RewardFlow.TestUtilities.DataGenerators.Fakers.Employees;
 using System.Linq.Expressions;
 
 namespace RewardFlow.TestUtilities.DataGenerators.Fakers.Users;
@@ -7,7 +8,7 @@ namespace RewardFlow.TestUtilities.DataGenerators.Fakers.Users;
 /// <summary>
 /// Generates fake user data for testing purposes, inheriting from <see cref="Faker{T}"/>.
 /// </summary>
-public class UserFaker : Faker<User>
+public class UserFaker : Faker<User>, IEntityFaker<User,UserFields>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="UserFaker"/> class.
@@ -39,7 +40,7 @@ public class UserFaker : Faker<User>
     /// Overwrites existing rules to force specific fields to NULL for testing edge cases.
     /// </summary>
     /// <param name="fields">A flags enumeration that indicates which properties must be set to NULL.</param>
-    public UserFaker WithNulls(UserFields fields)
+    public IEntityFaker<User,UserFields> WithNulls(UserFields fields)
     {
         if (fields.HasFlag(UserFields.Username)) RuleFor(u => u.Username, _ => null!);
         if (fields.HasFlag(UserFields.Email)) RuleFor(u => u.Email, _ => null);
@@ -62,7 +63,7 @@ public class UserFaker : Faker<User>
     /// <typeparam name="TProperty">The type of the property to set.</typeparam>
     /// <param name="property">The property expression.</param>
     /// <param name="value">The value to set for the property.</param>
-    public UserFaker ForProperty<TProperty>(Expression<Func<User, TProperty>> property, TProperty value)
+    public IEntityFaker<User,UserFields> ForProperty<TProperty>(Expression<Func<User, TProperty>> property, TProperty value)
     {
         RuleFor(property, _ => value);
         return this;
@@ -75,7 +76,7 @@ public class UserFaker : Faker<User>
     /// <param name="fields">
     /// A flags enumeration that indicates which properties must receive a value.
     /// </param>
-    public UserFaker WithValue(UserFields fields)
+    public IEntityFaker<User,UserFields> WithValue(UserFields fields)
     {
         if (fields.HasFlag(UserFields.Username))
             RuleFor(u => u.Username, f => f.Person.UserName);
