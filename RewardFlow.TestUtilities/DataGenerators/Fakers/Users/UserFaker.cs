@@ -8,7 +8,7 @@ namespace RewardFlow.TestUtilities.DataGenerators.Fakers.Users;
 /// <summary>
 /// Generates fake user data for testing purposes, inheriting from <see cref="Faker{T}"/>.
 /// </summary>
-public class UserFaker : Faker<User>, IEntityFaker<User,UserFields>
+internal class UserFaker : Faker<User>, IEntityFaker<User,UserFields>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="UserFaker"/> class.

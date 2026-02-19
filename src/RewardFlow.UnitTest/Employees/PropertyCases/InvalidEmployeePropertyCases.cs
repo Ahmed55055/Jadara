@@ -1,6 +1,6 @@
-namespace RewardFlow_UnitTest.Employees;
+namespace RewardFlow_UnitTest.Employees.PropertyCases;
 
-public class InvalidEmployeeDataCases
+public class InvalidEmployeePropertyCases
 {
     /// <summary>
     /// A collection of test cases representing invalid Egyptian National ID formats.
@@ -12,7 +12,7 @@ public class InvalidEmployeeDataCases
     /// </list>
     /// Note: IDs starting below 20 (1800s) are considered out of scope/invalid for this system.
     /// </summary>
-    public static readonly (string? NationalNum, string Reason)[] NationalNums =
+    public readonly (string? NationalNum, string Reason)[] NationalNums =
     [
         ("", "Empty string"),
         ("19123456789013", "Starts number less than 20"),
@@ -20,7 +20,7 @@ public class InvalidEmployeeDataCases
         ("2712345678901", "Too Short Only 13 digit"),
         ("301234567890134", "Too Long"),
         ("2612345678901a", "Contains Alphabets"),
-        ("301 2345 6789 013", "14 number with spaces in between"),
+        ("301 2345 6789 013", "14 digits with spaces in between"),
         ("30 245 789 013", "14 letters counting spaces"),
         ("30-245-789-013", "14 letters counting hyphens")
     ];
@@ -30,7 +30,7 @@ public class InvalidEmployeeDataCases
     /// </summary>
     /// <remarks>
     /// <b>Validation Strategy:</b> Empirical research on ~3,700 records suggests a 12–14 digit standard 
-    /// with a hyphen after digits 3–5. However, due to legacy outliers (&lt;0.1%):
+    /// counting a hyphen after digits 3–5. However, due to legacy outliers (&lt;0.1%):
     /// <list type="bullet">
     /// <item>Length: Standard is 12–14, but one 15-digit record exists.</item>
     /// <item>Format: Some records have zero, two, or misplaced hyphens (e.g., after the 6th digit).</item>
@@ -38,17 +38,21 @@ public class InvalidEmployeeDataCases
     /// To avoid blocking legacy data, validation is <b>permissive</b>: it rejects non-numeric 
     /// characters (except hyphens) and extreme lengths, prioritizing source consistency.
     /// </remarks>
-    public static readonly (string? AccountNum, string Reason)[] AccountNums =
+    public readonly (string? AccountNum, string Reason)[] AccountNums =
     [
-        ("123-123456", "Too short (minimum 12 digits expected)"),
+        ("123-1234567", "Too short (minimum 12 digits expected)"),
         ("12345678901234567", "Too long (maximum 16 characters allowed)"),
-        ("1234-1234567a", "Contains alphabetic characters")
+        ("1234-1234567a", "Contains alphabetic characters"),
+        ("-123456789012", "Leading Hyphen"),
+        ("123456789012-", "Trailing Hyphen"),
+        ("123--456789012", "Double Hyphen"),
+        ("123-!2345678", "Special Characters")
     ];
     
     /// <summary>
     /// A collection of test cases representing invalid Salary values.
     /// </summary>
-    public static readonly (float? Salary, string Reason)[] Salary =
+    public readonly (float? Salary, string Reason)[] Salary =
     [
         (-1f, "Negative Salary"),
         (0f, "Zero Salary"),
@@ -58,9 +62,18 @@ public class InvalidEmployeeDataCases
     /// <summary>
     /// A collection of test cases representing invalid Foreign Key identifiers.
     /// </summary>
-    public static readonly (int? ForeignKeyId, string Reason)[] ForeignKeysId =
+    public readonly (int? ForeignKeyId, string Reason)[] ForeignKeysId =
     [
         (0, "Foreign keys Ids must be positive numbers")
     ];
 
+    public readonly IEnumerable<(string? value, string reason)> Name =
+    [
+        ("", "Name is empty"),
+        (null, "Name is null"),
+        ("   ", "contains only spaces"),
+        ("John_&Doe", "contains special characters"),
+        ("John1234", "contains numbers"),
+        (new string('a', 256), "Name exceeds maximum length of 256 characters")
+    ];
 }

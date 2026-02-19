@@ -9,4 +9,27 @@ public static class EmployeeExtention
     {
         return new EmployeeRequest(employee);
     }
+
+    public static EmployeeBulkRequest ToRequest(this IEnumerable<Employee> employees)
+    {
+        return new EmployeeBulkRequest(employees);
+    }
+}
+
+public struct EmployeeBulkRequest
+{
+    public IEnumerable<Employee> Employees { get; set; }
+
+    public EmployeeBulkRequest(IEnumerable<Employee> employees)
+    {
+        Employees = employees;
+    }
+
+    public BulkInsert.Request BulkInsert()
+    {
+        var emps = Employees
+            .Select(e => new BulkInsert.emp(e.Name, e.NationalNumber, e.AccountNumber, e.Salary));
+        
+        return new BulkInsert.Request(emps.ToList());
+    }
 }
