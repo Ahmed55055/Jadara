@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace RewardFlow.TestUtilities.DataGenerators.Fakers.Employees;
 
-public class EmployeeFaker : Faker<Employee>
+public class EmployeeFaker : Faker<Employee>, IEntityFaker<Employee,EmployeeFields>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="EmployeeFaker"/> class.
@@ -36,8 +36,9 @@ public class EmployeeFaker : Faker<Employee>
     /// <summary>
     /// Overwrites existing rules to force specific fields to NULL for testing edge cases.
     /// </summary>
-    public EmployeeFaker WithNulls(EmployeeFields fields)
+    public IEntityFaker<Employee,EmployeeFields> WithNulls(EmployeeFields fields)
     {
+        if (fields.HasFlag(EmployeeFields.Name)) RuleFor(e => e.Name, _ => null);
         if (fields.HasFlag(EmployeeFields.NationalNumber)) RuleFor(e => e.NationalNumber, _ => null);
         if (fields.HasFlag(EmployeeFields.AccountNumber)) RuleFor(e => e.AccountNumber, _ => null);
         if (fields.HasFlag(EmployeeFields.Salary)) RuleFor(e => e.Salary, _ => null);
@@ -52,7 +53,7 @@ public class EmployeeFaker : Faker<Employee>
     /// <summary>
     /// Helper to force a property to a specific value without complex logic.
     /// </summary>
-    public EmployeeFaker ForProperty<TProperty>(Expression<Func<Employee, TProperty>> property, TProperty value)
+    public IEntityFaker<Employee,EmployeeFields> ForProperty<TProperty>(Expression<Func<Employee, TProperty>> property, TProperty value)
     {
         RuleFor(property, _ => value);
         return this;
@@ -65,7 +66,7 @@ public class EmployeeFaker : Faker<Employee>
     /// <param name="fields">
     /// A flags enumeration that indicates which properties must receive a value.
     /// </param>
-    public EmployeeFaker WithValue(EmployeeFields fields)
+    public IEntityFaker<Employee,EmployeeFields> WithValue(EmployeeFields fields)
     {
         if (fields.HasFlag(EmployeeFields.NationalNumber))
             RuleFor(e => e.NationalNumber, f => f.Random.String2(14, "0123456789"));
