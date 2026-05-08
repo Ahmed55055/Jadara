@@ -14,6 +14,7 @@ public sealed class RewardDbContext(DbContextOptions<RewardDbContext> options) :
     public DbSet<EmployeeSessionRewardEntity> EmployeeSessionRewardEntity => Set<EmployeeSessionRewardEntity>();
     public DbSet<SubjectSessionRewardEntity> SubjectSessionRewardEntity => Set<SubjectSessionRewardEntity>();
     public DbSet<EmployeeReward> EmployeeReward => Set<EmployeeReward>();
+    public DbSet<EmployeeSnapshot> EmployeeSnapshots => Set<EmployeeSnapshot>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

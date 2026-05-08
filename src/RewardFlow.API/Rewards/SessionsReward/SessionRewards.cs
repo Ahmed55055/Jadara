@@ -207,7 +207,7 @@ public sealed partial class SessionRewards : Reward, ISessionReward
     private async Task<SubjectSessionReward> GetOrCreateSubjectSessionReward(SessionSubjectDto dto,
         RewardDbContext context)
     {
-        var SSR = await SubjectSessionReward.FindBySubjectAndSession(dto.SubjectId, this.Semester.Value, this.RewardId,
+        var SSR = await SubjectSessionReward.FindByRewardAndSubject(dto.SubjectId, this.Semester.Value, this.RewardId,
             context);
 
         if (SSR is not null)
@@ -265,11 +265,11 @@ public sealed partial class SessionRewards : Reward, ISessionReward
             from empSession in context.EmployeeSessionRewardEntity
             join subjectSession in context.SubjectSessionRewardEntity on empSession.SubjectSessionRewardId equals
                 subjectSession.Id
-            join empReward in context.EmployeeReward on empSession.EmployeeId equals empReward.EmployeeId into
+            join empReward in context.EmployeeReward on empSession.EmployeeSnapshotId equals empReward.EmployeeId into
                 empRewardGroup
             from empReward in empRewardGroup.DefaultIfEmpty()
             where subjectSession.SessionRewardId == this.RewardId && !empReward.IsUpdated
-            group new { empSession.EmployeeId, subjectSession.NumberOfSessions } by empSession.EmployeeId
+            group new { EmployeeId = empSession.EmployeeSnapshotId, subjectSession.NumberOfSessions } by empSession.EmployeeSnapshotId
             into g
             select new EmployeeSessionData
             (

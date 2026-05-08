@@ -51,7 +51,7 @@ public sealed class SubjectSessionReward
         return new SubjectSessionReward(subjectSessionReward, dbContext);
     }
 
-    public static async Task<SubjectSessionReward? > FindBySubjectAndSession(int SubjectId, int semester, int SessionRewardId, RewardDbContext dbContext)
+    public static async Task<SubjectSessionReward? > FindByRewardAndSubject(int SubjectId,  int SessionRewardId, RewardDbContext dbContext)
     {
         var subjectSessions =
             await (
@@ -60,8 +60,7 @@ public sealed class SubjectSessionReward
 
             where
             subjectSessionReward.SessionRewardId == SessionRewardId &&
-            subjectSemester.SubjectId == SubjectId &&
-            subjectSemester.SemesterNumber == semester
+            subjectSemester.SubjectId == SubjectId
 
             select subjectSessionReward
             ).SingleOrDefaultAsync();
@@ -77,13 +76,13 @@ public sealed class SubjectSessionReward
 
     public bool AddEmployee(int employeeId, bool isMainEmployee = false)
     {
-        if (Entity.Employees.Any(x => x.EmployeeId == employeeId))
+        if (Entity.Employees.Any(x => x.EmployeeSnapshotId == employeeId))
             return false;
 
         if (Entity.Employees.Count >= MaxNumberOfEmployees)
             return false;
 
-        Entity.Employees.Add(new EmployeeSessionRewardEntity { EmployeeId = employeeId, SubjectSessionRewardId = Id });
+        Entity.Employees.Add(new EmployeeSessionRewardEntity { EmployeeSnapshotId = employeeId, SubjectSessionRewardId = Id });
 
         if (isMainEmployee)
             MainEmployeeId = employeeId;
@@ -101,7 +100,7 @@ public sealed class SubjectSessionReward
 
     public bool RemoveEmployee(int employeeId)
     {
-        var employee = Entity.Employees.FirstOrDefault(x => x.EmployeeId == employeeId);
+        var employee = Entity.Employees.FirstOrDefault(x => x.EmployeeSnapshotId == employeeId);
         if (employee == null)
             return false;
 

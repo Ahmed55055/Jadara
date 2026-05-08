@@ -4,11 +4,10 @@ namespace Reward_Flow_v2.Rewards.SessionsReward;
 
 public record EmployeeRewardDto(int EmployeeRewardId,int EmployeeId,float Total);
 
-internal interface ISessionReward
+internal interface ISessionReward : IReward
 {
-    public Task<bool> AssignEmployeeToSubjectAsync(SessionSubjectDto dto);
-    public Task<bool> AssignEmployeeToSubjectAsync(IEnumerable<SessionSubjectDto> dto);
+    public Task<bool> AssignEmployeeAsync(SessionSubjectDto dto);
+    public Task<bool> AssignEmployeesAsync(IEnumerable<SessionSubjectDto> dto);
     public Task<EmployeeRewardDto?> GetEmployeeReward(int employeeId);
-    public Task<IEnumerable<EmployeeRewardDto>> GetEmployeesReward();
-    public Task<float> GetRewardTotal();
+    public Task<IEnumerable<EmployeeRewardDto>> GetEmployeesRewards();
 }

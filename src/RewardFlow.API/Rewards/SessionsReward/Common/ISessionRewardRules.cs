@@ -8,5 +8,5 @@ public interface ISessionRewardRules
     bool MaxSessionNumberRuleEnabled {  get; set; }
 
     bool IsWithInMaximumNumberOfSession(int sessionNumber);
-    bool CanAssignEmployeeToSubjectAsync(int dtoSubjectId, int dtoNumberOfStudents, IEnumerable<int> EmployeesIds);
+    Task<bool> CanAssignEmployeeToSubjectAsync(int dtoSubjectId, int dtoNumberOfStudents, IEnumerable<int> EmployeesIds);
 }
