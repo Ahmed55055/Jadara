@@ -155,7 +155,7 @@ namespace RewardFlow_UnitTest.Rewards.SessionsReward
             
             context.EmployeeSessionRewardEntity.Add(new EmployeeSessionRewardEntity
             {
-                EmployeeId = 1,
+                EmployeeSnapshotId = 1,
                 SubjectSessionRewardId = subjectSessionReward.Id
             });
             
@@ -201,7 +201,7 @@ namespace RewardFlow_UnitTest.Rewards.SessionsReward
             var employeeSessionRewards = Enumerable.Range(1, employeeCount)
                 .Select(i => new EmployeeSessionRewardEntity
                 {
-                    EmployeeId = i,
+                    EmployeeSnapshotId = i,
                     SubjectSessionRewardId = subjectSessionReward.Id
                 });
             context.EmployeeSessionRewardEntity.AddRange(employeeSessionRewards);

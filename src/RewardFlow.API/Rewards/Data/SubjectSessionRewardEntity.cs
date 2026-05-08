@@ -17,4 +17,5 @@ public class SubjectSessionRewardEntity : ITenantEntity
     public int MaxNumberOfEmployees {  get; set; }
 
     public virtual ICollection<EmployeeSessionRewardEntity> Employees { get; set; } = new List<EmployeeSessionRewardEntity>();
+    public virtual  ICollection<SemesterSubject> SemesterSubject { get; set; } = new List<SemesterSubject>();
 }

@@ -10,9 +10,9 @@ public class EmployeeSessionRewardEntity: ITenantEntity
     public int Id { get; set; }
     public Guid TenantId { get; set; }
     public required int SubjectSessionRewardId { get; set; }
-    public required int EmployeeId { get; set; }
+    public required int EmployeeSnapshotId { get; set; }
     public int NumberOfSessions {  get; set; }
-    public float Salary {  get; set; }
     
     public virtual SubjectSessionRewardEntity SubjectSessionReward { get; set; } = null!;
+    public virtual EmployeeSnapshot EmployeeSnapshot { get; set; } = null!;
 }
