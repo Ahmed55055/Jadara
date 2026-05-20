@@ -12,7 +12,7 @@ public class SessionsRewardCalculator : ISessionRewardCalculator
         return (int)Math.Round(numberOfStudents / 5.0, MidpointRounding.AwayFromZero);
     }
 
-    public float CalculateTotal(int numOfSessions, float salary, float percentage)
+    public decimal CalculateTotal(int numOfSessions, decimal salary, decimal percentage)
     {
         return numOfSessions * salary * percentage;
     }

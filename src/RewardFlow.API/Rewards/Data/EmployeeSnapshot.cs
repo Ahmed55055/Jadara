@@ -31,6 +31,6 @@ public class EmployeeSnapshot
     private string? _accountNumber;
     public string? NationalNumberHash { get; private set; }
     public string? AccountNumberHash { get; private set; }
-    public float? Salary { get; set; }
+    public decimal? Salary { get; set; }
     public byte? JobTitle { get; set; }
 }
