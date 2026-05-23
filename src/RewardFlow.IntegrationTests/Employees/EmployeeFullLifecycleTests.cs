@@ -123,7 +123,7 @@ public class EmployeeFullLifecycleTests : IAsyncLifetime
             Name = "John Smith",
             NationalNumber = "12345678901",
             AccountNumber = "ACC654321",
-            Salary = 6000.0f,
+            Salary = 6000.0m,
             FacultyId = 1,
             DepartmentId = 1,
             JobTitle = (byte)2,
@@ -137,7 +137,7 @@ public class EmployeeFullLifecycleTests : IAsyncLifetime
         var updatedGetResponse = await _userClient.Client.GetAsync($"/api/Employees/{employeeId}");
         var updatedEmployee = await updatedGetResponse.Content.ReadFromJsonAsync<EmployeeDto>();
         updatedEmployee!.Name.Should().Be("John Smith");
-        updatedEmployee.Salary.Should().Be(6000.0f);
+        updatedEmployee.Salary.Should().Be(6000.0m);
     }
 
     private async Task CreateAdditionalEmployees()

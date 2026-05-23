@@ -51,7 +51,7 @@ public class ValidEmployeePropertyCases
         ("Ahmed Ali", "With spaces")
     ];
 
-    public readonly (float? value, string Description)[] Salaries =
+    public readonly (decimal? value, string Description)[] Salaries =
     [
         (EmployeeConstraints.Salary.Min, $"Min salary"),
         (EmployeeConstraints.Salary.Max, $"Max salary"),

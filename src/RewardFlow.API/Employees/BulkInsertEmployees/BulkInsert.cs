@@ -18,7 +18,7 @@ public static class BulkInsert
         string Name,
         string? NationalNumber = null,
         string? AccountNumber = null,
-        float?   Salary = null);
+        decimal?   Salary = null);
     public record Request(List<emp> Employees);
     public record Response(int Success, List<int> FailsIndexes);
 

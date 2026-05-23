@@ -1,34 +1,33 @@
 namespace Reward_Flow_v2.Rewards.Data;
 
-public class EmployeeReward
+public sealed class EmployeeReward
 {
-    public int RewardId { get; set; }
-    public int EmployeeId { get; set; }
-    public Guid EmployeeSnapshotId { get; set; }
-    public decimal Total { get; set; }
+    public int RewardId { get; init; }
+    public int EmployeeId { get; init; }
+    public Guid EmployeeSnapshotId { get; private set; }
+    public decimal Amount { get; private set; }
     public bool IsUpdated { get; private set; }
-    
-    public virtual EmployeeSnapshot EmployeeSnapshot { get; set; }
+
+    public EmployeeSnapshot EmployeeSnapshot { get; private set; } 
 
     private EmployeeReward() { }
 
-    private EmployeeReward(int rewardId, int employeeId,  EmployeeSnapshot employeeSnapshot, decimal total)
+    private EmployeeReward(int rewardId, int employeeId, EmployeeSnapshot employeeSnapshot, decimal amount)
     {
         RewardId = rewardId;
         EmployeeId = employeeId;
-        Total = total;
+        Amount = amount;
         IsUpdated = true;
-        this.EmployeeSnapshot =  employeeSnapshot; 
+        EmployeeSnapshot = employeeSnapshot;
     }
 
-    public static EmployeeReward? Create(int rewardId, int employeeId, EmployeeSnapshot employeeSnapshot, decimal total = 0)
+    public static EmployeeReward Create(int rewardId, EmployeeSnapshot employeeSnapshot, decimal total = 0)
     {
-        if (employeeSnapshot is null)
-            return null;
-        
-        var instance = new EmployeeReward(rewardId, employeeId, employeeSnapshot, total);
-        
-        if(total == 0)
+        ArgumentNullException.ThrowIfNull(employeeSnapshot);
+
+        var instance = new EmployeeReward(rewardId, employeeSnapshot.EmployeeId, employeeSnapshot, total);
+
+        if (total == 0)
             instance.MarkAsOutdated();
 
         return instance;
@@ -44,9 +43,9 @@ public class EmployeeReward
         IsUpdated = false;
     }
 
-    public void UpdateTotal(decimal total)
+    public void UpdateAmount(decimal total)
     {
-        Total = total;
+        Amount = total;
         IsUpdated = true;
     }
 }

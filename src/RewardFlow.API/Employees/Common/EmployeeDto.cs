@@ -5,7 +5,7 @@ public record EmployeeDto{
     public string Name { get; set; }
     public string? NationalNumber { get; set; }
     public string? AccountNumber { get; set; }
-    public float? Salary { get; set; }
+    public decimal? Salary { get; set; }
     public string? Faculty { get; set; }
     public string? Department { get; set; }
     public DateTime CreatedAt { get; set; }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Reward_Flow_v2.Rewards.Data;
 
-public class SubjectSessionRewardEntity
+public sealed class SubjectSessionRewardEntity
 {
     private readonly List<EmployeeSessionSubject> _employeeSessionSubjects = new();
     
@@ -20,8 +20,8 @@ public class SubjectSessionRewardEntity
     public int? MainEmployeeId { get; private set; }
     public int MaxNumberOfEmployees { get; set; }
 
-    public virtual IReadOnlyCollection<EmployeeSessionSubject> EmployeeSessionSubject => _employeeSessionSubjects.AsReadOnly();
-    public virtual SubjectSnapshot SubjectSnapshot { get; private set; } = null!;
+    public IReadOnlyCollection<EmployeeSessionSubject> EmployeeSessionSubject => _employeeSessionSubjects.AsReadOnly();
+    public SubjectSnapshot SubjectSnapshot { get; private set; } = null!;
 
     private SubjectSessionRewardEntity() { }
 
@@ -113,7 +113,7 @@ public class SubjectSessionRewardEntity
 
     private EmployeeSessionSubject CreateEmployeeSessionSubject(EmployeeSnapshot employeeSnapshot)
     {
-        return new EmployeeSessionSubject { EmployeeSnapshot = employeeSnapshot, SubjectSessionReward = this };
+        return new EmployeeSessionSubject(subjectSessionReward : this,employeeSnapshot : employeeSnapshot) ;
     }
 
     /// <summary>

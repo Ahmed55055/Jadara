@@ -42,7 +42,6 @@ public sealed class Program
         builder.Services.AddScoped<IEmployeeTokenService, EmployeeTokenService>();
         builder.Services.AddScoped<ISessionRewardCalculator, SessionsRewardCalculator>();
         builder.Services.AddScoped<ISessionRewardRules, SessionRewardRules>();
-        builder.Services.AddScoped<ISessionRewardFactory, SessionRewards.SessionRewardFactory>();
         builder.Services.AddScoped<IEmployeeLookupService,EmployeeLookupService>();
 
 

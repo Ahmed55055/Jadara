@@ -2,7 +2,7 @@ using Reward_Flow_v2.Rewards.Data;
 
 namespace RewardFlow_API.Rewards.Data;
 
-public class SubjectSnapshot
+public sealed class SubjectSnapshot
 {
     public Guid SnapshotId { get; private set; }
     public DateTime CapturedAt { get; private set; }
@@ -13,5 +13,5 @@ public class SubjectSnapshot
     public byte Semester { get; set; }
     public byte Year { get; set; }
 
-    public virtual SemesterSubject SemesterSubject { get; set; } = null!;
+    public SemesterSubject SemesterSubject { get; set; } = null!;
 }

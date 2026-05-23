@@ -9,7 +9,7 @@ namespace Reward_Flow_v2.Rewards.SessionsReward.CreateReward;
 
 public static partial class CreateSessionsReward
 {
-    public record Request(string? RewardName, string? RewardCode, int? Year, byte? Semester, float Percentage);
+    public record Request(string Name, string? Code, byte? Year, byte? Semester, decimal Percentage);
 
     public static void MapCreateSessionsReward(this IEndpointRouteBuilder app)
     {
@@ -22,32 +22,14 @@ public static partial class CreateSessionsReward
             .Validation(new CreateRewardRequestValidator());
     }
 
-    private static async Task<IResult> HandlerAsync(Request request, ISessionRewardFactory factory, IHttpContextAccessor httpContextAccessor, CancellationToken cancellationToken)
+    private static async Task<IResult> HandlerAsync(Request request, ISessionRewardService sessionRewardService , IHttpContextAccessor httpContextAccessor, CancellationToken cancellationToken)
     {
         var currentUserId = await httpContextAccessor.GetCurrentUserIntIdAsync(cancellationToken);
-
-        if (currentUserId == 0)
-            return Results.Unauthorized();
-
-        try
-        {
-
-            var sessionRewardId = await factory.CreateAsync(
-                currentUserId,
-                request.RewardName ?? "Untitled",
-                request.RewardCode,
-                request.Year,
-                request.Semester,
-                request.Percentage);
-
-            if (sessionRewardId == null)
-                return Results.UnprocessableEntity();
-
-            return Results.Created(RewardApiPath.GetSessionsRewardById, sessionRewardId);
-        }
-        catch (Exception)
-        {
-            return Results.InternalServerError();
-        }
+        
+        var rewardResult = await sessionRewardService.CreateReward(request, currentUserId);
+        
+        return rewardResult.IsSuccess?
+             Results.Created(RewardApiPath.GetSessionsRewardById, rewardResult.Value):
+             Results.InternalServerError();
     }
 }

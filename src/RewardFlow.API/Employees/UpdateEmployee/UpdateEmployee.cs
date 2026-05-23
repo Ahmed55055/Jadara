@@ -17,7 +17,7 @@ public static partial class UpdateEmployee
         public Optional<string> Name { get; init; }
         public Optional<string?> NationalNumber { get; init; }
         public Optional<string?> AccountNumber { get; init; }
-        public Optional<float?> Salary { get; init; }
+        public Optional<decimal?> Salary { get; init; }
         public Optional<int?> FacultyId { get; init; }
         public Optional<int?> DepartmentId { get; init; }
         public Optional<byte?> JobTitle { get; init; }
