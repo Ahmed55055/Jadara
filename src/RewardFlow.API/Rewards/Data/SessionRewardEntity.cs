@@ -6,14 +6,43 @@ using System.Threading.Tasks;
 
 namespace Reward_Flow_v2.Rewards.Data;
 
-public class SessionRewardEntity: ITenantEntity
+public sealed class SessionRewardEntity: ITenantEntity
 {
     public int Id { get; set; }
     public Guid TenantId { get; set; }
-    public int? year { get; set; }
+    public byte? year { get; set; }
     public byte? semester { get; set; }
-    public float Percentage { get; set; }
+    public decimal Percentage { get; set; }
 
-    public virtual RewardEntity Reward { get; set; } = null!;
+    public Reward Reward { get; init; } = null!;
+
+    private SessionRewardEntity()
+    {
+    }
+
+    private SessionRewardEntity(byte? year, byte? semester, decimal percentage, Reward reward)
+    {
+        this.year = year;
+        this.semester = semester;
+        Percentage = percentage;
+
+        Reward = reward;
+    }
+
+    public static SessionRewardEntity Create(byte? year, byte? semester, decimal percentage, int CreatedBy,
+        string? name = "Untitled", string? code = null)
+    {
+        var reward = new Reward
+        {
+            Name = name,
+            Total = 0,
+            Code = code,
+            LastUpdate = DateTime.UtcNow,
+            CreatedBy = CreatedBy,
+            NumberOfEmployees = 0,
+            RewardType = (int)RewardTypes.Sessions
+        };
+
+        return new(year, semester, percentage, reward);
+    }
 }
-

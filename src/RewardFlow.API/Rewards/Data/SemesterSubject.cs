@@ -1,16 +1,14 @@
-using RewardFlow_API.Common.Interface;
-
 namespace Reward_Flow_v2.Rewards.Data;
 
-public class SemesterSubject : ITenantEntity
+public sealed class SemesterSubject : ITenantEntity
 {
-    public int Id { get; set; }
+    public int Id { get; private set; }
     public Guid TenantId { get; set; }
-    public int SubjectId { get; set; }
-    public byte Semester { get; set; }
+    public int SubjectId { get; init; }
+    public byte Semester { get; init; }
     public int NumberOfStudents { get; set; }
     public decimal? Price {  get; set; }
-    public byte Year { get; set; }
+    public byte Year { get; init; }
     
-    public virtual Subject Subject { get; set; } = null!;
+    public Subject Subject { get; init; } = null!;
 }

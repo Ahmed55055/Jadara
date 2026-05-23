@@ -4,14 +4,24 @@ using System.Threading.Tasks;
 
 namespace Reward_Flow_v2.Rewards.Data;
 
-public class EmployeeSessionSubject
+public sealed class EmployeeSessionSubject
 {
     public int SubjectSessionRewardId { get; init; }
-    public Guid EmployeeSnapshotId { get; init; }
-    // Denormalization to optimize queries by avoiding joins.
-    // Keep set private; this value must remain immutable and never be updated independently.
     public int EmployeeId { get; private set; }
+    public Guid EmployeeSnapshotId { get; init; }
     
-    public virtual SubjectSessionRewardEntity SubjectSessionReward { get; init; } = null!;
-    public virtual EmployeeSnapshot EmployeeSnapshot { get; init; } = null!;
+    public SubjectSessionRewardEntity SubjectSessionReward { get; init; } = null!;
+    public EmployeeSnapshot EmployeeSnapshot { get; init; } = null!;
+    private EmployeeSessionSubject() { } 
+
+    public EmployeeSessionSubject(SubjectSessionRewardEntity subjectSessionReward, EmployeeSnapshot employeeSnapshot)
+    {
+        ArgumentNullException.ThrowIfNull(subjectSessionReward, nameof(subjectSessionReward));
+        ArgumentNullException.ThrowIfNull(employeeSnapshot, nameof(employeeSnapshot));
+        
+        SubjectSessionReward = subjectSessionReward;
+        EmployeeSnapshot = employeeSnapshot;
+        
+        EmployeeId = employeeSnapshot.EmployeeId; 
+    }
 }

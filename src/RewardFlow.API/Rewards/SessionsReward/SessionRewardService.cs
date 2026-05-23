@@ -5,6 +5,7 @@ using Reward_Flow_v2.Employees.Data;
 using Reward_Flow_v2.Rewards.Data;
 using Reward_Flow_v2.Rewards.Data.Database;
 using Reward_Flow_v2.Rewards.SessionsReward.Common;
+using Reward_Flow_v2.Rewards.SessionsReward.CreateReward;
 using Reward_Flow_v2.Rewards.SessionsReward.Dtos;
 using Reward_Flow_v2.Rewards.SessionsReward.Interface;
 using RewardFlow_API.Rewards.Data;
@@ -19,16 +20,17 @@ public class SessionRewardService(
     ISnapshotService<SemesterSubject, SubjectSnapshot> subjectSnapshotService,
     ISnapshotService<Employee, EmployeeSnapshot> employeeSnapshotService,
     IEmployeeLookupService employeeLookup,
-    ILogger<SessionRewardService> logger) : ISessionReward
+    ILogger<SessionRewardService> logger) : ISessionRewardService
 {
     public async Task<decimal> GetTotalAsync(int rewardId)
     {
         return await dbcontext.EmployeeReward
             .Where(er => er.RewardId == rewardId)
-            .SumAsync(er => er.Total);
+            .SumAsync(er => er.Amount);
     }
-    
+
     #region AssignEmployees
+
     private record RewardProcessingContext(
         SessionRewardEntity Reward,
         List<Employee> Employees,
@@ -39,7 +41,6 @@ public class SessionRewardService(
         List<EmployeeReward> EmployeeRewards,
         List<EmployeeSessionCount> EmployeeSessionCounts);
 
-    
 
     private record EmployeeSessionCount(int EmployeeId, int TotalSessions);
 
@@ -113,12 +114,7 @@ public class SessionRewardService(
             if (employeeRewards.Any(e => e.EmployeeId == employeeId))
                 continue;
 
-            var newRecord = EmployeeReward.Create(rewardId, employeeId,
-                employeeSnapshots.First(e => e.EmployeeId == employeeId));
-
-            if (newRecord is null)
-                return Result.Fail(
-                    $"Failed to create EmployeeReward for Employee {employeeId} and Reward {rewardId}");
+            var newRecord = EmployeeReward.Create(rewardId, employeeSnapshots.First(e => e.EmployeeId == employeeId));
 
             employeeRewards.Add(newRecord);
         }
@@ -193,6 +189,19 @@ public class SessionRewardService(
             var newRecord = new EmployeeSessionCount(employeeId, 0);
             employeeSessionCounts.Add(newRecord);
         }
+    }
+
+    public async Task<Result<int>> CreateReward(CreateSessionsReward.Request dto, int createdBy)
+    {
+        var reward =
+            SessionRewardEntity.Create(dto.Year, dto.Semester, dto.Percentage, createdBy, dto.Name, dto.Code);
+
+        dbcontext.Add(reward);
+        await dbcontext.SaveChangesAsync();
+
+        return reward.Id == 0 
+            ? Result.Fail("Couldn't create this reward") 
+            : Result.Ok(reward.Id);
     }
 
     public async Task<Result<IEnumerable<EmployeeSessionReward>>> AssignEmployeeAsync(SessionSubjectDto dto)
@@ -272,7 +281,7 @@ public class SessionRewardService(
             var salary = employeeReward.EmployeeSnapshot.Salary;
             var newTotal = calculator.CalculateTotal(empSessions, salary.Value, rewardContext.Reward.Percentage);
 
-            employeeReward.UpdateTotal(newTotal);
+            employeeReward.UpdateAmount(newTotal);
         }
 
         return Result.Ok();

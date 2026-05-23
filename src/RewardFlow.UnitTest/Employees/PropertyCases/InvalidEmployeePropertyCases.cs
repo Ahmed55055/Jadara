@@ -52,11 +52,11 @@ public class InvalidEmployeePropertyCases
     /// <summary>
     /// A collection of test cases representing invalid Salary values.
     /// </summary>
-    public readonly (float? Salary, string Reason)[] Salary =
+    public readonly (decimal? Salary, string Reason)[] Salary =
     [
-        (-1f, "Negative Salary"),
-        (0f, "Zero Salary"),
-        (100_000f, "Salary exceeds maximum limit of 99,999 EGP")
+        (-1m, "Negative Salary"),
+        (0m, "Zero Salary"),
+        (100_000m, "Salary exceeds maximum limit of 99,999 EGP")
     ];
 
     /// <summary>

@@ -32,7 +32,7 @@ public class Employee : ITenantEntity
     
     public string? NationalNumberHash { get; private set; }
     public string? AccountNumberHash { get; private set; }
-    public float? Salary { get; set; }
+    public decimal? Salary { get; set; }
     public int? FacultyId { get; set; }
     public int? DepartmentId { get; set; }
     public int CreatedBy { get; set; }

@@ -3,5 +3,5 @@
 public record EmployeeDto
 {
     public required int EmployeeId { get; init; }
-    public required float Salary { get; init; }
+    public required decimal Salary { get; init; }
 }

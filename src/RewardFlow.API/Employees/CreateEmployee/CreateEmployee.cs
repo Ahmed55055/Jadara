@@ -14,7 +14,7 @@ public static class CreateEmployee
         string Name,
         string? NationalNumber,
         string? AccountNumber,
-        float? Salary,
+        decimal? Salary,
         int? FacultyId,
         int? DepartmentId,
         byte? JobTitle,

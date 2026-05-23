@@ -2,17 +2,17 @@ using RewardFlow_API.Common.Interface;
 
 namespace Reward_Flow_v2.Rewards.Data;
 
-public class RewardEntity: ITenantEntity
+public class Reward: ITenantEntity
 {
-    public int Id { get; set; }
+    public int Id { get; private set; }
     public Guid TenantId { get; set; }
     public string? Name { get; set; }
-    public float Total { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public decimal Total { get; set; }
+    public DateTime CreatedAt { get; private set; }
     public DateTime LastUpdate { get; set; }
-    public int CreatedBy { get; set; }
+    public int CreatedBy { get; init; }
     public string? Code { get; set; }
-    public int RewardType { get; set; }
+    public int RewardType { get; init; }
     public int NumberOfEmployees { get; set; }
 
 

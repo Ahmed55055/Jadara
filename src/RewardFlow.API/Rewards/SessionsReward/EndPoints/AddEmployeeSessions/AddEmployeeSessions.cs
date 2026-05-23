@@ -16,27 +16,8 @@ public static class AddEmployeeSessions
             .WithTags(RewardApiPath.Tag);
     }
 
-    private static async Task<IResult> HandlerAsync(int id, SessionSubjectDto dto, ISessionRewardFactory factory, IHttpContextAccessor httpContextAccessor, CancellationToken cancellationToken)
+    private static async Task<IResult> HandlerAsync(int id, SessionSubjectDto dto, IHttpContextAccessor httpContextAccessor, CancellationToken cancellationToken)
     {
-        var currentUserId = await httpContextAccessor.GetCurrentUserIntIdAsync(cancellationToken);
-        
-        if (currentUserId == 0)
-            return Results.Unauthorized();
-
-        try
-        {
-            var sessionReward = await factory.FindAsync(id, currentUserId);
-            
-            if (sessionReward == null)
-                return Results.NotFound();
-
-            await sessionReward.AssignEmployeeToSubjectAsync(dto);
-            
-            return Results.NoContent();
-        }
-        catch (Exception)
-        {
-            return Results.InternalServerError();
-        }
+        throw new System.NotImplementedException();
     }
 }

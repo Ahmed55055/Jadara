@@ -22,7 +22,12 @@ public class EmployeeFaker : Faker<Employee>, IEntityFaker<Employee,EmployeeFiel
         RuleFor(e => e.NationalNumber, f => f.Random.String2(14, "0123456789").OrNull(f, 0.1f));
         RuleFor(e => e.AccountNumber, f => f.Random.String2(f.Random.Number(12, 14), "0123456789-").OrNull(f, 0.1f));
 
-        RuleFor(e => e.Salary, f => f.Random.Float(250, 15000).OrNull(f, 0.1f));
+        
+        RuleFor(e => e.Salary, f => 
+        {
+            decimal value = f.Random.Decimal(250m, 15000m);
+            return value.OrNull(f, 0.1f);
+        });
         RuleFor(e => e.FacultyId, f => f.Random.Int(1, 2).OrNull(f, 0.2f));
         RuleFor(e => e.DepartmentId, f => f.Random.Int(1, 3).OrNull(f, 0.2f));
         RuleFor(e => e.JobTitle, f => f.Random.Byte(1, 3).OrNull(f, 0.1f));
@@ -75,7 +80,7 @@ public class EmployeeFaker : Faker<Employee>, IEntityFaker<Employee,EmployeeFiel
             RuleFor(e => e.AccountNumber, f => f.Random.String2(f.Random.Number(12, 14), "0123456789-"));
 
         if (fields.HasFlag(EmployeeFields.Salary))
-            RuleFor(e => e.Salary, f => f.Random.Float(250, 15_000));
+            RuleFor(e => e.Salary, f => f.Random.Decimal(250, 15_000));
 
         if (fields.HasFlag(EmployeeFields.FacultyId))
             RuleFor(e => e.FacultyId, f => f.Random.Int(1, 2));
