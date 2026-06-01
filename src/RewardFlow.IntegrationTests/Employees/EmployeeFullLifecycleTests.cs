@@ -19,16 +19,10 @@ namespace RewardFlow.IntegrationTests.Employees;
 /// Tests various scenarios for employee operations including creation, retrieval, update, and deletion.
 /// </summary>
 [Collection("EmployeeTests")]
-public class EmployeeFullLifecycleTests : IAsyncLifetime
+public class EmployeeFullLifecycleTests(TestWebApplicationFactory factory)
+    : BaseEmployeeTestFixture(factory), IAsyncLifetime
 {
-    private readonly TestWebApplicationFactory _factory;
-    private readonly DbUtility _dbUtility;
     private UserClient _userClient;
-    public EmployeeFullLifecycleTests(EmployeeTestFixture factory)
-    {
-        _factory = factory;
-        _dbUtility = new DbUtility(_factory);
-    }
 
     public async Task InitializeAsync()
     {

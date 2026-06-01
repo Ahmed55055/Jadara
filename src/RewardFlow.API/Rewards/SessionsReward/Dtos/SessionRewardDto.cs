@@ -4,7 +4,7 @@ public record SessionRewardDto(
     int SessionRewardId,
     string Name,
     string? Code,
-    byte? Year,
+    short? Year,
     byte? Semester,
     decimal Percentage,
     decimal Total,

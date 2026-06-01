@@ -10,5 +10,5 @@ public record UpdateSessionsRewardRequest
     public Optional<string?> RewardCode;
     public Optional<int?> Year;
     public Optional<byte?> Semester;
-    public Optional<float> Percentage;
+    public Optional<decimal> Percentage;
 }

@@ -28,7 +28,7 @@ public struct EmployeeBulkRequest
     public BulkInsert.Request BulkInsert()
     {
         var emps = Employees
-            .Select(e => new BulkInsert.emp(e.Name, e.NationalNumber, e.AccountNumber, e.Salary));
+            .Select(e => new BulkInsert.emp(Guid.NewGuid(), e.Name, e.NationalNumber, e.AccountNumber, e.Salary));
         
         return new BulkInsert.Request(emps.ToList());
     }

@@ -17,19 +17,11 @@ namespace RewardFlow.IntegrationTests.Auth;
 /// Integration tests for the User Full Lifecycle.
 /// Tests the complete user workflow from registration through login to password reset.
 /// </summary>
-[Collection("UserTests")]
-public class UserFullLifecycleTests : IAsyncLifetime
+public class UserFullLifecycleTests(TestWebApplicationFactory _factory) : BaseAuthTestFixture(_factory), IAsyncLifetime
 {
-    private readonly Faker _faker = new();
-    private readonly TestWebApplicationFactory _factory;
     private HttpClient _client;
     private Reward_Flow_v2.User.Data.User _testUser;
     private string _originalPassword;
-
-    public UserFullLifecycleTests(UserTestFixture factory)
-    {
-        _factory = factory;
-    }
 
     public async Task InitializeAsync()
     {

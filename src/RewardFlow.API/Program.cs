@@ -8,9 +8,11 @@ using Reward_Flow_v2.Common.Tokenization;
 using Reward_Flow_v2.Common.UserIdRetrieval;
 using Reward_Flow_v2.Employees;
 using Reward_Flow_v2.Employees.Common;
+using Reward_Flow_v2.Employees.Data;
 using Reward_Flow_v2.Employees.Data.Database;
 using Reward_Flow_v2.Employees.Shared;
 using Reward_Flow_v2.Rewards;
+using Reward_Flow_v2.Rewards.Data;
 using Reward_Flow_v2.Rewards.Data.Database;
 using Reward_Flow_v2.Rewards.SessionsReward;
 using Reward_Flow_v2.Rewards.SessionsReward.Common;
@@ -19,6 +21,8 @@ using Reward_Flow_v2.Rewards.SessionsReward.Interface;
 using Reward_Flow_v2.User;
 using Reward_Flow_v2.User.AuthService;
 using Reward_Flow_v2.User.Data.Database;
+using RewardFlow_API.Rewards.Common;
+using RewardFlow_API.Rewards.Data;
 using RewardFlow_API.Common.Interface;
 using Scalar.AspNetCore;
 
@@ -38,12 +42,16 @@ public sealed class Program
 
         // Register services
         AppConfiguration.Initialize(builder.Configuration);
-        builder.Services.AddScoped<IUserIdRetrievalService, UserIdRetrievalService>();
+        builder.Services.AddScoped<IUserRetrievalService, UserRetrievalService>();
         builder.Services.AddScoped<ITokenizer, Tokenizer>();
         builder.Services.AddScoped<IEmployeeTokenService, EmployeeTokenService>();
         builder.Services.AddScoped<ISessionRewardCalculator, SessionsRewardCalculator>();
         builder.Services.AddScoped<ISessionRewardRules, SessionRewardRules>();
         builder.Services.AddScoped<IEmployeeLookupService,EmployeeLookupService>();
+        builder.Services.AddScoped<ISessionRewardService,SessionRewardService>();
+        builder.Services.AddScoped<ISnapshotService<Employee,EmployeeSnapshot>,EmployeeSnapshotService>();
+        builder.Services.AddScoped<ISnapshotService<SemesterSubject,SubjectSnapshot>,SubjectSnapshotService>();
+        builder.Services.AddScoped<ScopedUserContext>();
         builder.Services.AddScoped<IUserContext, UserContext>();
 
         builder.Services.AddDbContextFactory<RewardDbContext>( options =>

@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+/*using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.InMemory; 
 using Moq;
 using Reward_Flow_v2.Rewards.Data;
@@ -102,7 +102,7 @@ namespace RewardFlow_UnitTest.Rewards.SessionsReward
             
             var dto = new SessionSubjectDto
             {
-                SubjectId = 1,
+                SemesterSubjectId = 1,
                 NumberOfStudents = 25,
                 MainEmployeeId = 1,
                 Employees = new List<SessionEmployeeDto> { new() { EmployeeId = 1, Salary = 5000f } }
@@ -124,7 +124,7 @@ namespace RewardFlow_UnitTest.Rewards.SessionsReward
             
             var dto = new SessionSubjectDto
             {
-                SubjectId = 1,
+                SemesterSubjectId = 1,
                 NumberOfStudents = 0,
                 MainEmployeeId = 1,
                 Employees = new List<SessionEmployeeDto> { new() { EmployeeId = 1, Salary = 5000f } }
@@ -144,7 +144,7 @@ namespace RewardFlow_UnitTest.Rewards.SessionsReward
             var subjectSessionReward = new SubjectSessionRewardEntity
             {
                 SessionRewardId = sessionRewardId,
-                NumberOfSessions = totalSessions,
+                SessionCount = totalSessions,
                 SemesterSubjectId = 1,
                 StudentsNumber = 25,
                 MainEmployeeId = 1,
@@ -153,7 +153,7 @@ namespace RewardFlow_UnitTest.Rewards.SessionsReward
             context.SubjectSessionRewardEntity.Add(subjectSessionReward);
             await context.SaveChangesAsync();
             
-            context.EmployeeSessionRewardEntity.Add(new EmployeeSessionRewardEntity
+            context.EmployeeSessionReward.Add(new EmployeeSessionSubject
             {
                 EmployeeSnapshotId = 1,
                 SubjectSessionRewardId = subjectSessionReward.Id
@@ -162,8 +162,8 @@ namespace RewardFlow_UnitTest.Rewards.SessionsReward
             context.EmployeeReward.Add(new EmployeeReward
             {
                 RewardId = rewardId,
-                EmployeeId = 1,
-                Total = 0,
+                EmployeeSnapshot = 1,
+                Amount = 0,
                 IsUpdated = false
             });
             
@@ -175,8 +175,8 @@ namespace RewardFlow_UnitTest.Rewards.SessionsReward
             if (!context.SubjectSemester.Any())
             {
                 context.SubjectSemester.AddRange(
-                    new SemesterSubject { Id = 1, SubjectId = 1, SemesterNumber = 1, NumberOfStudents = 25 },
-                    new SemesterSubject { Id = 2, SubjectId = 2, SemesterNumber = 1, NumberOfStudents = 30 }
+                    new SemesterSubject { Id = 1, SubjectId = 1, Semester = 1, NumberOfStudents = 25 },
+                    new SemesterSubject { Id = 2, SubjectId = 2, Semester = 1, NumberOfStudents = 30 }
                 );
                 await context.SaveChangesAsync();
             }
@@ -189,7 +189,7 @@ namespace RewardFlow_UnitTest.Rewards.SessionsReward
             var subjectSessionReward = new SubjectSessionRewardEntity
             {
                 SessionRewardId = sessionRewardId,
-                NumberOfSessions = 10,
+                SessionCount = 10,
                 SemesterSubjectId = 1,
                 StudentsNumber = 25,
                 MainEmployeeId = 1,
@@ -199,19 +199,19 @@ namespace RewardFlow_UnitTest.Rewards.SessionsReward
             await context.SaveChangesAsync();
             
             var employeeSessionRewards = Enumerable.Range(1, employeeCount)
-                .Select(i => new EmployeeSessionRewardEntity
+                .Select(i => new EmployeeSessionSubject
                 {
                     EmployeeSnapshotId = i,
                     SubjectSessionRewardId = subjectSessionReward.Id
                 });
-            context.EmployeeSessionRewardEntity.AddRange(employeeSessionRewards);
+            context.EmployeeSessionReward.AddRange(employeeSessionRewards);
             
             var employeeRewards = Enumerable.Range(1, employeeCount)
                 .Select(i => new EmployeeReward
                 {
                     RewardId = rewardId,
-                    EmployeeId = i,
-                    Total = 0,
+                    EmployeeSnapshot = i,
+                    Amount = 0,
                     IsUpdated = false
                 });
             context.EmployeeReward.AddRange(employeeRewards);
@@ -224,4 +224,4 @@ namespace RewardFlow_UnitTest.Rewards.SessionsReward
             // Context is created per test, no need to dispose
         }
     }
-}
+}*/

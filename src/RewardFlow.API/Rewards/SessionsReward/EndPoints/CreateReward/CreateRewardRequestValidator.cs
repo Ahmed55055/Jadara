@@ -9,17 +9,17 @@ public static partial class CreateSessionsReward
         public CreateRewardRequestValidator()
         {
 
-            RuleFor(x => x.RewardName)
+            RuleFor(x => x.Name)
                 .NotEmpty()
-                .When(x => x.RewardName is not null);
+                .When(x => x.Name is not null);
 
-            RuleFor(x => x.RewardCode)
+            RuleFor(x => x.Code)
                 .NotEmpty()
                 .MaximumLength(50)
-                .When(x => x.RewardCode is not null);
+                .When(x => x.Code is not null);
 
             RuleFor(x => x.Year)
-                .GreaterThan(2011)
+                .GreaterThan((short)2011)
                 .When(x => x.Year is not null);
 
             RuleFor(x => x.Semester)

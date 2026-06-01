@@ -18,48 +18,6 @@ public static class DeleteSessionsReward
 
     private static async Task<IResult> HandlerAsync(int id, RewardDbContext dbContext, IHttpContextAccessor httpContextAccessor, CancellationToken cancellationToken)
     {
-        var currentUserId = await httpContextAccessor.GetCurrentUserIntIdAsync(cancellationToken);
-        
-        if (currentUserId == 0)
-            return Results.Unauthorized();
-
-        try
-        {
-            var sessionReward = await dbContext.SessionRewardEntity
-                .Include(sr => sr.Reward)
-                .Where(sr => sr.Id == id && sr.Reward.CreatedBy == currentUserId)
-                .FirstOrDefaultAsync(cancellationToken);
-
-            if (sessionReward == null)
-                return Results.NotFound();
-
-            var subjectSessionRewards = await dbContext.SubjectSessionRewardEntity
-                .Include(ssr => ssr.Employees)
-                .Where(ssr => ssr.SessionRewardId == id)
-                .ToListAsync(cancellationToken);
-            
-            foreach (var ssr in subjectSessionRewards)
-            {
-                dbContext.EmployeeSessionRewardEntity.RemoveRange(ssr.Employees);
-            }
-            
-            dbContext.SubjectSessionRewardEntity.RemoveRange(subjectSessionRewards);
-            
-            var employeeRewards = await dbContext.EmployeeReward
-                .Where(er => er.RewardId == sessionReward.Id)
-                .ToListAsync(cancellationToken);
-            
-            dbContext.EmployeeReward.RemoveRange(employeeRewards);
-            dbContext.SessionRewardEntity.Remove(sessionReward);
-            dbContext.Reward.Remove(sessionReward.Reward);
-            
-            await dbContext.SaveChangesAsync(cancellationToken);
-            
-            return Results.NoContent();
-        }
-        catch (Exception)
-        {
-            return Results.InternalServerError();
-        }
+        throw new System.NotImplementedException();
     }
 }
