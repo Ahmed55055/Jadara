@@ -1,6 +1,5 @@
 using FluentAssertions;
 using Reward_Flow_v2.Employees.Common;
-using Reward_Flow_v2.Employees.CreateEmployee;
 using Reward_Flow_v2.Employees.Data;
 using RewardFlow.IntegrationTests.Employees.Common;
 using RewardFlow.IntegrationTests.Infrastructure;
@@ -9,20 +8,11 @@ using System.Net;
 using System.Net.Http.Json;
 using Xunit;
 
-namespace RewardFlow.IntegrationTests.Employees;
+namespace RewardFlow.IntegrationTests.Employees.SinglarOperatoins;
 
-[Collection("EmployeeTests")]
-public class EmployeeSearchTests : IAsyncLifetime
+public class EmployeeSearchTests(TestWebApplicationFactory factory) : BaseEmployeeTestFixture(factory), IAsyncLifetime 
 {
-    private readonly TestWebApplicationFactory _factory;
-    private readonly DbUtility _dbUtility;
     private UserClient _userClient;
-
-    public EmployeeSearchTests(EmployeeTestFixture factory)
-    {
-        _factory = factory;
-        _dbUtility = new DbUtility(_factory);
-    }
 
     public async Task InitializeAsync()
     {

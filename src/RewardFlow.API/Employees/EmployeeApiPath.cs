@@ -14,4 +14,5 @@ public static class EmployeeApiPath
     public const string Update = $"{EmployeeRootApi}/{{id}}";
     public const string Delete = $"{EmployeeRootApi}/{{id}}";
     public const string BulkInsert = $"{EmployeeRootApi}/BulkInsert";
+    public const string BulkInsertV2 = $"{EmployeeRootApi}/v2/BulkInsert";
 }

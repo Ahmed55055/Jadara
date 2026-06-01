@@ -17,19 +17,9 @@ namespace RewardFlow.IntegrationTests.Users;
 /// Integration tests for GetAllUsers endpoint.
 /// Tests various scenarios for retrieving all users including authorization checks.
 /// </summary>
-[Collection("UserTests")]
-public class GetAllUsersTests : IAsyncLifetime
+public class GetAllUsersTests (TestWebApplicationFactory factory) : BaseUserTestFixture(factory), IAsyncLifetime
 {
-    private readonly TestWebApplicationFactory _factory;
-    private readonly DbUtility _dbUtility;
-    private readonly Faker _faker = new();
     private List<User> _otherUsers;
-
-    public GetAllUsersTests(UserTestFixture factory)
-    {
-        _factory = factory;
-        _dbUtility = new DbUtility(_factory);
-    }
 
     public async Task InitializeAsync()
     {

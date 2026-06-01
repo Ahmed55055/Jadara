@@ -1,26 +1,17 @@
-using System.Net;
-using System.Net.Http.Json;
 using FluentAssertions;
-using RewardFlow.IntegrationTests.Infrastructure;
 using Reward_Flow_v2.Employees.Data;
+using RewardFlow.IntegrationTests.Infrastructure;
 using RewardFlow.TestUtilities.DataGenerators;
 using RewardFlow.TestUtilities.DataGenerators.Fakers.Employees;
+using System.Net;
+using System.Net.Http.Json;
 using Xunit;
 
-namespace RewardFlow.IntegrationTests.Employees;
+namespace RewardFlow.IntegrationTests.Employees.SinglarOperatoins;
 
-[Collection("EmployeeTests")]
-public class GetEmployeeTests : IAsyncLifetime
+public class GetEmployeeTests(TestWebApplicationFactory factory) : BaseEmployeeTestFixture(factory), IAsyncLifetime
 {
-    private readonly TestWebApplicationFactory _factory;
-    private readonly DbUtility _dbUtility;
     private UserClient _userClient;
-
-    public GetEmployeeTests(EmployeeTestFixture factory)
-    {
-        _factory = factory;
-        _dbUtility = new DbUtility(_factory);
-    }
 
     public async Task InitializeAsync()
     {

@@ -12,18 +12,9 @@ using Xunit;
 
 namespace RewardFlow.IntegrationTests.Employees.BulkOperations;
 
-[Collection("EmployeeTests")]
-public class BulkDeleteTests : IAsyncLifetime
+public class BulkDeleteTests(TestWebApplicationFactory factory) : BaseEmployeeTestFixture(factory), IAsyncLifetime
 {
-    private readonly TestWebApplicationFactory _factory;
-    private readonly DbUtility _dbUtility;
     private UserClient _userClient;
-
-    public BulkDeleteTests(EmployeeTestFixture factory)
-    {
-        _factory = factory;
-        _dbUtility = new DbUtility(_factory);
-    }
 
     public async Task InitializeAsync()
     {
@@ -57,8 +48,8 @@ public class BulkDeleteTests : IAsyncLifetime
         response.StatusCode.Should().Be(HttpStatusCode.Accepted);
         var result = await response.Content.ReadFromJsonAsync<BulkInsert.Response>();
         result.Should().NotBeNull();
-        result!.Success.Should().Be(3);
-        result.FailsIndexes.Should().BeEmpty();
+        result!.Summary.SuccessfulRecords.Should().Be(3);
+        result.Errors.Should().BeEmpty();
 
         // Verify employees were deleted
         var allEmployees = await _dbUtility.Set<Employee>().ToListAsync();

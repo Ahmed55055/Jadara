@@ -1,35 +1,27 @@
-using Bogus;
-using System.Net;
-using System.Net.Http.Json;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Reward_Flow_v2.Employees.Common;
 using Reward_Flow_v2.Employees.CreateEmployee;
-using RewardFlow.IntegrationTests.Infrastructure;
 using Reward_Flow_v2.Employees.Data;
 using RewardFlow.IntegrationTests.Employees.Common;
+using RewardFlow.IntegrationTests.Infrastructure;
 using RewardFlow.TestUtilities.DataGenerators;
 using RewardFlow.TestUtilities.DataGenerators.Fakers.Employees;
+using System.Net;
+using System.Net.Http.Json;
 using Xunit;
 
-namespace RewardFlow.IntegrationTests.Employees;
+namespace RewardFlow.IntegrationTests.Employees.SinglarOperatoins;
 
 /// <summary>
 /// Integration tests for the Create Employee endpoint.
 /// Tests various scenarios for creating employees including validation, duplicate detection, and concurrent operations.
 /// </summary>
-[Collection("EmployeeTests")]
-public class CreateEmployeeTests : IAsyncLifetime
-{
-    private readonly TestWebApplicationFactory _factory;
-    private readonly DbUtility _dbUtility;
-    private UserClient _userClient;
-    public CreateEmployeeTests(EmployeeTestFixture factory)
-    {
-        _factory = factory;
-        _dbUtility = new DbUtility(_factory);
-    }
 
+public class CreateEmployeeTests(TestWebApplicationFactory factory) : BaseEmployeeTestFixture(factory), IAsyncLifetime
+{
+    private UserClient _userClient;
+    
     public async Task InitializeAsync()
     {
         var user = TestDataGenerator.User.Generate();

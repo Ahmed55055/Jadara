@@ -9,7 +9,7 @@ namespace Reward_Flow_v2.Rewards.SessionsReward.CreateReward;
 
 public static partial class CreateSessionsReward
 {
-    public record Request(string Name, string? Code, byte? Year, byte? Semester, decimal Percentage);
+    public record Request(string? Name, string? Code, short? Year, byte? Semester, decimal Percentage);
 
     public static void MapCreateSessionsReward(this IEndpointRouteBuilder app)
     {

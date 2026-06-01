@@ -17,7 +17,7 @@ public class SessionRewardConfiguration : IEntityTypeConfiguration<SessionReward
             .ValueGeneratedOnAdd()
             .HasColumnName("session_reward_id");
         
-        builder.Property(sr => sr.year)
+        builder.Property(sr => sr.Year)
             .HasColumnName("year")
             .HasColumnType("smallint");
         

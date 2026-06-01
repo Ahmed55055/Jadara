@@ -16,23 +16,71 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="122934b0-07bf-4213-8299-df7b9ea03e04" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Doc/ArchitectureDecisionLog/16 Immutable Employee Snapshots for Reward Temporal Integrity.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/Data/Database/EmployeeSnapshotConfiguration.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/Data/EmployeeSnapshot.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/EmployeeSnapshotService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/Interface/ISnapshotService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/SessionReward_v2.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.API/Common/EndpointValidation/EndpointExtensions.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.API/Common/Enums/AllowedRoles.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.API/Common/Enums/ValidationStrategy.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.API/Common/HttpUserAccessorExtentions.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.API/Common/ScopedUserContext.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.API/Employees/BulkInsertEmployees/BulkInsert_v2.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/BaseAuthTestFixture.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/BaseEmployeeTestFixture.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/Rewards/SessionRewardFixture.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/Rewards/SessionRewardTestCollection.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Rewards/BaseRewardTest.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Rewards/SessionReward/AssignEmployeeTest.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Rewards/SessionReward/CreateSessionRewardTest.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Users/BaseUserTestFixture.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Reward_Flow_v2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Reward_Flow_v2/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Common/EmployeeLookup/IEmployeeLookupService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Common/EmployeeLookup/IEmployeeLookupService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/Data/Database/EmployeeSessionRewardEntityConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/Data/Database/EmployeeSessionRewardEntityConfiguration.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/Data/Database/RewardDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/Data/Database/RewardDbContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/Data/EmployeeSessionRewardEntity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/Data/EmployeeSessionRewardEntity.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/Data/SubjectSessionRewardEntity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/Data/SubjectSessionRewardEntity.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/IReward.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/IReward.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/Common/ISessionRewardRules.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/Common/ISessionRewardRules.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/ISessionReward.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/ISessionReward.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/SessionRewards.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/SessionRewards.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/SubjectSessionReward.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/SubjectSessionReward.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RewardFlow.TestUtilities/RequestExtentionHandler/Employee/EmployeeExtention.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RewardFlow.TestUtilities/RequestExtentionHandler/Employee/EmployeeExtention.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Common/EndpointValidation/ValidateEndpoint.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Common/EndpointValidation/ValidateEndpoint.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Common/EntityTracker.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Common/GetHttpsAccessorUserId.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Common/UserIdRetrieval/IUserIdRetrievalService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Common/UserRetrieval/IUserRetrievalService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Common/UserIdRetrieval/UserIdRetrievalService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Common/UserRetrieval/UserRetrievalService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Common/enMode.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Employees/BulkInsertEmployees/BulkInsert.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Employees/BulkInsertEmployees/BulkInsert.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Employees/Common/EmployeeTokenService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Employees/Common/EmployeeTokenService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Employees/Common/IEmployeeTokenService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Employees/Common/IEmployeeTokenService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Employees/Data/Employee.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Employees/Data/Employee.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Employees/EmployeeApiPath.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Employees/EmployeeApiPath.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/Data/Database/SessionRewardConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/Data/Database/SessionRewardConfiguration.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/Data/SessionRewardEntity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/Data/SessionRewardEntity.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/RewardApiPath.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/RewardApiPath.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/Dtos/SessionRewardDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/Dtos/SessionRewardDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/EndPoints/AddEmployeeSessions/AddEmployeeSessions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/EndPoints/AddEmployeeSessions/AddEmployeeSessions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/EndPoints/AddMultipleEmployeeSessions/AddMultipleEmployeeSessions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/EndPoints/AddMultipleEmployeeSessions/AddMultipleEmployeeSessions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/EndPoints/CreateReward/CreateRewardRequestValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/EndPoints/CreateReward/CreateRewardRequestValidator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/EndPoints/CreateReward/CreateSessionsReward.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/EndPoints/CreateReward/CreateSessionsReward.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/EndPoints/DeleteSessionsReward/DeleteSessionsReward.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/EndPoints/DeleteSessionsReward/DeleteSessionsReward.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/EndPoints/GetAllSessionsRewards/GetAllSessionsRewards.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/EndPoints/GetAllSessionsRewards/GetAllSessionsRewards.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/EndPoints/GetSessionsRewardById/GetSessionsRewardById.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/EndPoints/GetSessionsRewardById/GetSessionsRewardById.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/EndPoints/GetSessionsRewardsByReward/GetSessionsRewardsByReward.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/EndPoints/GetSessionsRewardsByReward/GetSessionsRewardsByReward.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/EndPoints/UpdateSessionsReward/UpdateSessionsReward.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/EndPoints/UpdateSessionsReward/UpdateSessionsReward.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/EndPoints/UpdateSessionsReward/UpdateSessionsRewardRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/EndPoints/UpdateSessionsReward/UpdateSessionsRewardRequest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/LoginTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/LoginTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/RegisterTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/RegisterTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/ResetPasswordTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/ResetPasswordTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/UserFullLifecycleTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/UserFullLifecycleTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/BulkOperations/BulkCreateTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/BulkOperations/BulkCreateTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/BulkOperations/BulkDeleteTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/BulkOperations/BulkDeleteTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/BulkOperations/BulkUpdateTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/BulkOperations/BulkUpdateTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/CreateEmployeeTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/SinglarOperatoins/CreateEmployeeTestsFixture.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/DeleteEmployeeTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/SinglarOperatoins/DeleteEmployeeTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/EmployeeFullLifecycleTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/EmployeeFullLifecycleTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/EmployeeSearchTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/SinglarOperatoins/EmployeeSearchTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/GetEmployeeTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/SinglarOperatoins/GetEmployeeTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/UpdateEmployeeTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/SinglarOperatoins/UpdateEmployeeTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/DbUtility.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/DbUtility.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/Employee/EmployeeTestCollection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/Employee/EmployeeTestCollection.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/Employee/EmployeeTestFixture.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/Employee/EmployeeTestFixtureDisposedClass.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/GlobalTestSetup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/GlobalTestSetup.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/TestWebApplicationFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/TestWebApplicationFactory.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/RewardFlow.IntegrationTests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/RewardFlow.IntegrationTests.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Users/GetAllUsersTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Users/GetAllUsersTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Users/GetUserByEmailTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Users/GetUserByEmailTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Users/GetUserByUsernameTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Users/GetUserByUsernameTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RewardFlow.UnitTest/Rewards/SessionsReward/SessionRewardFactoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.UnitTest/Rewards/SessionsReward/SessionRewardFactoryTests.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RewardFlow.UnitTest/Rewards/SessionsReward/SessionRewardsTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RewardFlow.UnitTest/Rewards/SessionsReward/SessionRewardsTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -77,21 +125,30 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/9f36f47319b32af838b2a5d575986ff83918e428931b1ed44ad662b6bc8a/HashSet.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/a0b45f29f34f594814a7b1fbc25fe5ef3c18257956ed4f4fbfa68717db58/DbContext.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/c7102cd0ffb8973777e61b1942c3fffac7e14016a511d055c3adf73ff91748/ThrowHelper.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/e5d623ea960f2c3c9fda144954d339f8d4cd3dad6dd8bd4ab96093a010ab/Dictionary.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/RewardFlow.TestUtilities/Extentions/ExpressionExtentions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/RewardFlow.TestUtilities/Extentions/RandomExtentions.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/RewardFlow.API/Common/EndpointValidation/EndpointExtensions.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/RewardFlow.API/Common/Enums/AllowedRoles.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/RewardFlow.API/Common/Enums/ValidationStrategy.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/RewardFlow.API/Employees/BulkInsertEmployees/BulkInsert_v2.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/RewardFlow.API/Employees/Common/EmployeeDto.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/RewardFlow.API/Rewards/Data/Database/EmployeeSnapshotConfiguration.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/RewardFlow.API/Rewards/Data/EmployeeSnapshot.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/RewardFlow.API/Rewards/EmployeeSnapshotService.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/SessionReward_v2.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/RewardFlow.API/Rewards/Data/Database/EmployeeSessionSubjectConfiguration.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/RewardFlow.API/Rewards/Data/EmployeeSessionReward.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/RewardFlow.API/Rewards/SessionsReward/SessionRewardService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/Common/RequestCreator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/LoginTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/BulkOperations/BulkDeleteTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/BulkOperations/BulkUpdateTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/Common/ApiManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/GlobalTestSetup.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/Rewards/SessionRewardTestCollection.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/User/UserTestCollection.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Infrastructure/User/UserTestFixture.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Rewards/SessionReward/CreateSessionRewardTest.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Users/GetAllUsersTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Users/GetUserByEmailTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/RewardFlow.UnitTest/Employees/RequestValidators/BulkInsertEmployeeValidatorTest.cs" root0="FORCE_HIGHLIGHTING" />
@@ -110,41 +167,44 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Launch Settings Profile.RewardFlow.API: https.executor": "Run",
-    "0f0981bd-d7ab-4dc0-b843-499183c0b1d9.executor": "Debug",
-    "5921cb4c-4439-4b1b-8e8e-8ed8576ac015.executor": "Debug",
-    "6a995ea2-adb3-462a-8026-c33d164c2970.executor": "Debug",
-    "6bad8b18-d092-4309-bfb7-c3b810a5aa0e.executor": "Debug",
-    "ATTACH_DIALOG_SELECTED_CONTAINER": "sqlserver-reward-flow-debug",
-    "Docker.deploy/docker-compose.debug.yaml.migrate: Compose Deployment.executor": "Run",
-    "Docker.deploy/docker-compose.debug.yaml.sqlserver: Compose Deployment.executor": "Run",
-    "Docker.deploy/docker-compose.debug.yaml: Compose Deployment.executor": "Run",
-    "Docker.deploy/docker-compose.dev.yaml: Compose Deployment.executor": "Run",
-    "Docker.deploy/docker-compose.yaml: Compose Deployment.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "bedb83f7-5580-48af-9bc0-9ed41d22201e.executor": "Debug",
-    "c8ba7720-7892-481e-a505-58df8f6921a3.executor": "Debug",
-    "cidr.known.project.marker": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "refactor/snapshot",
-    "last_opened_file_path": "/media/ahmed/54d07f6a-5b2f-4c8f-a919-c812fce84cab/Projects/Reward_Flow_v2/deploy/docker-compose.dev.yaml",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.keymap",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Launch Settings Profile.RewardFlow.API: https.executor&quot;: &quot;Run&quot;,
+    &quot;0f0981bd-d7ab-4dc0-b843-499183c0b1d9.executor&quot;: &quot;Debug&quot;,
+    &quot;5921cb4c-4439-4b1b-8e8e-8ed8576ac015.executor&quot;: &quot;Debug&quot;,
+    &quot;5f4cff2d-c6c3-47c5-986d-c7b954cfb3bd.executor&quot;: &quot;Debug&quot;,
+    &quot;6a995ea2-adb3-462a-8026-c33d164c2970.executor&quot;: &quot;Debug&quot;,
+    &quot;6bad8b18-d092-4309-bfb7-c3b810a5aa0e.executor&quot;: &quot;Debug&quot;,
+    &quot;ATTACH_DIALOG_SELECTED_CONTAINER&quot;: &quot;sqlserver-reward-flow-debug&quot;,
+    &quot;Docker.deploy/docker-compose.debug.yaml.migrate: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.deploy/docker-compose.debug.yaml.sqlserver: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.deploy/docker-compose.debug.yaml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.deploy/docker-compose.dev.yaml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.deploy/docker-compose.yaml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;ShowUsagesActions.previewPropertyKey&quot;: &quot;true&quot;,
+    &quot;ad79a2d9-1b04-4b0c-89c8-aa5c1671dedf.executor&quot;: &quot;Debug&quot;,
+    &quot;bedb83f7-5580-48af-9bc0-9ed41d22201e.executor&quot;: &quot;Debug&quot;,
+    &quot;c8ba7720-7892-481e-a505-58df8f6921a3.executor&quot;: &quot;Debug&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;refactor/snapshot&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/media/ahmed/54d07f6a-5b2f-4c8f-a919-c812fce84cab/Projects/Reward_Flow_v2/deploy/docker-compose.dev.yaml&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.grazie&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Docker.deploy/docker-compose.dev.yaml: Compose Deployment">
     <configuration name="RewardFlow.API: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/src/RewardFlow.API/RewardFlow.API.csproj" />
@@ -271,9 +331,9 @@
       <list>
         <item itemvalue="Docker.deploy/docker-compose.yaml: Compose Deployment" />
         <item itemvalue="Docker.deploy/docker-compose.dev.yaml: Compose Deployment" />
-        <item itemvalue="Docker.deploy/docker-compose.debug.yaml: Compose Deployment" />
         <item itemvalue="Docker.deploy/docker-compose.debug.yaml.sqlserver: Compose Deployment" />
         <item itemvalue="Docker.deploy/docker-compose.debug.yaml.migrate: Compose Deployment" />
+        <item itemvalue="Docker.deploy/docker-compose.debug.yaml: Compose Deployment" />
       </list>
     </recent_temporary>
   </component>
@@ -347,9 +407,21 @@
       <workItem from="1770738128872" duration="55660000" />
       <workItem from="1771215493312" duration="14883000" />
       <workItem from="1771301924657" duration="36146000" />
-      <workItem from="1778228725673" duration="1425000" />
-      <workItem from="1778230270768" duration="263000" />
-      <workItem from="1778230755263" duration="15261000" />
+      <workItem from="1778491518513" duration="648000" />
+      <workItem from="1778492214616" duration="30400000" />
+      <workItem from="1778615481935" duration="30433000" />
+      <workItem from="1778837017920" duration="26484000" />
+      <workItem from="1778948221540" duration="13576000" />
+      <workItem from="1779030445546" duration="47985000" />
+      <workItem from="1779280221178" duration="2535000" />
+      <workItem from="1779308511066" duration="38748000" />
+      <workItem from="1779529891421" duration="13364000" />
+      <workItem from="1779580180556" duration="21332000" />
+      <workItem from="1779793160476" duration="28652000" />
+      <workItem from="1779964326683" duration="15225000" />
+      <workItem from="1780059556004" duration="16555000" />
+      <workItem from="1780176539394" duration="14574000" />
+      <workItem from="1780245493120" duration="5162000" />
     </task>
     <task id="LOCAL-00001" summary="introduce src folder and clean up duplicate folders">
       <option name="closed" value="true" />
@@ -431,7 +503,23 @@
       <option name="project" value="LOCAL" />
       <updated>1771016994130</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="intoduce SessionRewardService.cs">
+      <option name="closed" value="true" />
+      <created>1779280461965</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1779280461965</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Move project sources under RewardFlow_API, reorganizing existing files/namespaces and Obsidian docs. Add a new Rewards feature slice (entities, DbContext, configurations, endpoints, calculators, factories and session-reward logic) plus related DTOs and interfaces. Introduce Common utilities: IEmployeeLookupService and DTOs, Optional&lt;T&gt; struct, EntityTracker&lt;T&gt;, and enMode enum. Add tests (RewardFlow_Test), solution/project files, many architecture decision records and docs, and update workspace/Obsidian settings. Remove an obsolete top-level Doc/.obsidian/app.json and the old HTTP file.">
+      <option name="closed" value="true" />
+      <created>1779560651417</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1779560651417</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -450,7 +538,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/master" />
+                        <option value="test/employee-unit-tests" />
                       </list>
                     </value>
                   </entry>
@@ -476,7 +564,9 @@
     <MESSAGE value="test(employees): add validation tests for employee creation&#10;&#10;Add comprehensive test infrastructure for validating employee creation with&#10;invalid data fields. This includes test methods, data generators, and test&#10;cases for various validation scenarios.&#10;&#10;- Add CreateEmployee_WithInvalidField_ShouldReturnBadRequest test method&#10;- Create InvalidEmployees data generator with MemberData attribute&#10;- Add GenerateInvalidEmployees helper method for property-based test cases&#10;- Add Name field support to EmployeeFaker.WithNulls method&#10;- Expose NationalNums, AccountNums, Salary, and ForeignKeysId test cases&#10;- Add Bogus package and TestUtilities project reference" />
     <MESSAGE value="refactor(employees): expose EmployeeApiPath for test utilities" />
     <MESSAGE value="refactor(test): implement IEntityFaker for polymorphic test data&#10;&#10;Updates EmployeeFaker and UserFaker to implement the IEntityFaker interface. By returning the interface type instead of concrete classes, we enable consistent method chaining and allow generic handling of entity fakers. This reduces code complexity and boilerplate when adding future entities." />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor(test): implement IEntityFaker for polymorphic test data&#10;&#10;Updates EmployeeFaker and UserFaker to implement the IEntityFaker interface. By returning the interface type instead of concrete classes, we enable consistent method chaining and allow generic handling of entity fakers. This reduces code complexity and boilerplate when adding future entities." />
+    <MESSAGE value="intoduce SessionRewardService.cs" />
+    <MESSAGE value="Move project sources under RewardFlow_API, reorganizing existing files/namespaces and Obsidian docs. Add a new Rewards feature slice (entities, DbContext, configurations, endpoints, calculators, factories and session-reward logic) plus related DTOs and interfaces. Introduce Common utilities: IEmployeeLookupService and DTOs, Optional&lt;T&gt; struct, EntityTracker&lt;T&gt;, and enMode enum. Add tests (RewardFlow_Test), solution/project files, many architecture decision records and docs, and update workspace/Obsidian settings. Remove an obsolete top-level Doc/.obsidian/app.json and the old HTTP file." />
+    <option name="LAST_COMMIT_MESSAGE" value="Move project sources under RewardFlow_API, reorganizing existing files/namespaces and Obsidian docs. Add a new Rewards feature slice (entities, DbContext, configurations, endpoints, calculators, factories and session-reward logic) plus related DTOs and interfaces. Introduce Common utilities: IEmployeeLookupService and DTOs, Optional&lt;T&gt; struct, EntityTracker&lt;T&gt;, and enMode enum. Add tests (RewardFlow_Test), solution/project files, many architecture decision records and docs, and update workspace/Obsidian settings. Remove an obsolete top-level Doc/.obsidian/app.json and the old HTTP file." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -499,19 +589,12 @@
           </properties>
           <option name="timeStamp" value="42" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/RewardFlow.API/Employees/SearchEmployeesByName/SearchEmployeesByName.cs</url>
-          <line>23</line>
-          <properties documentPath="$PROJECT_DIR$/src/RewardFlow.API/Employees/SearchEmployeesByName/SearchEmployeesByName.cs" containingFunctionPresentation="Method 'HandlerAsync'">
-            <startOffsets>
-              <option value="1013" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1103" />
-            </endOffsets>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.TypeInitializationException" breakIfHandledByUserCode="true" isInternal="false" displayValue="TypeInitializationException" namespaceName="System">
+            <option name="internal" value="false" />
           </properties>
-          <option name="timeStamp" value="57" />
-        </line-breakpoint>
+          <option name="timeStamp" value="78" />
+        </breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Employees/EmployeeBulkInsertionTests.cs</url>
           <line>48</line>
@@ -519,30 +602,30 @@
           <option name="timeStamp" value="62" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/RewardFlow.API/Employees/BulkInsertEmployees/BulkInsert.cs</url>
-          <line>65</line>
-          <properties documentPath="$PROJECT_DIR$/src/RewardFlow.API/Employees/BulkInsertEmployees/BulkInsert.cs" containingFunctionPresentation="Method 'HandlerAsync'">
+          <url>file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Rewards/SessionReward/CreateSessionRewardTest.cs</url>
+          <line>19</line>
+          <properties documentPath="C:\Users\Mg Magic\RiderProjects\Jadara\src\RewardFlow.IntegrationTests\Rewards\SessionReward\CreateSessionRewardTest.cs" containingFunctionPresentation="Method 'InitializeAsync'">
             <startOffsets>
-              <option value="2234" />
+              <option value="668" />
             </startOffsets>
             <endOffsets>
-              <option value="2269" />
+              <option value="713" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="68" />
+          <option name="timeStamp" value="81" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/LoginTests.cs</url>
-          <line>58</line>
-          <properties documentPath="$PROJECT_DIR$/src/RewardFlow.IntegrationTests/Auth/LoginTests.cs" containingFunctionPresentation="Method 'Login_WithValidCredentials_ShouldReturnOk'">
+          <url>file://$PROJECT_DIR$/src/RewardFlow.API/Employees/BulkInsertEmployees/BulkInsert.cs</url>
+          <line>93</line>
+          <properties documentPath="C:\Users\Mg Magic\RiderProjects\Jadara\src\RewardFlow.API\Employees\BulkInsertEmployees\BulkInsert.cs" containingFunctionPresentation="Method 'HandlerAsync'">
             <startOffsets>
-              <option value="1979" />
+              <option value="3555" />
             </startOffsets>
             <endOffsets>
-              <option value="2023" />
+              <option value="3607" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="69" />
+          <option name="timeStamp" value="92" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

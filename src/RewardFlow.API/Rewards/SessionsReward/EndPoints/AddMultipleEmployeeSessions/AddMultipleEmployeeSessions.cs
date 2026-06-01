@@ -8,7 +8,7 @@ public static class AddMultipleEmployeeSessions
 {
     public static void MapAddMultipleEmployeeSessions(this IEndpointRouteBuilder app)
     {
-        app.MapPost($"{RewardApiPath.SessionsReward}/{{id}}/employees/batch", HandlerAsync)
+        app.MapPost($"{RewardApiPath.SessionsRootApi}/{{id}}/employees/batch", HandlerAsync)
             .RequireAuthorization()
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)

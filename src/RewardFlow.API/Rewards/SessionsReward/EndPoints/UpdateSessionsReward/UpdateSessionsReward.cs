@@ -21,29 +21,8 @@ public static class UpdateSessionsReward
             .Validation(new UpdateSessionsRewardValidator());
     }
 
-    private static async Task<IResult> HandlerAsync(int id, UpdateSessionsRewardRequest request, ISessionRewardFactory factory, IHttpContextAccessor httpContextAccessor, CancellationToken cancellationToken)
+    private static async Task<IResult> HandlerAsync(int id, UpdateSessionsRewardRequest request, IHttpContextAccessor httpContextAccessor, CancellationToken cancellationToken)
     {
-        var currentUserId = await httpContextAccessor.GetCurrentUserIntIdAsync(cancellationToken);
-
-        if (currentUserId == 0)
-            return Results.Unauthorized();
-
-        try
-        {
-            var success = await factory.UpdateAsync(
-                id, 
-                currentUserId, 
-                request.RewardName, 
-                request.RewardCode, 
-                request.Year, 
-                request.Semester, 
-                request.Percentage);
-
-            return success ? Results.NoContent() : Results.NotFound();
-        }
-        catch (Exception)
-        {
-            return Results.InternalServerError();
-        }
+        throw new System.NotImplementedException();
     }
 }

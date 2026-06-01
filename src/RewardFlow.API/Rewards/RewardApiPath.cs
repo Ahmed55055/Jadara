@@ -1,17 +1,17 @@
 namespace Reward_Flow_v2.Rewards;
 
-internal static class RewardApiPath
+public static class RewardApiPath
 {
-    public const string Tag = "Rewards";
+    public const string Tag = "rewards";
     private const string RewardRootApi = $"{ApiPath.Route}/{Tag}";
-
-    public const string SessionsReward = $"{RewardRootApi}/sessions";
-    public const string CreateSessionsReward = $"{SessionsReward}";
-    public const string GetAllSessionsRewards = $"{SessionsReward}";
-    public const string GetSessionsRewardById = $"{SessionsReward}/{{id}}";
-    public const string UpdateSessionsReward = $"{SessionsReward}/{{id}}";
-    public const string DeleteSessionsReward = $"{SessionsReward}/{{id}}";
-    public const string GetSessionsRewardsByRewardId = $"{SessionsReward}/reward/{{rewardId}}";
-    public const string AddEmployeeSessions = $"{SessionsReward}/{{id}}/employees";
-    public const string AddMultipleEmployeeSessions = $"{SessionsReward}/{{id}}/employees/batch";
+    public const string SessionsRootApi = $"{RewardRootApi}/sessions";
+    
+    public const string CreateSessionsReward = $"{SessionsRootApi}";
+    public const string GetAllSessionsRewards = $"{SessionsRootApi}";
+    public const string GetSessionsRewardById = $"{SessionsRootApi}/{{id}}";
+    public const string UpdateSessionsReward = $"{SessionsRootApi}/{{id}}";
+    public const string DeleteSessionsReward = $"{SessionsRootApi}/{{id}}";
+    public const string GetSessionsRewardsByRewardId = $"{SessionsRootApi}/reward/{{rewardId}}";
+    public const string AssignSessionRewardEmployees = $"{SessionsRootApi}/{{id}}/assign";
+    public const string AddMultipleEmployeeSessions = $"{SessionsRootApi}/{{id}}/employees/batch";
 }

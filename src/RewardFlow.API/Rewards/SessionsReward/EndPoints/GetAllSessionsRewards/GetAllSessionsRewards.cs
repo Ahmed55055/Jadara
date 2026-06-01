@@ -33,10 +33,11 @@ public static class GetAllSessionsRewards
                     sr.Id,
                     sr.Reward.Name,
                     sr.Reward.Code,
-                    sr.year,
+                    sr.Year,
                     sr.semester,
                     sr.Percentage,
-                    0 // Total will be calculated separately if needed
+                    0,
+                    currentUserId
                 ))
                 .ToListAsync(cancellationToken);
 

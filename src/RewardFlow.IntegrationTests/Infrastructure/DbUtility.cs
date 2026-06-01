@@ -11,9 +11,10 @@ namespace RewardFlow.IntegrationTests.Infrastructure;
 /// <summary>
 /// Utility class for managing database operations in integration tests.
 /// </summary>
-public class DbUtility: IDisposable
+public class DbUtility : IDisposable
 {
     private readonly DbContext[] _contexts;
+    private TestWebApplicationFactory _factory;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DbUtility"/> class.
@@ -21,6 +22,7 @@ public class DbUtility: IDisposable
     /// <param name="factory">The test web application factory used to create service scopes.</param>
     public DbUtility(TestWebApplicationFactory factory)
     {
+        _factory = factory;
         var scope = factory.Services.CreateScope();
 
         _contexts = new DbContext[]
@@ -33,10 +35,14 @@ public class DbUtility: IDisposable
     
     public DbContext GetContext<T>() where T : class
     {
-        var context = _contexts.FirstOrDefault(c => c.Model.FindEntityType(typeof(T)) is not null)
-                      ?? throw new ArgumentException($"Context {typeof(T)} does not exist");
-
-        return context;
+        var scope = _factory.Services.CreateScope();
+        
+        var contextType = _contexts
+                              .FirstOrDefault(c => c.Model.FindEntityType(typeof(T)) is not null)?
+                              .GetType()
+                          ?? throw new ArgumentException($"No context found that manages entity type {typeof(T).Name}");
+        
+        return (DbContext)scope.ServiceProvider.GetRequiredService(contextType);
     }
 
     public async Task InsertAsync<T>(T entity) where T : class
@@ -54,10 +60,10 @@ public class DbUtility: IDisposable
         context.Set<T>().AddRange(entities);
         await context.SaveChangesAsync();
     }
-    
+
     public DbSet<T> Set<T>() where T : class
-    => GetContext<T>().Set<T>();
-    
+        => GetContext<T>().Set<T>();
+
     public void Dispose()
     {
         foreach (var context in _contexts)

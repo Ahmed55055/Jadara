@@ -1,31 +1,30 @@
 using Microsoft.EntityFrameworkCore;
 using Reward_Flow_v2.Employees.Data;
+using RewardFlow.IntegrationTests.Infrastructure;
 using Xunit;
 
-namespace RewardFlow.IntegrationTests.Infrastructure;
+namespace RewardFlow.IntegrationTests.Employees;
 
-public class EmployeeTestFixture : TestWebApplicationFactory, IAsyncLifetime
+public class BaseEmployeeTestFixture: IClassFixture<TestWebApplicationFactory>
 {
-    private DbUtility dbUtility;
+    protected readonly TestWebApplicationFactory _factory;
+    protected readonly DbUtility _dbUtility;
 
+
+    public BaseEmployeeTestFixture(TestWebApplicationFactory factory)
+    {
+        _factory = factory;
+        _dbUtility = new DbUtility(_factory);
+    }
+    
     public async Task InitializeAsync()
     {
-        await base.InitializeAsync();
-
-        dbUtility = new DbUtility(this);
-
-        var faculties = await dbUtility.Set<Faculty>().AnyAsync()
-            ? await dbUtility.Set<Faculty>().ToListAsync()
+        var faculties = await _dbUtility.Set<Faculty>().AnyAsync()
+            ? await _dbUtility.Set<Faculty>().ToListAsync()
             : await AddFaculities();
 
-        if (!await dbUtility.Set<Department>().AnyAsync())
+        if (!await _dbUtility.Set<Department>().AnyAsync())
             await AddDepartments(faculties);
-    }
-
-    public async Task DisposeAsync()
-    {
-        await ResetDatabaseAsync();
-        await base.DisposeAsync();
     }
 
     private async Task<List<Faculty>> AddFaculities()
@@ -37,7 +36,7 @@ public class EmployeeTestFixture : TestWebApplicationFactory, IAsyncLifetime
             new Faculty { Name = "Faculty of Science", IsDefault = true },
             new Faculty { Name = "Faculty of Arts", IsDefault = true }
         };
-        await dbUtility.InsertRangeAsync(faculities);
+        await _dbUtility.InsertRangeAsync(faculities);
         return faculities;
     }
 
@@ -53,7 +52,7 @@ public class EmployeeTestFixture : TestWebApplicationFactory, IAsyncLifetime
             new Department { Name = "Operations", IsDefault = true, Faculty = faculities[1] }
         };
 
-        await dbUtility.InsertRangeAsync(departments);
+        await _dbUtility.InsertRangeAsync(departments);
         return departments;
     }
 }

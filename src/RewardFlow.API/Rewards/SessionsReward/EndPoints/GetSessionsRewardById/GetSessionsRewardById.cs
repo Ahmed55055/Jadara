@@ -17,35 +17,8 @@ public static class GetSessionsRewardById
             .WithTags(RewardApiPath.Tag);
     }
 
-    private static async Task<IResult> HandlerAsync(int id, ISessionRewardFactory factory, IHttpContextAccessor httpContextAccessor, CancellationToken cancellationToken)
+    private static async Task<IResult> HandlerAsync(int id, IHttpContextAccessor httpContextAccessor, CancellationToken cancellationToken)
     {
-        var currentUserId = await httpContextAccessor.GetCurrentUserIntIdAsync(cancellationToken);
-        
-        if (currentUserId == 0)
-            return Results.Unauthorized();
-
-        try
-        {
-            var sessionsReward = await factory.FindAsync(id, currentUserId);
-
-            if (sessionsReward == null)
-                return Results.NotFound();
-
-            var dto = new SessionRewardDto(
-                sessionsReward.SessionRewardId,
-                sessionsReward.Name,
-                sessionsReward.Code,
-                sessionsReward.Year,
-                sessionsReward.Semester,
-                sessionsReward.Percentage,
-                await sessionsReward.GetRewardTotal()
-            );
-
-            return Results.Ok(dto);
-        }
-        catch (Exception)
-        {
-            return Results.InternalServerError();
-        }
+        throw new System.NotImplementedException();
     }
 }

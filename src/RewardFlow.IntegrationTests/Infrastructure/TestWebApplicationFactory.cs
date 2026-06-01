@@ -25,12 +25,13 @@ namespace RewardFlow.IntegrationTests.Infrastructure;
 public class TestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private static readonly MsSqlContainer _dbContainer = new MsSqlBuilder()
+        .WithDockerEndpoint("http://192.168.1.107:2375")
         .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
         .WithPassword("Test123!@#")
         .WithReuse(true)
         .WithName("dev-sql-server-reusable")
         .WithEnvironment("ACCEPT_EULA", "Y")
-        .WithPortBinding(10434, 1433)
+        .WithPortBinding(1434, 1433)
         .WithWaitStrategy(Wait.ForUnixContainer()
             .UntilCommandIsCompleted("/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "Test123!@#",
                 "-C", "-Q", "SELECT 1")
@@ -39,9 +40,10 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncL
 
     private static Respawner _respawner = null!;
     private static string _connectionString;
-    private static bool _isInitialized;
-    
-    public IConfiguration Configuration;
+    private static bool _isInitialized = false;
+
+    public IConfiguration Configuration { get; set; }
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureServices(services =>
@@ -51,7 +53,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncL
                     d.ServiceType == typeof(DbContextOptions<UserDbContext>) ||
                     d.ServiceType == typeof(DbContextOptions<EmployeeDbContext>) ||
                     d.ServiceType == typeof(DbContextOptions<RewardDbContext>) ||
-                    d.ServiceType == typeof(IDbContextFactory<RewardDbContext>)||
+                    d.ServiceType == typeof(IDbContextFactory<RewardDbContext>) ||
                     d.ServiceType == typeof(IResetPasswordMessageSender))
                 .ToList();
 
@@ -73,16 +75,19 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncL
             services.AddDbContextFactory<RewardDbContext>(options =>
                 options.UseSqlServer(_connectionString, o => o.CommandTimeout(120)));
 
-            services.AddScoped<IResetPasswordMessageSender,SpyEmailSender>();
+            services.AddScoped<IResetPasswordMessageSender, SpyEmailSender>();
         });
         builder.UseEnvironment("Test");
     }
 
     public async Task InitializeAsync()
     {
+        Configuration = Services.GetService<IConfiguration>();
+        
         if (_isInitialized)
             return;
-        
+            
+
         await _dbContainer.StartAsync();
         _connectionString = _dbContainer.GetConnectionString() + ";Initial Catalog=RewardFlow";
 
@@ -95,17 +100,21 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncL
             scope.ServiceProvider.GetRequiredService<RewardDbContext>()
         };
 
-        // TODO:
-        // Needs code refactor.
-        // Context:
-        // this code is tech-debt and will be listed as an issue to not delay delivery 
-        // THE PROBLEM CONTEXT: The Container starts and database respond for the health check,
-        // but it is not fully loaded so GetPendingMigrationsAsync returns some migrations to apply
-        // while the database is up to date but needs some time.
-        // Why 15 seconds? this is just the safe spot for my machine.
-        // if encountered an exception in the future says "there is a database with same name"
-        // then you are in the right place look at the code below as the database isn't ready when running GetPendingMigrationsAsync()
-        await Task.Delay(TimeSpan.FromSeconds(15));
+        var isDatabaseReady = false;
+        var retries = 0;
+
+        while (!isDatabaseReady && retries < 200) // 3s * 200 = 10 min
+        {
+            try
+            {
+                await contexts[0].Database.ExecuteSqlRawAsync("SELECT DB_ID('RewardFlow')");
+                isDatabaseReady = true;            }
+            catch
+            {
+                retries++;
+                await Task.Delay(3000);
+            }
+        }
 
         foreach (var context in contexts)
         {
@@ -114,37 +123,36 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncL
             if (hasPendingMigrations.Any())
                 await context.Database.MigrateAsync();
         }
-
-        Configuration = Services.GetService<IConfiguration>()!;
-
+        
         await InitializeRespawnerAsync();
         _isInitialized = true;
     }
 
     public new async Task DisposeAsync()
     {
-        await base.DisposeAsync();
+        //await base.DisposeAsync();
     }
 
     public async Task ResetDatabaseAsync()
     {
-        using var conn =  new SqlConnection(_connectionString);
-        await conn.OpenAsync();
-        await _respawner.ResetAsync(conn);
+        // using var conn = new SqlConnection(_connectionString);
+        // await conn.OpenAsync();
+        // await _respawner.ResetAsync(conn);
     }
 
     private async Task InitializeRespawnerAsync()
     {
-        using var conn =  new SqlConnection(_connectionString);
+        using var conn = new SqlConnection(_connectionString);
         await conn.OpenAsync();
-        
+
         _respawner = await Respawner.CreateAsync(conn,
             new RespawnerOptions
             {
                 SchemasToInclude = ["dbo"],
                 TablesToIgnore = new Table[]
                 {
-                    "Role", "faculties", "departments", "plans", "employee_status", "job_titles","__EFMigrationsHistory"
+                    "Role", "faculties", "departments", "plans", "employee_status", "job_titles",
+                    "__EFMigrationsHistory"
                 },
                 DbAdapter = DbAdapter.SqlServer
             });

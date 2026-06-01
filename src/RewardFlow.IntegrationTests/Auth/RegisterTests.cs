@@ -16,19 +16,9 @@ namespace RewardFlow.IntegrationTests.Auth;
 /// Integration tests for the Register endpoint.
 /// Tests various scenarios for user registration including validation, duplicate detection, and successful creation.
 /// </summary>
-[Collection("UserTests")]
-public class RegisterTests : IAsyncLifetime
+public class RegisterTests(TestWebApplicationFactory factory) : BaseAuthTestFixture(factory), IAsyncLifetime
 {
-    private readonly Faker _faker = new();
-    private readonly TestWebApplicationFactory _factory;
-    private readonly DbUtility _dbUtility;
     private HttpClient _client;
-
-    public RegisterTests(UserTestFixture factory)
-    {
-        _factory = factory;
-        _dbUtility = new DbUtility(_factory);
-    }
 
     public async Task InitializeAsync()
     {

@@ -1,25 +1,17 @@
-using System.Net;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using RewardFlow.IntegrationTests.Infrastructure;
 using Reward_Flow_v2.Employees.Data;
 using RewardFlow.IntegrationTests.Employees.Common;
+using RewardFlow.IntegrationTests.Infrastructure;
 using RewardFlow.TestUtilities.DataGenerators;
+using System.Net;
 using Xunit;
 
-namespace RewardFlow.IntegrationTests.Employees;
+namespace RewardFlow.IntegrationTests.Employees.SinglarOperatoins;
 
-[Collection("EmployeeTests")]
-public class DeleteEmployeeTests : IAsyncLifetime
+public class DeleteEmployeeTests(TestWebApplicationFactory factory) : BaseEmployeeTestFixture(factory), IAsyncLifetime
 {
-    private readonly TestWebApplicationFactory _factory;
-    private readonly DbUtility _dbUtility;
     private UserClient _userClient;
-    public DeleteEmployeeTests(EmployeeTestFixture factory)
-    {
-        _factory = factory;
-        _dbUtility = new DbUtility(_factory);
-    }
 
     public async Task InitializeAsync()
     {
