@@ -12,12 +12,11 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
     {
         builder.ToTable("users");
 
-        builder.HasKey(u => u.UUID);
+        builder.HasKey(u => u.Id);
 
         builder.Property(u => u.Id)
             .HasColumnName("id")
-            .ValueGeneratedOnAdd()
-            .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+            .ValueGeneratedOnAdd();
 
         builder.Property(u => u.UUID)
             .HasColumnName("user_id")
@@ -25,6 +24,11 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasIndex(u => u.UUID)
             .IsUnique();
+        
+        builder.Property(u => u.TenantId)
+            .HasColumnName("tenant_id")
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql("NEWID()");
 
         builder.Property(u => u.Username)
             .HasColumnName("username")

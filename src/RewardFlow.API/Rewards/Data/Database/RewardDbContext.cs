@@ -1,11 +1,15 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Reward_Flow_v2.Common.Extentions;
+using RewardFlow_API.Common.Interface;
 
 namespace Reward_Flow_v2.Rewards.Data.Database;
 
-public sealed class RewardDbContext(DbContextOptions<RewardDbContext> options) : DbContext(options)
+public sealed class RewardDbContext(DbContextOptions<RewardDbContext> options,  IConfiguration configuration, IUserContext userContext)
+    : DbContext(options)
 {
-    private const string Schema = "dbo";
-    
+    private const string Schema = "DbReward";
+
     public DbSet<Subject> Subject => Set<Subject>();
     public DbSet<RewardEntity> Reward => Set<RewardEntity>();
     public DbSet<SemesterSubject> SubjectSemester => Set<SemesterSubject>();
@@ -27,5 +31,30 @@ public sealed class RewardDbContext(DbContextOptions<RewardDbContext> options) :
         modelBuilder.ApplyConfiguration(new EmployeeSessionRewardEntityConfiguration());
         modelBuilder.ApplyConfiguration(new EmployeeRewardConfiguration());
 
+        foreach (var entity in modelBuilder.GetEntityBuilders<ITenantEntity>())
+        {
+            entity.Property((ITenantEntity t) => t.TenantId)
+                .HasColumnName("tenant_id")
+                .IsRequired();
+
+            entity.HasIndex<ITenantEntity>(t => t.TenantId);
+
+            entity.HasQueryFilter<ITenantEntity>(e => e.TenantId == userContext.GetTenantId());
+        }
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    {
+        var currentTenantId = userContext.GetTenantId();
+
+        var addedEntities = ChangeTracker.Entries<ITenantEntity>()
+            .Where(e => e.State == EntityState.Added);
+
+        foreach (var entityEntry in addedEntities)
+        {
+            entityEntry.Entity.TenantId = currentTenantId;
+        }
+
+        return base.SaveChangesAsync(cancellationToken);
     }
 }

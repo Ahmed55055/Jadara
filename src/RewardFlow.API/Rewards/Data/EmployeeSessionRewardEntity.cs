@@ -1,12 +1,14 @@
 ﻿using FluentResults;
 using Reward_Flow_v2.Rewards.Data.Database;
+using RewardFlow_API.Common.Interface;
 using System.Threading.Tasks;
 
 namespace Reward_Flow_v2.Rewards.Data;
 
-public class EmployeeSessionRewardEntity
+public class EmployeeSessionRewardEntity: ITenantEntity
 {
     public int Id { get; set; }
+    public Guid TenantId { get; set; }
     public required int SubjectSessionRewardId { get; set; }
     public required int EmployeeId { get; set; }
     public int NumberOfSessions {  get; set; }
