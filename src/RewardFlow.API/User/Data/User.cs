@@ -1,13 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using RewardFlow_API.Common.Interface;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Numerics;
 
 namespace Reward_Flow_v2.User.Data
 {
-    public sealed class User
+    public sealed class User : ITenantEntity
     {
         public int Id { get; private set; }
         public Guid UUID { get; private set; }
+        public Guid TenantId { get; set; }
         public string Username { get; set; }
         public string PasswordHash { get; set; }
         public string? Email { get; set; }

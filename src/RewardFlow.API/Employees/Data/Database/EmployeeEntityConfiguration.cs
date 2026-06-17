@@ -9,7 +9,8 @@ public class EmployeeEntityConfiguration : IEntityTypeConfiguration<Employee>
     public void Configure(EntityTypeBuilder<Employee> builder)
     {
         builder.ToTable("employees");
-        builder.HasKey(e => e.EmployeeId);
+        builder.HasKey(e => new {e.TenantId, e.EmployeeId});
+        
         builder.Property(e => e.EmployeeId).ValueGeneratedOnAdd();
         
         builder.Property(e => e.EmployeeId).HasColumnName("employee_id");

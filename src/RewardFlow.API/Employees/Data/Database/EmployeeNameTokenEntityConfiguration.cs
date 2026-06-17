@@ -17,6 +17,6 @@ public class EmployeeNameTokenEntityConfiguration : IEntityTypeConfiguration<Emp
         builder.Property(t => t.N).HasColumnName("n");
         builder.Property(t => t.EmployeeId).HasColumnName("employee_id");
 
-        builder.HasIndex(t => new { t.UserId, t.TokenHashed });
+        builder.HasIndex(t => new { t.TenantId, t.TokenHashed });
     }
 }

@@ -1,9 +1,12 @@
 ﻿using Reward_Flow_v2.Common.Hashing;
+using RewardFlow_API.Common.Interface;
+
 namespace Reward_Flow_v2.Employees.Data;
 
-public class Employee
+public class Employee : ITenantEntity
 {
     public int EmployeeId { get; set; }
+    public Guid TenantId { get; set; }
     public string Name { get; set; } = null!;
     public string? NationalNumber 
     { 

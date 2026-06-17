@@ -19,6 +19,7 @@ using Reward_Flow_v2.Rewards.SessionsReward.Interface;
 using Reward_Flow_v2.User;
 using Reward_Flow_v2.User.AuthService;
 using Reward_Flow_v2.User.Data.Database;
+using RewardFlow_API.Common.Interface;
 using Scalar.AspNetCore;
 
 namespace Reward_Flow_v2;
@@ -44,10 +45,13 @@ public sealed class Program
         builder.Services.AddScoped<ISessionRewardRules, SessionRewardRules>();
         builder.Services.AddScoped<ISessionRewardFactory, SessionRewards.SessionRewardFactory>();
         builder.Services.AddScoped<IEmployeeLookupService,EmployeeLookupService>();
-
+        builder.Services.AddScoped<IUserContext, UserContext>();
 
         builder.Services.AddDbContextFactory<RewardDbContext>( options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")),
+        ServiceLifetime.Scoped);
+        /*builder.Services.AddDbContext<RewardDbContext>( options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));*/
 
         builder.Services.AddDbContext<UserDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
