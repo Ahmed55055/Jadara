@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Reward_Flow_v2.Employees.Data;
+using RewardFlow_API.Employees.Common;
 using RewardFlow.IntegrationTests.Infrastructure;
 using RewardFlow.TestUtilities.DataGenerators;
 using RewardFlow.TestUtilities.DataGenerators.Fakers.Employees;
@@ -29,6 +30,7 @@ public class GetEmployeeTests(TestWebApplicationFactory factory) : BaseEmployeeT
         // Arrange
         var employeeData = TestDataGenerator.Employee
             .ForProperty(e => e.CreatedBy, _userClient.User.Id)
+            .ForProperty(e => e.TenantId, _userClient.User.TenantId)
             .Generate();
         await _dbUtility.InsertAsync(employeeData);
 
@@ -37,11 +39,10 @@ public class GetEmployeeTests(TestWebApplicationFactory factory) : BaseEmployeeT
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var employee = await response.Content.ReadFromJsonAsync<Employee>();
+        var employee = await response.Content.ReadFromJsonAsync<EmployeeDto>();
         employee.Should().NotBeNull();
-        employee!.EmployeeId.Should().Be(employeeData.EmployeeId);
+        employee!.Id.Should().Be(employeeData.EmployeeId);
         employee.Name.Should().Be(employeeData.Name);
-        employee.CreatedBy.Should().Be(_userClient.User.Id);
     }
 
     [Fact]
@@ -60,6 +61,7 @@ public class GetEmployeeTests(TestWebApplicationFactory factory) : BaseEmployeeT
         // Arrange
         var employeeData = TestDataGenerator.Employee
             .ForProperty(e => e.CreatedBy, _userClient.User.Id)
+            .ForProperty(e => e.TenantId, _userClient.User.TenantId)
             .WithValue(EmployeeFields.NationalNumber)
             .Generate();
         await _dbUtility.InsertAsync(employeeData);
@@ -69,10 +71,9 @@ public class GetEmployeeTests(TestWebApplicationFactory factory) : BaseEmployeeT
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var employee = await response.Content.ReadFromJsonAsync<Employee>();
+        var employee = await response.Content.ReadFromJsonAsync<EmployeeDto>();
         employee.Should().NotBeNull();
         employee!.NationalNumber.Should().Be(employeeData.NationalNumber);
-        employee.CreatedBy.Should().Be(_userClient.User.Id);
     }
 
     // TODO: Needs thoughtfully decision on how to handle this case or if it should be handled at all, and remove the functionality
@@ -102,6 +103,7 @@ public class GetEmployeeTests(TestWebApplicationFactory factory) : BaseEmployeeT
         // Arrange
         var employees = TestDataGenerator.Employee
             .ForProperty(e => e.CreatedBy, _userClient.User.Id)
+            .ForProperty(e => e.TenantId, _userClient.User.TenantId)
             .Generate(2);
         await _dbUtility.InsertRangeAsync(employees);
 

@@ -17,6 +17,8 @@ using RewardFlow.IntegrationTests.Infrastructure;
 using System.Data.Common;
 using Respawn;
 using Respawn.Graph;
+using Reward_Flow_v2.Employees.Data;
+using RewardFlow_API.Common.Interface;
 using RewardFlow.IntegrationTests.Auth;
 using RewardFlow.IntegrationTests.Auth.Common;
 
@@ -39,7 +41,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncL
         .Build();
 
     private static Respawner _respawner = null!;
-    private static string _connectionString;
+    public static string ConnectionString;
     private static bool _isInitialized = false;
 
     public IConfiguration Configuration { get; set; }
@@ -64,16 +66,16 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncL
 
             // Add test database contexts
             services.AddDbContext<UserDbContext>(options =>
-                options.UseSqlServer(_connectionString, o => o.CommandTimeout(120)));
+                options.UseSqlServer(ConnectionString, o => o.CommandTimeout(120)));
 
             services.AddDbContext<EmployeeDbContext>(options =>
-                options.UseSqlServer(_connectionString, o => o.CommandTimeout(120)));
+                options.UseSqlServer(ConnectionString, o => o.CommandTimeout(120)));
 
             services.AddDbContext<RewardDbContext>(options =>
-                options.UseSqlServer(_connectionString, o => o.CommandTimeout(120)));
+                options.UseSqlServer(ConnectionString, o => o.CommandTimeout(120)));
 
             services.AddDbContextFactory<RewardDbContext>(options =>
-                options.UseSqlServer(_connectionString, o => o.CommandTimeout(120)));
+                options.UseSqlServer(ConnectionString, o => o.CommandTimeout(120)));
 
             services.AddScoped<IResetPasswordMessageSender, SpyEmailSender>();
         });
@@ -83,13 +85,14 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncL
     public async Task InitializeAsync()
     {
         Configuration = Services.GetService<IConfiguration>();
-        
+
         if (_isInitialized)
             return;
-            
 
         await _dbContainer.StartAsync();
-        _connectionString = _dbContainer.GetConnectionString() + ";Initial Catalog=RewardFlow";
+        ConnectionString = _dbContainer.GetConnectionString() + ";Initial Catalog=RewardFlow";
+        
+        InitializeStaticEntitiesData();
 
         using var scope = Services.CreateScope();
 
@@ -100,21 +103,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncL
             scope.ServiceProvider.GetRequiredService<RewardDbContext>()
         };
 
-        var isDatabaseReady = false;
-        var retries = 0;
-
-        while (!isDatabaseReady && retries < 200) // 3s * 200 = 10 min
-        {
-            try
-            {
-                await contexts[0].Database.ExecuteSqlRawAsync("SELECT DB_ID('RewardFlow')");
-                isDatabaseReady = true;            }
-            catch
-            {
-                retries++;
-                await Task.Delay(3000);
-            }
-        }
+        await WaitContainerIsReady(contexts);
 
         foreach (var context in contexts)
         {
@@ -123,9 +112,104 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncL
             if (hasPendingMigrations.Any())
                 await context.Database.MigrateAsync();
         }
-        
+
         await InitializeRespawnerAsync();
         _isInitialized = true;
+    }
+
+    private void InitializeStaticEntitiesData()
+    {
+        using var scope = Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<EmployeeDbContext>();
+
+        // Already initialized
+        if (context.Faculty.Any() || context.Department.Any())
+            return;
+
+        var faculties = new[]
+        {
+            new Faculty
+            {
+                Name = "Faculty of Engineering",
+                CreatedBy = 0,
+                CreatedAt = DateTime.UtcNow,
+                IsDefault = true
+            },
+            new Faculty
+            {
+                Name = "Faculty of Medicine",
+                CreatedBy = 0,
+                CreatedAt = DateTime.UtcNow,
+                IsDefault = true
+            },
+            new Faculty
+            {
+                Name = "Faculty of Science",
+                CreatedBy = 0,
+                CreatedAt = DateTime.UtcNow,
+                IsDefault = true
+            }
+        };
+
+        context.Faculty.AddRange(faculties);
+        context.SaveChanges();
+
+        var departments = new[]
+        {
+            new Department
+            {
+                Name = "Computer Engineering",
+                FacultyId = faculties[0].FacultyId,
+                IsDefault = true
+            },
+            new Department
+            {
+                Name = "Civil Engineering",
+                FacultyId = faculties[0].FacultyId,
+                IsDefault = true
+            },
+            new Department
+            {
+                Name = "Cardiology",
+                FacultyId = faculties[1].FacultyId,
+                IsDefault = true
+            },
+            new Department
+            {
+                Name = "Physics",
+                FacultyId = faculties[2].FacultyId,
+                IsDefault = true
+            },
+            new Department
+            {
+                Name = "Chemistry",
+                FacultyId = faculties[2].FacultyId,
+                IsDefault = true
+            }
+        };
+
+        context.Department.AddRange(departments);
+        context.SaveChanges();
+    }
+
+    private static async Task WaitContainerIsReady(DbContext[] contexts)
+    {
+        return;
+        var isContainerReady = false;
+        var retries = 0;
+
+        while (!isContainerReady && retries < 200) // 3s * 200 = 10 min
+        {
+            try
+            {
+                isContainerReady = await contexts[0].Database.CanConnectAsync();
+            }
+            catch
+            {
+                retries++;
+                await Task.Delay(3000);
+            }
+        }
     }
 
     public new async Task DisposeAsync()
@@ -142,7 +226,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncL
 
     private async Task InitializeRespawnerAsync()
     {
-        using var conn = new SqlConnection(_connectionString);
+        using var conn = new SqlConnection(ConnectionString);
         await conn.OpenAsync();
 
         _respawner = await Respawner.CreateAsync(conn,

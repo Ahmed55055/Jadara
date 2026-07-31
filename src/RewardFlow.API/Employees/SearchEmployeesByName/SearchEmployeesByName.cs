@@ -1,9 +1,7 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Reward_Flow_v2.Common;
-using Reward_Flow_v2.Employees.Common;
-using Reward_Flow_v2.Employees.Data;
 using Reward_Flow_v2.Employees.Data.Database;
+using RewardFlow_API.Employees.Common;
 using System.Linq;
 namespace Reward_Flow_v2.Employees.SearchEmployeesByName;
 
@@ -13,7 +11,7 @@ public static class SearchEmployeesByName
     {
         app.MapGet(EmployeeApiPath.SearchByName, HandlerAsync)
             .RequireAuthorization()
-            .Produces<IEnumerable<Employee>>(StatusCodes.Status200OK)
+            .Produces<IEnumerable<EmployeeDto>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status500InternalServerError)
             .WithTags(EmployeeApiPath.Tag);
@@ -36,7 +34,7 @@ public static class SearchEmployeesByName
                 .Where(e => employeeIds.Contains(e.EmployeeId) && e.CreatedBy == currentUserId)
                 .ToListAsync(cancellationToken);
 
-            var orderedEmployees = employees.OrderBy(e => ids.IndexOf(e.EmployeeId));
+            var orderedEmployees = employees.OrderBy(e => ids.IndexOf(e.EmployeeId)).Select(e => e.ToDto());
 
             return Results.Ok(orderedEmployees);
         }

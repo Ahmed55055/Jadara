@@ -4,9 +4,9 @@ using Reward_Flow_v2.Rewards.Data;
 
 namespace Reward_Flow_v2.Rewards.Data.Database;
 
-public class SemesterSubjectConfiguration : IEntityTypeConfiguration<SemesterSubject>
+public class SemesterSubjectConfiguration : IEntityTypeConfiguration<TermCourse>
 {
-    public void Configure(EntityTypeBuilder<SemesterSubject> builder)
+    public void Configure(EntityTypeBuilder<TermCourse> builder)
     {
         builder.ToTable("subject_semesters");
         builder.HasKey(ss => ss.Id);
@@ -35,7 +35,7 @@ public class SemesterSubjectConfiguration : IEntityTypeConfiguration<SemesterSub
             .HasColumnType("smallint")
             .IsRequired();
 
-        builder.HasOne(ss => ss.Subject)
+        builder.HasOne(ss => ss.Course)
             .WithMany(s => s.SubjectSemesters)
             .HasForeignKey(ss => ss.SubjectId)
             .OnDelete(DeleteBehavior.Cascade);

@@ -2,7 +2,7 @@ using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Reward_Flow_v2.Rewards;
 using Reward_Flow_v2.Rewards.Data;
-using Reward_Flow_v2.Rewards.SessionsReward.CreateReward;
+using RewardFlow_API.Rewards.SessionsReward.EndPoints.Reward.CreateReward;
 using RewardFlow.IntegrationTests.Infrastructure;
 using RewardFlow.IntegrationTests.Infrastructure.Rewards;
 using RewardFlow.TestUtilities.DataGenerators;
@@ -38,7 +38,7 @@ public class CreateSessionRewardTest(TestWebApplicationFactory factory) : BaseRe
         var request = new CreateSessionsReward.Request(Name, Code, Year, Semester, Percentage);
 
         // Act
-        var response = await _userClient.Client.PostAsJsonAsync(RewardApiPath.CreateSessionsReward, request);
+        var response = await _userClient.Client.PostAsJsonAsync(RewardApiPath.SessionRewards, request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -56,10 +56,10 @@ public class CreateSessionRewardTest(TestWebApplicationFactory factory) : BaseRe
     {
         // Arrange
         var request = new CreateSessionsReward.Request(null, null, 2026, 1, .04m);
-        var baseResponse = await _userClient.Client.PostAsJsonAsync(RewardApiPath.CreateSessionsReward, request);
+        var baseResponse = await _userClient.Client.PostAsJsonAsync(RewardApiPath.SessionRewards, request);
 
         // Act
-        var duplicateResponse = await _userClient.Client.PostAsJsonAsync(RewardApiPath.CreateSessionsReward, request);
+        var duplicateResponse = await _userClient.Client.PostAsJsonAsync(RewardApiPath.SessionRewards, request);
 
         // Assert
         duplicateResponse.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -80,7 +80,7 @@ public class CreateSessionRewardTest(TestWebApplicationFactory factory) : BaseRe
 
     private async Task<SessionRewardEntity?> GetSessionRewardById(int id)
     {
-        var reward = await _dbUtility.Set<SessionRewardEntity>()
+        var reward = await _dbUtility.Query<SessionRewardEntity>()
             .Include(r => r.Reward)
             .FirstOrDefaultAsync(r => r.Id == id);
         return reward;

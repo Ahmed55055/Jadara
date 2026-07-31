@@ -1,4 +1,4 @@
-namespace Reward_Flow_v2.Employees.Common;
+namespace RewardFlow_API.Employees.Common;
 
 public record EmployeeDto{
     public int Id { get; set; }

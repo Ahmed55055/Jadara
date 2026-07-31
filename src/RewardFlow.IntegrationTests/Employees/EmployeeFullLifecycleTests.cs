@@ -3,11 +3,11 @@ using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Reward_Flow_v2.Employees.Common;
 using Reward_Flow_v2.Employees.CreateEmployee;
 using Reward_Flow_v2.Employees.UpdateEmployee;
 using RewardFlow.IntegrationTests.Infrastructure;
 using Reward_Flow_v2.Employees.Data;
+using RewardFlow_API.Employees.Common;
 using RewardFlow.IntegrationTests.Employees.Common;
 using RewardFlow.TestUtilities.DataGenerators;
 using Xunit;
@@ -94,7 +94,7 @@ public class EmployeeFullLifecycleTests(TestWebApplicationFactory factory)
 
     private async Task GetEmployeeByNationalNumber(int employeeId)
     {
-        var employee = await _dbUtility.Set<Employee>().FindAsync(employeeId);
+        var employee = await _dbUtility.Query<Employee>().FirstOrDefaultAsync(e => e.EmployeeId == employeeId);
         var getByNationalResponse = await _userClient.Client.GetAsync($"/api/Employees/national/{employee.NationalNumber}");
         getByNationalResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         
@@ -105,7 +105,7 @@ public class EmployeeFullLifecycleTests(TestWebApplicationFactory factory)
 
     private async Task GetEmployeeByName(int employeeId)
     {
-        var employee = await _dbUtility.Set<Employee>().FindAsync(employeeId);
+        var employee = await _dbUtility.Query<Employee>().FirstOrDefaultAsync(e=>e.EmployeeId == employeeId);
         var getByNameResponse = await _userClient.Client.GetAsync($"/api/Employees/name/{Uri.EscapeDataString(employee.Name)}");
         getByNameResponse.StatusCode.Should().Be(HttpStatusCode.OK);
     }

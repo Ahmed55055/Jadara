@@ -52,7 +52,7 @@ public class BulkDeleteTests(TestWebApplicationFactory factory) : BaseEmployeeTe
         result.Errors.Should().BeEmpty();
 
         // Verify employees were deleted
-        var allEmployees = await _dbUtility.Set<Employee>().ToListAsync();
+        var allEmployees = await _dbUtility.Query<Employee>().ToListAsync();
         allEmployees.Should().NotContain(e => employeeIds.Contains(e.EmployeeId));
     }
 

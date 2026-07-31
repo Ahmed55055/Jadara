@@ -14,11 +14,11 @@ public class EmployeeTestFixtureDisposedClass : TestWebApplicationFactory, IAsyn
 
         dbUtility = new DbUtility(this);
 
-        var faculties = await dbUtility.Set<Faculty>().AnyAsync()
-            ? await dbUtility.Set<Faculty>().ToListAsync()
+        var faculties = await dbUtility.Query<Faculty>().AnyAsync()
+            ? await dbUtility.Query<Faculty>().ToListAsync()
             : await AddFaculities();
 
-        if (!await dbUtility.Set<Department>().AnyAsync())
+        if (!await dbUtility.Query<Department>().AnyAsync())
             await AddDepartments(faculties);
     }
 

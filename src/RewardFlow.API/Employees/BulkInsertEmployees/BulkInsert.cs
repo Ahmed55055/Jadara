@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using Reward_Flow_v2.Common;
 using Reward_Flow_v2.Common.EndpointValidation;
 using Reward_Flow_v2.Common.Enums;
-using Reward_Flow_v2.Employees.Common;
 using Reward_Flow_v2.Employees.CreateEmployee;
 using Reward_Flow_v2.Employees.Data;
 using Reward_Flow_v2.Employees.Data.Database;
+using RewardFlow_API.Employees.Common;
 using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 using System.Net;
@@ -18,14 +18,8 @@ namespace Reward_Flow_v2.Employees.BulkInsertEmployees;
 
 public static class BulkInsert
 {
-    public record emp(
-        Guid Tracker,
-        string Name,
-        string? NationalNumber = null,
-        string? AccountNumber = null,
-        decimal? Salary = null);
 
-    public record Request(List<emp> Employees);
+    public record Request(List<BatchEmployee> Employees);
 
     public record Response(BatchSummary Summary, SuccessfulRecord[] InsertedRecords, BulkError[] Errors);
 
@@ -40,7 +34,8 @@ public static class BulkInsert
         InvalidName,
         DuplicateNationalNumber,
         DuplicateAccountNumber,
-        DatabaseConflict
+        DatabaseConflict,
+        Unexpected
     }
 
     public static void MapBulkInsertEmployee(this IEndpointRouteBuilder app)
@@ -149,7 +144,7 @@ public static class BulkInsert
     }
 
     private static Dictionary<Guid, Employee> ProcessDistinctEmployees(
-        Request request, UserContext userContext, List<BulkError> errors, IEmployeeTokenService tokenService)
+        Request request, ScopedUserContextDto scopedUserContextDto, List<BulkError> errors, IEmployeeTokenService tokenService)
     {
         var entitiesToInsertDic = new Dictionary<Guid, Employee>();
         var seenNationalHashes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -160,7 +155,7 @@ public static class BulkInsert
             Guid trackerId = rawEntity.Tracker == Guid.Empty ? Guid.NewGuid() : rawEntity.Tracker;
 
             // Map and validate name via Domain Factory rules
-            var entity = PrepareEmployee(rawEntity, userContext.Id, tokenService);
+            var entity = PrepareEmployee(rawEntity, scopedUserContextDto.Id, tokenService);
 
             // If creation failed, it means the name was empty or too short after regex cleaning
             if (entity == null)
@@ -237,7 +232,7 @@ public static class BulkInsert
         return dbConflicts;
     }
 
-    private static Employee? PrepareEmployee(emp rawEmp, int currentUserId, IEmployeeTokenService tokenService)
+    private static Employee? PrepareEmployee(BatchEmployee rawBatchEmployee, int currentUserId, IEmployeeTokenService tokenService)
     {
         // 1. Temporarily instantiate a shell or mock tokens if needed, 
         // but the cleanest way is to generate tokens based on the rawEmp name context
@@ -245,7 +240,7 @@ public static class BulkInsert
         // Let's use an empty list for creation, then generate and update properly.
         var emptyTokens = new List<EmployeeNameToken>();
 
-        var employee = Employee.Create(rawEmp.Name, currentUserId, emptyTokens);
+        var employee = Employee.Create(rawBatchEmployee.Name, currentUserId, emptyTokens);
 
         if (employee == null)
         {
@@ -253,9 +248,9 @@ public static class BulkInsert
         }
 
         // 2. Map optional properties using domain business rules
-        employee.UpdateNationalNumber(rawEmp.NationalNumber);
-        employee.AccountNumber = rawEmp.AccountNumber; // Map directly if no custom domain method exists
-        employee.Salary = rawEmp.Salary;
+        employee.UpdateNationalNumber(rawBatchEmployee.NationalNumber);
+        employee.AccountNumber = rawBatchEmployee.AccountNumber; // Map directly if no custom domain method exists
+        employee.Salary = rawBatchEmployee.Salary;
         employee.CreatedAt = DateTime.UtcNow;
 
         // 3. Generate and apply actual name tokens now that the name is cleaned inside the entity

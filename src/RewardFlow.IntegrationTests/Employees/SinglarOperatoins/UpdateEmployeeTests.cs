@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Reward_Flow_v2.Common;
 using Reward_Flow_v2.Employees.Data;
 using Reward_Flow_v2.Employees.UpdateEmployee;
@@ -180,6 +181,7 @@ public class UpdateEmployeeTests(TestWebApplicationFactory factory) : BaseEmploy
 
         var employeeData = TestDataGenerator.Employee
             .ForProperty(e => e.CreatedBy, otherUser.Id)
+            .ForProperty(e => e.TenantId, otherUser.TenantId)
             .Generate();
         await _dbUtility.InsertAsync(employeeData);
 
@@ -260,7 +262,7 @@ public class UpdateEmployeeTests(TestWebApplicationFactory factory) : BaseEmploy
     {
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-        var updatedEmployee = await _dbUtility.Set<Employee>().FindAsync(employeeId);
+        var updatedEmployee = await _dbUtility.Query<Employee>().FirstOrDefaultAsync(e=>e.EmployeeId == employeeId);
         updatedEmployee.Should().NotBeNull();
         
         List<string> fieldsNames = new();

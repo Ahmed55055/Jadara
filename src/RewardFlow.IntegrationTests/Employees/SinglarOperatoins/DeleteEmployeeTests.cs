@@ -58,7 +58,7 @@ public class DeleteEmployeeTests(TestWebApplicationFactory factory) : BaseEmploy
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         // Verify name tokens are removed
-        var tokensExist = await _dbUtility.Set<EmployeeNameToken>().AnyAsync(
+        var tokensExist = await _dbUtility.Query<EmployeeNameToken>().AnyAsync(
             t => t.EmployeeId == createdEmployee!.Id && t.UserId == _userClient.User.Id);
         tokensExist.Should().BeFalse();
     }

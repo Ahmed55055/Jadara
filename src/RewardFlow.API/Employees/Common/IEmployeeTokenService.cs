@@ -1,6 +1,6 @@
 using Reward_Flow_v2.Employees.Data;
 
-namespace Reward_Flow_v2.Employees.Common;
+namespace RewardFlow_API.Employees.Common;
 
 public interface IEmployeeTokenService
 {
@@ -12,4 +12,5 @@ public interface IEmployeeTokenService
     Task UpdateTokensAsync(Employee employee, int userId, CancellationToken cancellationToken = default);
     Task DeleteTokensAsync(int employeeId, int userId, CancellationToken cancellationToken = default);
     Task<IEnumerable<int>> SearchEmployeesByNameAsync(string searchName, int userId, int limit = 10, CancellationToken cancellationToken = default);
+    List<EmployeeNameToken> CreateTokens(string employeeName, int employeeId, int userId);
 }

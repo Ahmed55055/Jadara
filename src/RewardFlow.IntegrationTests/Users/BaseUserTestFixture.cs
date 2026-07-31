@@ -2,7 +2,6 @@ using Bogus;
 using Microsoft.EntityFrameworkCore;
 using RewardFlow.IntegrationTests.Infrastructure;
 using Reward_Flow_v2.Employees.Data;
-using Reward_Flow_v2.Employees.Common;
 using RewardFlow.IntegrationTests.Employees.Common;
 using RewardFlow.TestUtilities.DataGenerators;
 using Xunit;

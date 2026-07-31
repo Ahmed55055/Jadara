@@ -1,13 +1,15 @@
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Reward_Flow_v2.Common;
 using Reward_Flow_v2.Common.EmployeeLookup;
 using Reward_Flow_v2.Common.ErrorHandling;
+using Reward_Flow_v2.Common.Interceptors;
 using Reward_Flow_v2.Common.Tokenization;
 using Reward_Flow_v2.Common.UserIdRetrieval;
 using Reward_Flow_v2.Employees;
-using Reward_Flow_v2.Employees.Common;
+using Reward_Flow_v2.Employees.BulkInsertEmployees;
 using Reward_Flow_v2.Employees.Data;
 using Reward_Flow_v2.Employees.Data.Database;
 using Reward_Flow_v2.Employees.Shared;
@@ -24,7 +26,10 @@ using Reward_Flow_v2.User.Data.Database;
 using RewardFlow_API.Rewards.Common;
 using RewardFlow_API.Rewards.Data;
 using RewardFlow_API.Common.Interface;
+using RewardFlow_API.Employees.Common;
+using RewardFlow_API.Rewards.Courses;
 using Scalar.AspNetCore;
+using UserContext = RewardFlow_API.Common.Interface.UserContext;
 
 namespace Reward_Flow_v2;
 
@@ -50,21 +55,53 @@ public sealed class Program
         builder.Services.AddScoped<IEmployeeLookupService,EmployeeLookupService>();
         builder.Services.AddScoped<ISessionRewardService,SessionRewardService>();
         builder.Services.AddScoped<ISnapshotService<Employee,EmployeeSnapshot>,EmployeeSnapshotService>();
-        builder.Services.AddScoped<ISnapshotService<SemesterSubject,SubjectSnapshot>,SubjectSnapshotService>();
+        builder.Services.AddScoped<ISnapshotService<TermCourse,CourseSnapshot>,SubjectSnapshotService>();
         builder.Services.AddScoped<ScopedUserContext>();
-        builder.Services.AddScoped<IUserContext, UserContext>();
-
-        builder.Services.AddDbContextFactory<RewardDbContext>( options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")),
-        ServiceLifetime.Scoped);
-        /*builder.Services.AddDbContext<RewardDbContext>( options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));*/
-
+        builder.Services.AddScoped<IUserContext,UserContext>();
+        builder.Services.AddScoped<IBulkEmployeesImporter,BulkEmployeesImportJob>();
+        builder.Services.AddScoped<ITokenBackgroundJob,TokenBackgroundJob>();
+        builder.Services.AddScoped<IBulkInserter<EmployeeNameToken>, EmployeeTokenBulkInsert>();
+        
+        // Register Interceptors
+        builder.Services
+            .AddScoped<AuditSaveChangesInterceptor>()
+            .AddScoped<TenantSaveChangesInterceptor>();
+       
+        // DbContexts
         builder.Services.AddDbContext<UserDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-        builder.Services.AddDbContext<EmployeeDbContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+        builder.Services.AddDbContext<RewardDbContext>( (sp,options) =>
+        {
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            
+            var auditInterceptor = sp.GetRequiredService<AuditSaveChangesInterceptor>();
+            var tenantInterceptor = sp.GetRequiredService<TenantSaveChangesInterceptor>();
+
+            options.AddInterceptors(auditInterceptor, tenantInterceptor);
+        });
+        
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        
+        builder.Services.AddDbContext<EmployeeDbContext>((sp,options) =>
+        {
+            options.UseSqlServer(connectionString);
+            
+            var auditInterceptor = sp.GetRequiredService<AuditSaveChangesInterceptor>();
+            var tenantInterceptor = sp.GetRequiredService<TenantSaveChangesInterceptor>();
+
+            options.AddInterceptors(auditInterceptor, tenantInterceptor);
+        });
+        
+        // Hangfire
+        builder.Services.AddHangfire(config => config
+            .UseSimpleAssemblyNameTypeSerializer()
+            .UseRecommendedSerializerSettings()
+            .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+        builder.Services.AddHangfireServer();
+        //builder.Services.AddScoped<IBulkInsertBackgroundJob, BulkInsertBackgroundJob>();
+        
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -80,7 +117,7 @@ public sealed class Program
                 };
             });
 
-        // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+        
         builder.Services.AddOpenApi();
 
         var app = builder.Build();
@@ -105,7 +142,8 @@ public sealed class Program
         app.MapUsers();
         app.MapEmployeeEndpoints();
         app.MapSessionRewardEndpoints();
-
+        app.MapCourseEndpoints();
+        
         app.Run();
     }
 }

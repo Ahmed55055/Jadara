@@ -5,9 +5,9 @@ using RewardFlow_API.Rewards.Data;
 
 namespace Reward_Flow_v2.Rewards.Data.Database;
 
-public class SubjectSnapshotConfiguration : IEntityTypeConfiguration<SubjectSnapshot>
+public class SubjectSnapshotConfiguration : IEntityTypeConfiguration<CourseSnapshot>
 {
-    public void Configure(EntityTypeBuilder<SubjectSnapshot> builder)
+    public void Configure(EntityTypeBuilder<CourseSnapshot> builder)
     {
         builder.ToTable("subject_snapshots");
         builder.HasKey(ss => ss.SnapshotId);
@@ -44,7 +44,7 @@ public class SubjectSnapshotConfiguration : IEntityTypeConfiguration<SubjectSnap
         builder.Property(ss => ss.Year)
             .HasColumnName("year");
 
-        builder.HasOne(ss => ss.SemesterSubject)
+        builder.HasOne(ss => ss.TermCourse)
             .WithMany()
             .HasForeignKey(ss => ss.SemesterSubjectId)
             .IsRequired()

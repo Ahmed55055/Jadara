@@ -52,7 +52,7 @@ public static class HttpUserAccessorExtentions
         return userRetrievalService != null ? await userRetrievalService.GetUserIntIdAsync(userGuidId, cancellationToken) : 0;
     }
 
-    public static async Task<UserContext?> GetCurrentUserAsync(this HttpContext httpContext)
+    public static async Task<ScopedUserContextDto?> GetCurrentUserAsync(this HttpContext httpContext)
     {
         var uuid = ParseUserUuid(httpContext);
         var userRetrievalService = httpContext?.RequestServices.GetService<IUserRetrievalService>();

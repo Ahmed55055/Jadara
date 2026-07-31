@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Reward_Flow_v2.Employees.Data.Database;
 using Reward_Flow_v2.Rewards.Data.Database;
@@ -14,6 +15,7 @@ namespace RewardFlow.IntegrationTests.Infrastructure;
 public class DbUtility : IDisposable
 {
     private readonly DbContext[] _contexts;
+    private readonly string _connectionString;
     private TestWebApplicationFactory _factory;
 
     /// <summary>
@@ -23,25 +25,38 @@ public class DbUtility : IDisposable
     public DbUtility(TestWebApplicationFactory factory)
     {
         _factory = factory;
-        var scope = factory.Services.CreateScope();
+        _connectionString = TestWebApplicationFactory.ConnectionString;
+        var options = 
+        _contexts =
+        [
+            new UserDbContext(new DbContextOptionsBuilder<UserDbContext>()
+                .UseSqlServer(_connectionString)
+                .Options, factory.Configuration),
 
-        _contexts = new DbContext[]
-        {
-            scope.ServiceProvider.GetRequiredService<UserDbContext>(),
-            scope.ServiceProvider.GetRequiredService<EmployeeDbContext>(),
-            scope.ServiceProvider.GetRequiredService<RewardDbContext>()
-        };
+            new EmployeeDbContext(
+                new DbContextOptionsBuilder<EmployeeDbContext>()
+                    .UseSqlServer(_connectionString)
+                    .Options, factory.Configuration, null),
+
+            new RewardDbContext(
+                new DbContextOptionsBuilder<RewardDbContext>()
+                    .UseSqlServer(_connectionString)
+                    .Options, factory.Configuration, null)
+            /*CreateContext<UserDbContext>(),
+            CreateContext<EmployeeDbContext>(),
+            CreateContext<RewardDbContext>()*/
+        ];
     }
     
     public DbContext GetContext<T>() where T : class
     {
         var scope = _factory.Services.CreateScope();
-        
+
         var contextType = _contexts
                               .FirstOrDefault(c => c.Model.FindEntityType(typeof(T)) is not null)?
                               .GetType()
                           ?? throw new ArgumentException($"No context found that manages entity type {typeof(T).Name}");
-        
+
         return (DbContext)scope.ServiceProvider.GetRequiredService(contextType);
     }
 
@@ -61,8 +76,8 @@ public class DbUtility : IDisposable
         await context.SaveChangesAsync();
     }
 
-    public DbSet<T> Set<T>() where T : class
-        => GetContext<T>().Set<T>();
+    public IQueryable<T> Query<T>() where T : class
+        => GetContext<T>().Set<T>().IgnoreQueryFilters();
 
     public void Dispose()
     {

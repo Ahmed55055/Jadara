@@ -82,7 +82,7 @@ public class GetAllUsersTests (TestWebApplicationFactory factory) : BaseUserTest
     public async Task GetAllUsers_RegularUser_ShouldReturnForbidden()
     {
         var userClient = new UserClient(_factory, _otherUsers[0]);
-        _dbUtility.Set<User>().Any(u => u.Username == _otherUsers[0].Username)
+        _dbUtility.Query<User>().Any(u => u.Username == _otherUsers[0].Username)
             .Should().BeTrue("The User isn't in the database. check the registration");
 
         // Act

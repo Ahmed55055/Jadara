@@ -3,7 +3,7 @@ using Reward_Flow_v2.Common.Tokenization;
 using Reward_Flow_v2.Employees.Data;
 using Reward_Flow_v2.Employees.Data.Database;
 
-namespace Reward_Flow_v2.Employees.Common;
+namespace RewardFlow_API.Employees.Common;
 
 public class EmployeeTokenService : IEmployeeTokenService
 {
@@ -77,6 +77,11 @@ public class EmployeeTokenService : IEmployeeTokenService
             .ToListAsync(cancellationToken);
 
         return results;
+    }
+
+    public List<EmployeeNameToken> CreateTokens(string employeeName, int employeeId, int userId)
+    {
+        return GenerateTokens(employeeName, employeeId, userId).ToList();
     }
 
     private IEnumerable<EmployeeNameToken> GenerateTokens(string name, int employeeId, int userId)

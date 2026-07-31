@@ -29,7 +29,18 @@ public static class ValidateEndpoint
 
         return builder;
     }
-
+    
+    /// <summary>
+    /// Secures an endpoint by validating user authentication and roles, returning 401 Unauthorized if access is denied.
+    /// </summary>
+    /// <param name="builder">The endpoint builder to attach the filter to.</param>
+    /// <param name="allowedRoles">The roles permitted to access the endpoint.</param>
+    /// <param name="strategy">The validation strategy (JWT claims or Database lookup).</param>
+    /// <returns>The builder instance for chaining.</returns>
+    /// <remarks>
+    /// If <see cref="AllowedRoles.Admin"/> is included in <paramref name="allowedRoles"/>, 
+    /// the strategy is automatically forced to <see cref="ValidationStrategy.Database"/> for security.
+    /// </remarks>
     public static IEndpointConventionBuilder ValidateAccess(
         this IEndpointConventionBuilder builder,
         AllowedRoles allowedRoles = AllowedRoles.Owner,
@@ -40,7 +51,7 @@ public static class ValidateEndpoint
             var httpContext = context.HttpContext;
             var user = httpContext.User;
 
-            if (user?.Identity?.IsAuthenticated ?? false)
+            if (user?.Identity?.IsAuthenticated != true)
             {
                 return Results.Unauthorized();
             }

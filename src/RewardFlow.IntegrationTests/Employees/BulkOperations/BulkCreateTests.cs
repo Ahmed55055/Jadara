@@ -9,11 +9,13 @@ using Reward_Flow_v2.Employees.BulkInsertEmployees;
 using RewardFlow.IntegrationTests.Employees.Common;
 using RewardFlow.TestUtilities.DataGenerators;
 using RewardFlow.TestUtilities.DataGenerators.Fakers.Employees;
+using System.Diagnostics;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace RewardFlow.IntegrationTests.Employees.BulkOperations;
 
-public class BulkCreateTests(TestWebApplicationFactory factory) : BaseEmployeeTestFixture(factory), IAsyncLifetime
+public class BulkCreateTests(TestWebApplicationFactory factory, ITestOutputHelper output) : BaseEmployeeTestFixture(factory), IAsyncLifetime
 {
     private UserClient _userClient;
 
@@ -31,25 +33,35 @@ public class BulkCreateTests(TestWebApplicationFactory factory) : BaseEmployeeTe
     public async Task BulkInsertEmployees_WithValidData_ShouldReturnOk()
     {
         // Arrange
+        const int employeesCount = 2000;
+        
         var employees = TestDataGenerator.Employee
             .ForProperty(e => e.CreatedBy, _userClient.User.Id)
-            .Generate(2000);
+            .Generate(employeesCount);
 
         BulkInsert.Request bulkRequest = BulkInsertEmployeeRequest(employees);
 
+
         // Act
+        var stopwatch = Stopwatch.StartNew();
+        
         var response = await _userClient.Client.PostAsJsonAsync("/api/Employees/BulkInsert", bulkRequest);
+        
+        stopwatch.Stop();
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Accepted);
         var result = await response.Content.ReadFromJsonAsync<BulkInsert.Response>();
         result.Should().NotBeNull();
-        result!.Summary.SuccessfulRecords.Should().Be(2000);
+        result!.Summary.SuccessfulRecords.Should().Be(employeesCount);
         result.Errors.Should().BeEmpty();
 
         // Verify employees were created
-        var addedCount = await _dbUtility.Set<Employee>().Where(e=>e.CreatedBy == _userClient.User.Id).CountAsync();
+        var addedCount = await _dbUtility.Query<Employee>().Where(e=>e.CreatedBy == _userClient.User.Id).CountAsync();
         addedCount.Should().Be(employees.Count);
+        
+        output.WriteLine(
+            $"✅ SPEED TEST RESULT: Processed {employeesCount} employees in {stopwatch.Elapsed.TotalSeconds:F2} seconds.");
     }
 
     [Fact]
@@ -111,7 +123,7 @@ public class BulkCreateTests(TestWebApplicationFactory factory) : BaseEmployeeTe
         result.Errors.Should().ContainSingle(e => e.ErrorStatusCode == BulkInsert.ErrorTypes.DatabaseConflict);
         
         // Verify that no new employees were inserted due to duplicate national numbers
-        var allEmployees = await _dbUtility.Set<Employee>().Where(e=>e.CreatedBy == _userClient.User.Id).ToListAsync();
+        var allEmployees = await _dbUtility.Query<Employee>().Where(e=>e.CreatedBy == _userClient.User.Id).ToListAsync();
         allEmployees.Should().HaveCount(1); // Only the existing employee
     }
 
@@ -156,9 +168,9 @@ public class BulkCreateTests(TestWebApplicationFactory factory) : BaseEmployeeTe
         );
     }
 
-    private BulkInsert.emp BulkInsertEmployeeObject(Employee employee)
+    private BatchEmployee BulkInsertEmployeeObject(Employee employee)
     {
-        return new BulkInsert.emp
+        return new BatchEmployee
         (
             Tracker: Guid.NewGuid(),
             Name: employee.Name, 

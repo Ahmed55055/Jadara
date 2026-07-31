@@ -1,6 +1,6 @@
 using FluentAssertions;
-using Reward_Flow_v2.Employees.Common;
 using Reward_Flow_v2.Employees.Data;
+using RewardFlow_API.Employees.Common;
 using RewardFlow.IntegrationTests.Employees.Common;
 using RewardFlow.IntegrationTests.Infrastructure;
 using RewardFlow.TestUtilities.DataGenerators;
@@ -99,7 +99,7 @@ public class EmployeeSearchTests(TestWebApplicationFactory factory) : BaseEmploy
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var employeesResponse = await response.Content.ReadFromJsonAsync<List<Employee>>();
+        var employeesResponse = await response.Content.ReadFromJsonAsync<List<EmployeeDto>>();
         employeesResponse.Should().NotBeNull();
         employeesResponse!.Count.Should().BeLessThanOrEqualTo(5);
     }

@@ -12,22 +12,26 @@ public sealed class RewardDbContext(DbContextOptions<RewardDbContext> options,  
 {
     private const string Schema = "DbReward";
     
-    public DbSet<Subject> Subject => Set<Subject>();
+    // Rewards
     public DbSet<Reward> Reward => Set<Reward>();
-    public DbSet<SemesterSubject> SubjectSemester => Set<SemesterSubject>();
-
     public DbSet<SessionRewardEntity> SessionRewardEntity => Set<SessionRewardEntity>();
-    public DbSet<EmployeeSessionReward> EmployeeSessionReward => Set<EmployeeSessionReward>();
-    public DbSet<EmployeeSessionSubject> EmployeeSessionSubject => Set<EmployeeSessionSubject>();
-    public DbSet<SubjectSessionRewardEntity> SubjectSessionRewardEntity => Set<SubjectSessionRewardEntity>();
+
+    // Subjects
+    public DbSet<Course> Course => Set<Course>();
+    public DbSet<TermCourse> TermCourse => Set<TermCourse>();
+    public DbSet<CourseSnapshot> CourseSnapshot => Set<CourseSnapshot>();
+    
+    // Sessions Reward
+    public DbSet<EmployeeSessions> EmployeeSessions => Set<EmployeeSessions>();
+    public DbSet<CourseEmployee> CourseEmployee => Set<CourseEmployee>();
+    public DbSet<CourseAssignment> CourseAssignment => Set<CourseAssignment>();
     public DbSet<EmployeeReward> EmployeeReward => Set<EmployeeReward>();
     public DbSet<EmployeeSnapshot> EmployeeSnapshots => Set<EmployeeSnapshot>();
-    public DbSet<SubjectSnapshot> SubjectSnapshot => Set<SubjectSnapshot>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(schema: Schema);
-        modelBuilder.ApplyConfiguration(new SubjectConfiguration());
+        modelBuilder.ApplyConfiguration(new CourseConfiguration());
         modelBuilder.ApplyConfiguration(new RewardConfiguration());
         modelBuilder.ApplyConfiguration(new SubjectSemesterConfiguration());
 

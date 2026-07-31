@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Reward_Flow_v2.Rewards.Data.Database;
 
-public class SubjectSemesterConfiguration : IEntityTypeConfiguration<SemesterSubject>
+public class SubjectSemesterConfiguration : IEntityTypeConfiguration<TermCourse>
 {
-    public void Configure(EntityTypeBuilder<SemesterSubject> builder)
+    public void Configure(EntityTypeBuilder<TermCourse> builder)
     {
         builder.ToTable("subject_semesters");
         builder.HasKey(ss => ss.Id);
@@ -30,7 +30,7 @@ public class SubjectSemesterConfiguration : IEntityTypeConfiguration<SemesterSub
             .HasColumnType("smallint")
             .IsRequired();
 
-        builder.HasOne(ss => ss.Subject)
+        builder.HasOne(ss => ss.Course)
             .WithMany(s => s.SubjectSemesters)
             .HasForeignKey(ss => ss.SubjectId);
     }

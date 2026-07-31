@@ -20,11 +20,11 @@ public class UserRetrievalService : IUserRetrievalService
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<UserContext?> GetUserAsync(Guid userGuid, CancellationToken cancellationToken = default)
+    public async Task<ScopedUserContextDto?> GetUserAsync(Guid userGuid, CancellationToken cancellationToken = default)
     {
         return await _dbContext.User
             .Where(u => u.UUID == userGuid)
-            .Select(u => new UserContext(u.Id, u.UUID, u.Username, u.IsActive, u.RoleId, u.PlanId))
+            .Select(u => new ScopedUserContextDto(u.Id, u.UUID, u.Username, u.IsActive, u.RoleId, u.PlanId))
             .FirstOrDefaultAsync();
     }
 }

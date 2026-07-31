@@ -5,9 +5,9 @@ using RewardFlow_API.Rewards.Data;
 
 namespace Reward_Flow_v2.Rewards.Data.Database;
 
-public class SubjectSessionRewardConfiguration : IEntityTypeConfiguration<SubjectSessionRewardEntity>
+public class SubjectSessionRewardConfiguration : IEntityTypeConfiguration<CourseAssignment>
 {
-    public void Configure(EntityTypeBuilder<SubjectSessionRewardEntity> builder)
+    public void Configure(EntityTypeBuilder<CourseAssignment> builder)
     {
         builder.ToTable("subject_session_rewards");
         builder.HasKey(ssr => ssr.Id);
@@ -38,16 +38,16 @@ public class SubjectSessionRewardConfiguration : IEntityTypeConfiguration<Subjec
             .HasColumnName("max_number_of_employees")
             .HasColumnType("smallint");
 
-        builder.HasMany(ssr => ssr.EmployeeSessionSubject)
-            .WithOne(ess => ess.SubjectSessionReward)
+        builder.HasMany(ssr => ssr.StaffMembers)
+            .WithOne(ess => ess.Course)
             .HasForeignKey(ess => ess.SubjectSessionRewardId);
 
-        builder.HasOne<SemesterSubject>()
+        builder.HasOne<TermCourse>()
             .WithMany()
             .HasForeignKey(ssr => ssr.SemesterSubjectId)
             .IsRequired();
 
-        builder.HasOne<SubjectSnapshot>()
+        builder.HasOne<CourseSnapshot>()
             .WithMany()
             .HasForeignKey(ssr => ssr.SubjectSnapshotId)
             .OnDelete(DeleteBehavior.NoAction)

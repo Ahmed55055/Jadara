@@ -56,11 +56,11 @@ public class BulkUpdateTests(TestWebApplicationFactory factory) : BaseEmployeeTe
         result.Errors.Should().BeEmpty();
 
         // Verify employees were updated
-        var allEmployees = await _dbUtility.Set<Employee>().ToListAsync();
+        var allEmployees = await _dbUtility.Query<Employee>().ToListAsync();
         allEmployees.Should().Contain(e => e.Name == "Updated Name" && e.CreatedBy == _userClient.User.Id);
         
         // Verify tokens were updated in the Employee Name Tokens table
-        var tokensExist = await _dbUtility.Set<EmployeeNameToken>().AnyAsync(
+        var tokensExist = await _dbUtility.Query<EmployeeNameToken>().AnyAsync(
             t => t.EmployeeId == allEmployees[0].EmployeeId && t.UserId == _userClient.User.Id);
         tokensExist.Should().BeTrue();
     }

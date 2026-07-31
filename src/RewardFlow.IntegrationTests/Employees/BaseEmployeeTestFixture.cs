@@ -19,11 +19,11 @@ public class BaseEmployeeTestFixture: IClassFixture<TestWebApplicationFactory>
     
     public async Task InitializeAsync()
     {
-        var faculties = await _dbUtility.Set<Faculty>().AnyAsync()
-            ? await _dbUtility.Set<Faculty>().ToListAsync()
+        var faculties = await _dbUtility.Query<Faculty>().AnyAsync()
+            ? await _dbUtility.Query<Faculty>().ToListAsync()
             : await AddFaculities();
 
-        if (!await _dbUtility.Set<Department>().AnyAsync())
+        if (!await _dbUtility.Query<Department>().AnyAsync())
             await AddDepartments(faculties);
     }
 

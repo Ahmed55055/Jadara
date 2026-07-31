@@ -154,7 +154,7 @@ public class RegisterTests(TestWebApplicationFactory factory) : BaseAuthTestFixt
         var hashes = new List<string>();
         foreach (var user in users)
         {
-            var dbUser = await _dbUtility.Set<User>().FirstOrDefaultAsync(u => u.Username == user.Username);
+            var dbUser = await _dbUtility.Query<User>().FirstOrDefaultAsync(u => u.Username == user.Username);
             dbUser.Should().NotBeNull();
             dbUser.PasswordHash.Should().NotBe(password); // Should be hashed
             dbUser.PasswordHash.Should().NotBeNullOrEmpty();

@@ -6,6 +6,7 @@ public sealed class EmployeeReward: ITenantEntity
 {
     public int RewardId { get; init; }
     public int EmployeeId { get; init; }
+    public Guid TenantId { get; set; }
     public Guid EmployeeSnapshotId { get; private set; }
     public decimal Amount { get; private set; }
     public bool IsUpdated { get; private set; }

@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Reward_Flow_v2.Common;
 using Reward_Flow_v2.Common.EndpointValidation;
-using Reward_Flow_v2.Employees.Common;
 using Reward_Flow_v2.Employees.Data;
 using Reward_Flow_v2.Employees.Data.Database;
+using RewardFlow_API.Employees.Common;
 using System.Security.Claims;
 
 namespace Reward_Flow_v2.Employees.UpdateEmployee;

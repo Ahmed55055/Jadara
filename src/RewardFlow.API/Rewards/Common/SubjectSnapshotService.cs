@@ -7,59 +7,59 @@ using RewardFlow_API.Rewards.Data;
 
 namespace RewardFlow_API.Rewards.Common;
 
-public class SubjectSnapshotService(RewardDbContext context) : ISnapshotService<SemesterSubject, SubjectSnapshot>
+public class SubjectSnapshotService(RewardDbContext context) : ISnapshotService<TermCourse, CourseSnapshot>
 {
-    public SubjectSnapshot Capture(SemesterSubject entity)
+    public CourseSnapshot Capture(TermCourse entity)
     {
         var snapshot = MapToSnapshot(entity);
-        context.SubjectSnapshot.Add(snapshot);
+        context.CourseSnapshot.Add(snapshot);
         return snapshot;
     }
 
-    public IEnumerable<SubjectSnapshot> Capture(IEnumerable<SemesterSubject> entities)
+    public IEnumerable<CourseSnapshot> Capture(IEnumerable<TermCourse> entities)
     {
         var snapshots = entities.Select(e => Capture(e)).ToList();
         return snapshots;
     }
 
-    public IQueryable<SubjectSnapshot> GetLatestSnapshot(int semesterSubjectId)
+    public IQueryable<CourseSnapshot> GetLatestSnapshot(int semesterSubjectId)
     {
-        return context.SubjectSnapshot
+        return context.CourseSnapshot
             .Where(s => s.SemesterSubjectId == semesterSubjectId)
             .OrderByDescending(s => s.CapturedAt);
     }
 
-    public IQueryable<IEnumerable<SubjectSnapshot>> GetLatestSnapshot(int[] entityIds)
+    public IQueryable<IEnumerable<CourseSnapshot>> GetLatestSnapshot(int[] entityIds)
     {
-        return context.SubjectSnapshot
+        return context.CourseSnapshot
             .Where(s => entityIds.Contains(s.SemesterSubjectId))
             .GroupBy(s => s.SemesterSubjectId)
             .Select(g => g.OrderByDescending(s => s.CapturedAt).Take(1));
     }
 
-    private bool IsUpToDate(SemesterSubject entity, SubjectSnapshot latest)
+    private bool IsUpToDate(TermCourse entity, CourseSnapshot latest)
     {
         // Compare the core values. If any differ, the snapshot is out of date.
         // Note: We access entity.Subject properties assuming they were Included in the query.
         return entity.SubjectId == latest.SemesterSubjectId &&
-               entity.Subject.Name == latest.SubjectName &&
-               entity.Subject.IsTheoretical == latest.IsTheoretical &&
-               entity.Subject.IsPractical == latest.IsPractical &&
+               entity.Course.Name == latest.SubjectName &&
+               entity.Course.IsTheoretical == latest.IsTheoretical &&
+               entity.Course.IsPractical == latest.IsPractical &&
                entity.Semester == latest.Semester &&
                entity.Year == latest.Year;
     }
 
 
-    private SubjectSnapshot MapToSnapshot(SemesterSubject entity)
+    private CourseSnapshot MapToSnapshot(TermCourse entity)
     {
-        return new SubjectSnapshot
+        return new CourseSnapshot
         {
-            SubjectName = entity.Subject.Name,
-            IsTheoretical = entity.Subject.IsTheoretical,
-            IsPractical = entity.Subject.IsPractical,
+            SubjectName = entity.Course.Name,
+            IsTheoretical = entity.Course.IsTheoretical,
+            IsPractical = entity.Course.IsPractical,
             Semester = entity.Semester,
             Year = entity.Year,
-            SemesterSubject = entity
+            TermCourse = entity
         };
     }
 }

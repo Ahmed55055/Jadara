@@ -4,9 +4,9 @@ using RewardFlow_API.Rewards.Data;
 
 namespace Reward_Flow_v2.Rewards.Data.Database;
 
-public class EmployeeSessionRewardConfiguration : IEntityTypeConfiguration<EmployeeSessionReward>
+public class EmployeeSessionRewardConfiguration : IEntityTypeConfiguration<EmployeeSessions>
 {
-    public void Configure(EntityTypeBuilder<EmployeeSessionReward> builder)
+    public void Configure(EntityTypeBuilder<EmployeeSessions> builder)
     {
         builder.ToTable("employee_session_rewards");
         builder.HasKey(esr => new { esr.SessionRewardId, esr.EmployeeId });

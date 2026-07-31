@@ -1,9 +1,7 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Reward_Flow_v2.Common;
-using Reward_Flow_v2.Employees.Data;
 using Reward_Flow_v2.Employees.Data.Database;
-using System.Security.Claims;
+using RewardFlow_API.Employees.Common;
 using Reward_Flow_v2.Common.Hashing;
 
 namespace Reward_Flow_v2.Employees.GetEmployeeByNationalNumber;
@@ -14,7 +12,7 @@ public static partial class GetEmployeeByNationalNumber
     {
         app.MapGet(EmployeeApiPath.GetByNationalNumber, HandlerAsync)
             .RequireAuthorization()
-            .Produces<Employee>(StatusCodes.Status200OK)
+            .Produces<EmployeeDto>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status500InternalServerError)
@@ -39,7 +37,7 @@ public static partial class GetEmployeeByNationalNumber
                 .Where(e => e.NationalNumberHash == nationalNumberHash && e.CreatedBy == currentUserId)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            return employee == null ? Results.NotFound() : Results.Ok(employee);
+            return employee == null ? Results.NotFound() : Results.Ok(employee.ToDto());
         }
         catch (Exception)
         {

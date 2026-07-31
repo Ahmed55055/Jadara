@@ -2,9 +2,9 @@ using EntityFramework.Exceptions.Common;
 using Microsoft.EntityFrameworkCore;
 using Reward_Flow_v2.Common;
 using Reward_Flow_v2.Common.EndpointValidation;
-using Reward_Flow_v2.Employees.Common;
 using Reward_Flow_v2.Employees.Data.Database;
 using Reward_Flow_v2.Employees.Data;
+using RewardFlow_API.Employees.Common;
 
 namespace Reward_Flow_v2.Employees.CreateEmployee;
 
@@ -24,7 +24,7 @@ public static class CreateEmployee
     {
         app.MapPost(EmployeeApiPath.Create, HandlerAsync)
             .RequireAuthorization()
-            .Produces<Employee>(StatusCodes.Status201Created)
+            .Produces<EmployeeDto>(StatusCodes.Status201Created)
             .Produces<IEnumerable<FluentValidation.Results.ValidationFailure>>(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status500InternalServerError)
@@ -43,6 +43,9 @@ public static class CreateEmployee
         if (currentUserId == 0)
             return Results.Unauthorized();
 
+        if (request.DepartmentId.HasValue && !await dbContext.Department.AnyAsync(d => d.DepartmentId == request.DepartmentId, cancellationToken))
+            return Results.BadRequest($"Department with ID {request.DepartmentId} does not exist");
+
         var employee = PrepareNewEmployeeObject(request, currentUserId);
 
         try
@@ -59,7 +62,7 @@ public static class CreateEmployee
             await tokenService.CreateTokensAsync(employee, currentUserId, cancellationToken);
 
             return Results.Created($"{EmployeeApiPath.GetById.Replace("{id}", employee.EmployeeId.ToString())}",
-                employee);
+                employee.ToDto());
         }
         catch (UniqueConstraintException)
         {

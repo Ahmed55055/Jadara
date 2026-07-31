@@ -5,10 +5,10 @@ using Reward_Flow_v2.Employees.Data;
 using Reward_Flow_v2.Rewards.Data;
 using Reward_Flow_v2.Rewards.Data.Database;
 using Reward_Flow_v2.Rewards.SessionsReward.Common;
-using Reward_Flow_v2.Rewards.SessionsReward.CreateReward;
 using Reward_Flow_v2.Rewards.SessionsReward.Dtos;
 using Reward_Flow_v2.Rewards.SessionsReward.Interface;
 using RewardFlow_API.Rewards.Data;
+using RewardFlow_API.Rewards.SessionsReward.EndPoints.Reward.CreateReward;
 using Z.EntityFramework.Plus;
 
 namespace Reward_Flow_v2.Rewards.SessionsReward;
@@ -17,7 +17,7 @@ public class SessionRewardService(
     RewardDbContext dbcontext,
     ISessionRewardCalculator calculator,
     ISessionRewardRules rules,
-    ISnapshotService<SemesterSubject, SubjectSnapshot> subjectSnapshotService,
+    ISnapshotService<TermCourse, CourseSnapshot> subjectSnapshotService,
     ISnapshotService<Employee, EmployeeSnapshot> employeeSnapshotService,
     IEmployeeLookupService employeeLookup,
     ILogger<SessionRewardService> logger) : ISessionRewardService
@@ -34,15 +34,27 @@ public class SessionRewardService(
     private record RewardProcessingContext(
         SessionRewardEntity Reward,
         List<Employee> Employees,
-        SubjectSnapshot SubjectSnapshot,
+        CourseSnapshot CourseSnapshot,
         List<EmployeeSnapshot> EmployeeSnapshots,
-        SubjectSessionRewardEntity SubjectSessionReward,
-        List<EmployeeSessionReward> EmployeeSessionRewards,
+        CourseAssignment CourseAssignment,
+        List<EmployeeSessions> EmployeeSessionRewards,
         List<EmployeeReward> EmployeeRewards,
         List<EmployeeSessionCount> EmployeeSessionCounts);
 
 
     private record EmployeeSessionCount(int EmployeeId, int TotalSessions);
+
+    /// <summary>
+    /// Assembles the complete processing context required for reward distribution.
+    /// </summary>
+    /// <remarks>
+    /// Utilizes Entity Framework Future Queries to consolidate independent data fetches into 
+    /// a single batch. Optimized to prevent N+1 degradation during high-volume processing.
+    /// </remarks>
+    /// <param name="employeesIds">A collection of unique employee identifiers.</param>
+    /// <param name="rewardId">The target session reward identifier.</param>
+    /// <param name="semesterSubjectId">The academic term subject identifier.</param>
+    /// <returns>A successful result containing the populated mapping context, or a failure result if foundational entities are missing.</returns>
 
     private async Task<Result<RewardProcessingContext>> LoadProcessingContextAsync(int[] employeesIds, int rewardId,
         int semesterSubjectId)
@@ -60,7 +72,7 @@ public class SessionRewardService(
             .Where(e => employeesIds.Contains(e.EmployeeId))
             .Future();
 
-        var subjectSemesterQuery = dbcontext.SubjectSemester
+        var subjectSemesterQuery = dbcontext.TermCourse
             .DeferredFirstOrDefault(s => s.Id == semesterSubjectId)
             .FutureValue();
 
@@ -68,7 +80,7 @@ public class SessionRewardService(
             .GetLatestSnapshot(employeesIds)
             .Future();
 
-        var employeeSessionRewardQuery = dbcontext.EmployeeSessionReward
+        var employeeSessionRewardQuery = dbcontext.EmployeeSessions
             .Where(e => employeesIds.Contains(e.EmployeeId) && e.SessionRewardId == rewardId)
             .Future();
 
@@ -76,8 +88,8 @@ public class SessionRewardService(
         // Should take care of this entities indexes,
         // as this is one of the most used features in the system
         var empSessionsQuery = (
-            from subjectSession in dbcontext.SubjectSessionRewardEntity.Where(s => s.SessionRewardId == rewardId)
-            join empSessionSubject in dbcontext.EmployeeSessionSubject.Where(e => employeesIds.Contains(e.EmployeeId))
+            from subjectSession in dbcontext.CourseAssignment.Where(s => s.SessionRewardId == rewardId)
+            join empSessionSubject in dbcontext.CourseEmployee.Where(e => employeesIds.Contains(e.EmployeeId))
                 on subjectSession.Id equals empSessionSubject.SubjectSessionRewardId
             group subjectSession.SessionCount by empSessionSubject.EmployeeId
             into groupResult
@@ -89,7 +101,7 @@ public class SessionRewardService(
 
         var subjectSnapshotQuery = subjectSnapshotService.GetLatestSnapshot(semesterSubjectId).FutureValue();
 
-        var subjectSessionQuery = dbcontext.SubjectSessionRewardEntity
+        var subjectSessionQuery = dbcontext.CourseAssignment
             .DeferredFirstOrDefault(s =>
                 s.SemesterSubjectId == semesterSubjectId && s.SessionRewardId == rewardId)
             .FutureValue();
@@ -97,9 +109,9 @@ public class SessionRewardService(
         return new RewardProcessingContext(
             Reward: await rewardQuery.ValueAsync(),
             Employees: employees.ToList(),
-            SubjectSnapshot: subjectSnapshotQuery.Value,
+            CourseSnapshot: subjectSnapshotQuery.Value,
             EmployeeSnapshots: employeeSnapshotQuery.SelectMany(e => e).ToList(),
-            SubjectSessionReward: subjectSessionQuery.Value,
+            CourseAssignment: subjectSessionQuery.Value,
             EmployeeSessionRewards: employeeSessionRewardQuery.ToList(),
             EmployeeRewards: employeeRewardQuery.ToList(),
             EmployeeSessionCounts: empSessionsQuery.ToList()
@@ -123,7 +135,7 @@ public class SessionRewardService(
     }
 
     private static Result EnsureEmployeesSessionRewards(IEnumerable<Employee> employees,
-        List<EmployeeSessionReward> employeeSessionRewards, int rewardId,
+        List<EmployeeSessions> employeeSessionRewards, int rewardId,
         List<EmployeeSnapshot> employeeSnapshots)
     {
         foreach (var employee in employees)
@@ -131,7 +143,7 @@ public class SessionRewardService(
             if (employeeSessionRewards.Any(e => e.EmployeeId == employee.EmployeeId))
                 continue;
 
-            var newRecord = EmployeeSessionReward.Create(rewardId,
+            var newRecord = EmployeeSessions.Create(rewardId,
                 employeeSnapshots.First(e => e.EmployeeId == employee.EmployeeId));
 
             if (newRecord is null)
@@ -191,27 +203,40 @@ public class SessionRewardService(
         }
     }
 
+    /// <summary>
+    /// Creates a new session reward entity and persists it to the database.
+    /// </summary>
+    /// <param name="dto">The request data containing reward details including year, semester, percentage, name, and code.</param>
+    /// <param name="createdBy">The identifier of the user creating the reward.</param>
+    /// <returns>A success result containing the new reward identifier, or a failure result if persistence fails.</returns>
     public async Task<Result<int>> CreateReward(CreateSessionsReward.Request dto, int createdBy)
     {
         var reward =
             SessionRewardEntity.Create(dto.Year, dto.Semester, dto.Percentage, createdBy, dto.Name, dto.Code);
+        try
+        {
 
-        dbcontext.Add(reward);
-        await dbcontext.SaveChangesAsync();
+            dbcontext.Add(reward);
+            await dbcontext.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Failed to create new Session Reward");
+        }
 
-        return reward.Id == 0 
-            ? Result.Fail("Couldn't create this reward") 
+        return reward.Id == 0
+            ? Result.Fail("Couldn't create this reward")
             : Result.Ok(reward.Id);
     }
 
-    public async Task<Result<IEnumerable<EmployeeSessionReward>>> AssignEmployeeAsync(SessionSubjectDto dto)
+      public async Task<Result<CourseAssignment?>> AssignEmployeeAsync(AddCourseAssignmentDto dto)
     {
         await using var transaction = await dbcontext.Database.BeginTransactionAsync();
         try
         {
-            var employeesIds = dto.Employees.Select(e => e.EmployeeId).Distinct().ToArray();
+            var employeesIds = dto.EmployeesIds as int[]?? dto.EmployeesIds.ToArray();
 
-            var loadingResult = await LoadProcessingContextAsync(employeesIds, dto.RewardId, dto.SemesterSubjectId);
+            var loadingResult = await LoadProcessingContextAsync(employeesIds, dto.RewardId, dto.TermCourseId);
             if (loadingResult.IsFailed)
                 return HandleFailureLogging(loadingResult.Errors);
 
@@ -228,11 +253,11 @@ public class SessionRewardService(
             await dbcontext.SaveChangesAsync();
             await transaction.CommitAsync();
 
-            return Result.Ok<IEnumerable<EmployeeSessionReward>>(loadingResult.Value.EmployeeSessionRewards);
+            return Result.Ok<CourseAssignment?>(loadingResult.Value.CourseAssignment);
         }
         catch (Exception ex)
         {
-            logger.LogCritical(ex, "Assignment failed for Subject {SubjectId}", dto.SemesterSubjectId);
+            logger.LogCritical(ex, "Assignment failed for Subject {SubjectId}", dto.TermCourseId);
             await transaction.RollbackAsync();
             return Result.Fail("Internal Consistency Error");
         }
@@ -256,9 +281,19 @@ public class SessionRewardService(
         return dbcontext.Entry(entry).State != EntityState.Detached;
     }
 
+    /// <summary>
+    /// Executes the core reward distribution algorithms across the active assignment context.
+    /// </summary>
+    /// <remarks>
+    /// Performs exclusively in-memory mutations on the provided context entities. Operates in O(N * M) time 
+    /// complexity due to linear searches within nested employee collections. Relies on the external calculation service 
+    /// for final financial allocations.
+    /// </remarks>
+    /// <param name="rewardContext">The populated processing context containing employee snapshots, session counts, and reward rules.</param>
+    /// <returns>A success result if all updates are applied, or a failure result if the initial course assignment update fails.</returns>
     private Result ProcessAssignment(RewardProcessingContext rewardContext)
     {
-        var result = rewardContext.SubjectSessionReward.UpdateEmployees(rewardContext.EmployeeSnapshots);
+        var result = rewardContext.CourseAssignment.UpdateEmployees(rewardContext.EmployeeSnapshots);
 
         if (result.IsFailed)
             return result;
@@ -269,7 +304,7 @@ public class SessionRewardService(
                 .TotalSessions;
 
             var newSessionCount =
-                rules.GetAllowedSessionCount(currentSessionCount + rewardContext.SubjectSessionReward.SessionCount);
+                rules.GetAllowedSessionCount(currentSessionCount + rewardContext.CourseAssignment.SessionCount);
 
             emp.UpdateSessionCount(newSessionCount);
         }
@@ -287,7 +322,7 @@ public class SessionRewardService(
         return Result.Ok();
     }
 
-    private Result<IEnumerable<EmployeeSessionReward>> HandleFailureLogging(IEnumerable<IError> errors)
+    private Result<CourseAssignment?> HandleFailureLogging(IEnumerable<IError> errors)
     {
         if (logger.IsEnabled(LogLevel.Warning))
             logger.LogError("Failed to ensure required records. Errors: {Errors}", errors);
