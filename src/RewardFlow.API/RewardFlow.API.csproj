@@ -40,4 +40,8 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Rewards\Data\Database\SubjectConfiguration.cs" />
+  </ItemGroup>
+
 </Project>
