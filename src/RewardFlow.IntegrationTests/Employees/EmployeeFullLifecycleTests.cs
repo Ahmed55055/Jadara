@@ -3,11 +3,11 @@ using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Reward_Flow_v2.Employees.Common;
 using Reward_Flow_v2.Employees.CreateEmployee;
 using Reward_Flow_v2.Employees.UpdateEmployee;
 using RewardFlow.IntegrationTests.Infrastructure;
 using Reward_Flow_v2.Employees.Data;
+using RewardFlow_API.Employees.Common;
 using RewardFlow.IntegrationTests.Employees.Common;
 using RewardFlow.TestUtilities.DataGenerators;
 using Xunit;
@@ -19,16 +19,10 @@ namespace RewardFlow.IntegrationTests.Employees;
 /// Tests various scenarios for employee operations including creation, retrieval, update, and deletion.
 /// </summary>
 [Collection("EmployeeTests")]
-public class EmployeeFullLifecycleTests : IAsyncLifetime
+public class EmployeeFullLifecycleTests(TestWebApplicationFactory factory)
+    : BaseEmployeeTestFixture(factory), IAsyncLifetime
 {
-    private readonly TestWebApplicationFactory _factory;
-    private readonly DbUtility _dbUtility;
     private UserClient _userClient;
-    public EmployeeFullLifecycleTests(EmployeeTestFixture factory)
-    {
-        _factory = factory;
-        _dbUtility = new DbUtility(_factory);
-    }
 
     public async Task InitializeAsync()
     {
@@ -100,7 +94,7 @@ public class EmployeeFullLifecycleTests : IAsyncLifetime
 
     private async Task GetEmployeeByNationalNumber(int employeeId)
     {
-        var employee = await _dbUtility.Set<Employee>().FindAsync(employeeId);
+        var employee = await _dbUtility.Query<Employee>().FirstOrDefaultAsync(e => e.EmployeeId == employeeId);
         var getByNationalResponse = await _userClient.Client.GetAsync($"/api/Employees/national/{employee.NationalNumber}");
         getByNationalResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         
@@ -111,7 +105,7 @@ public class EmployeeFullLifecycleTests : IAsyncLifetime
 
     private async Task GetEmployeeByName(int employeeId)
     {
-        var employee = await _dbUtility.Set<Employee>().FindAsync(employeeId);
+        var employee = await _dbUtility.Query<Employee>().FirstOrDefaultAsync(e=>e.EmployeeId == employeeId);
         var getByNameResponse = await _userClient.Client.GetAsync($"/api/Employees/name/{Uri.EscapeDataString(employee.Name)}");
         getByNameResponse.StatusCode.Should().Be(HttpStatusCode.OK);
     }
@@ -123,7 +117,7 @@ public class EmployeeFullLifecycleTests : IAsyncLifetime
             Name = "John Smith",
             NationalNumber = "12345678901",
             AccountNumber = "ACC654321",
-            Salary = 6000.0f,
+            Salary = 6000.0m,
             FacultyId = 1,
             DepartmentId = 1,
             JobTitle = (byte)2,
@@ -137,7 +131,7 @@ public class EmployeeFullLifecycleTests : IAsyncLifetime
         var updatedGetResponse = await _userClient.Client.GetAsync($"/api/Employees/{employeeId}");
         var updatedEmployee = await updatedGetResponse.Content.ReadFromJsonAsync<EmployeeDto>();
         updatedEmployee!.Name.Should().Be("John Smith");
-        updatedEmployee.Salary.Should().Be(6000.0f);
+        updatedEmployee.Salary.Should().Be(6000.0m);
     }
 
     private async Task CreateAdditionalEmployees()

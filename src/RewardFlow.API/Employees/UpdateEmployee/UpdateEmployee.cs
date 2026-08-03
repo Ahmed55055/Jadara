@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Reward_Flow_v2.Common;
 using Reward_Flow_v2.Common.EndpointValidation;
-using Reward_Flow_v2.Employees.Common;
 using Reward_Flow_v2.Employees.Data;
 using Reward_Flow_v2.Employees.Data.Database;
+using RewardFlow_API.Employees.Common;
 using System.Security.Claims;
 
 namespace Reward_Flow_v2.Employees.UpdateEmployee;
@@ -17,7 +17,7 @@ public static partial class UpdateEmployee
         public Optional<string> Name { get; init; }
         public Optional<string?> NationalNumber { get; init; }
         public Optional<string?> AccountNumber { get; init; }
-        public Optional<float?> Salary { get; init; }
+        public Optional<decimal?> Salary { get; init; }
         public Optional<int?> FacultyId { get; init; }
         public Optional<int?> DepartmentId { get; init; }
         public Optional<byte?> JobTitle { get; init; }

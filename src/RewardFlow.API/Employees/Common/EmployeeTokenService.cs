@@ -3,7 +3,7 @@ using Reward_Flow_v2.Common.Tokenization;
 using Reward_Flow_v2.Employees.Data;
 using Reward_Flow_v2.Employees.Data.Database;
 
-namespace Reward_Flow_v2.Employees.Common;
+namespace RewardFlow_API.Employees.Common;
 
 public class EmployeeTokenService : IEmployeeTokenService
 {
@@ -14,6 +14,29 @@ public class EmployeeTokenService : IEmployeeTokenService
     {
         _dbContext = dbContext;
         _tokenizer = tokenizer;
+    }
+
+    public IEnumerable<EmployeeNameToken> CreateTokens(IEnumerable<Employee> employees, int userId,
+        CancellationToken cancellationToken = default)
+    {
+        var tokens = new List<EmployeeNameToken>();
+
+        foreach (var employee in employees)
+        {
+            tokens.AddRange(GenerateTokens(employee.Name, employee.EmployeeId, userId));
+        }
+
+        return tokens;
+    }
+
+    public IEnumerable<EmployeeNameToken> CreateTokens(Employee employee, int userId,
+        CancellationToken cancellationToken = default)
+    {
+        var tokens = new List<EmployeeNameToken>();
+
+        tokens.AddRange(GenerateTokens(employee.Name, employee.EmployeeId, userId));
+
+        return tokens;
     }
 
     public async Task CreateTokensAsync(Employee employee, int userId, CancellationToken cancellationToken = default)
@@ -34,15 +57,16 @@ public class EmployeeTokenService : IEmployeeTokenService
         var tokens = await _dbContext.EmployeeNameToken
             .Where(t => t.EmployeeId == employeeId && t.UserId == userId)
             .ToListAsync(cancellationToken);
-        
+
         _dbContext.EmployeeNameToken.RemoveRange(tokens);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<int>> SearchEmployeesByNameAsync(string searchName, int userId, int limit = 10, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<int>> SearchEmployeesByNameAsync(string searchName, int userId, int limit = 10,
+        CancellationToken cancellationToken = default)
     {
         var searchTokens = GenerateSearchTokens(searchName);
-        
+
         var results = await _dbContext.EmployeeNameToken
             .Where(t => t.UserId == userId && searchTokens.Contains(t.TokenHashed))
             .GroupBy(t => t.EmployeeId)
@@ -55,28 +79,27 @@ public class EmployeeTokenService : IEmployeeTokenService
         return results;
     }
 
+    public List<EmployeeNameToken> CreateTokens(string employeeName, int employeeId, int userId)
+    {
+        return GenerateTokens(employeeName, employeeId, userId).ToList();
+    }
+
     private IEnumerable<EmployeeNameToken> GenerateTokens(string name, int employeeId, int userId)
     {
         var tokens = new List<EmployeeNameToken>();
-        
+
         // 2-gram tokens
         var twoGrams = _tokenizer.TokenizeToNGrams(name, 2, false);
         tokens.AddRange(twoGrams.Select(token => new EmployeeNameToken
         {
-            UserId = userId,
-            TokenHashed = _tokenizer.HashToken(token),
-            N = 2,
-            EmployeeId = employeeId
+            UserId = userId, TokenHashed = _tokenizer.HashToken(token), N = 2, EmployeeId = employeeId
         }));
 
         // 3-gram tokens with spaces
         var threeGrams = _tokenizer.TokenizeToNGrams(name, 3, true);
         tokens.AddRange(threeGrams.Select(token => new EmployeeNameToken
         {
-            UserId = userId,
-            TokenHashed = _tokenizer.HashToken(token),
-            N = 3,
-            EmployeeId = employeeId
+            UserId = userId, TokenHashed = _tokenizer.HashToken(token), N = 3, EmployeeId = employeeId
         }));
 
         return tokens;
@@ -85,7 +108,7 @@ public class EmployeeTokenService : IEmployeeTokenService
     private IEnumerable<string> GenerateSearchTokens(string searchName)
     {
         var tokens = new List<string>();
-        
+
         var twoGrams = _tokenizer.TokenizeToNGrams(searchName, 2, false);
         tokens.AddRange(twoGrams.Select(_tokenizer.HashToken));
 

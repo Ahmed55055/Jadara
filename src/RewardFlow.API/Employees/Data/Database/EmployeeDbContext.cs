@@ -13,7 +13,8 @@ public sealed class EmployeeDbContext(
     : DbContext(options)
 {
     private const string Schema = "dbo";
-
+private const string BatchSchema = "batch";
+    
     public DbSet<Employee> Employee => Set<Employee>();
     public DbSet<Department> Department => Set<Department>();
     public DbSet<EmployeeStatus> EmployeeStatus => Set<EmployeeStatus>();
@@ -21,8 +22,13 @@ public sealed class EmployeeDbContext(
     public DbSet<JobTitle> JobTitle => Set<JobTitle>();
     public DbSet<EmployeeNameToken> EmployeeNameToken => Set<EmployeeNameToken>();
 
+    // Background Batch
+    public DbSet<BulkImportBatch> BulkImportBatches => Set<BulkImportBatch>();
+    public DbSet<BulkImportResult> BulkImportResults => Set<BulkImportResult>();
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        base.OnConfiguring(optionsBuilder);
         optionsBuilder.UseExceptionProcessor();
     }
 
@@ -63,20 +69,5 @@ public sealed class EmployeeDbContext(
 
             entity.HasQueryFilter<ITenantEntity>(e => e.TenantId == userContext.GetTenantId());
         }
-    }
-
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
-    {
-        var currentTenantId = userContext.GetTenantId();
-
-        var addedEntities = ChangeTracker.Entries<ITenantEntity>()
-            .Where(e => e.State == EntityState.Added);
-
-        foreach (var entityEntry in addedEntities)
-        {
-            entityEntry.Entity.TenantId = currentTenantId;
-        }
-
-        return base.SaveChangesAsync(cancellationToken);
     }
 }

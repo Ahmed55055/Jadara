@@ -70,5 +70,14 @@ public class EmployeeEntityConfiguration : IEntityTypeConfiguration<Employee>
         builder.HasOne(e => e.StatusNavigation)
             .WithMany(s => s.Employees)
             .HasForeignKey(e => e.Status);
+        
+        builder.Navigation(e => e.NameTokens)
+            .HasField("_nameTokens")
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
+        
+        builder.HasMany(e => e.NameTokens)
+            .WithOne() 
+            .HasForeignKey(token=> new{token.TenantId, token.EmployeeId})
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

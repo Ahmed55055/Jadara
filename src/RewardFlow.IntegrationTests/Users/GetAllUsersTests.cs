@@ -17,19 +17,9 @@ namespace RewardFlow.IntegrationTests.Users;
 /// Integration tests for GetAllUsers endpoint.
 /// Tests various scenarios for retrieving all users including authorization checks.
 /// </summary>
-[Collection("UserTests")]
-public class GetAllUsersTests : IAsyncLifetime
+public class GetAllUsersTests (TestWebApplicationFactory factory) : BaseUserTestFixture(factory), IAsyncLifetime
 {
-    private readonly TestWebApplicationFactory _factory;
-    private readonly DbUtility _dbUtility;
-    private readonly Faker _faker = new();
     private List<User> _otherUsers;
-
-    public GetAllUsersTests(UserTestFixture factory)
-    {
-        _factory = factory;
-        _dbUtility = new DbUtility(_factory);
-    }
 
     public async Task InitializeAsync()
     {
@@ -92,7 +82,7 @@ public class GetAllUsersTests : IAsyncLifetime
     public async Task GetAllUsers_RegularUser_ShouldReturnForbidden()
     {
         var userClient = new UserClient(_factory, _otherUsers[0]);
-        _dbUtility.Set<User>().Any(u => u.Username == _otherUsers[0].Username)
+        _dbUtility.Query<User>().Any(u => u.Username == _otherUsers[0].Username)
             .Should().BeTrue("The User isn't in the database. check the registration");
 
         // Act

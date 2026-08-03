@@ -15,23 +15,13 @@ namespace RewardFlow.IntegrationTests.Users;
 /// Integration tests for GetUserByUsername endpoint.
 /// Tests various scenarios for retrieving user data by username including authorization checks.
 /// </summary>
-[Collection("UserTests")]
-public class GetUserByUsernameTests : IAsyncLifetime
+public class GetUserByUsernameTests(TestWebApplicationFactory factory) : BaseUserTestFixture(factory), IAsyncLifetime
 {
-    private readonly TestWebApplicationFactory _factory;
-    private readonly DbUtility _dbUtility;
-    private readonly Faker _faker = new();
     private UserClient _adminClient;
     private UserClient _regularClient;
     private User _adminUser;
     private User _regularUser;
     private User _otherUser;
-
-    public GetUserByUsernameTests(UserTestFixture factory)
-    {
-        _factory = factory;
-        _dbUtility = new DbUtility(_factory);
-    }
 
     public async Task InitializeAsync()
     {

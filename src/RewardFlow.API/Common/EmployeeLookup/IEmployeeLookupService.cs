@@ -1,7 +1,9 @@
+using Reward_Flow_v2.Employees.Data;
+
 namespace Reward_Flow_v2.Common.EmployeeLookup;
 
 public interface IEmployeeLookupService
 {
-    Task<EmployeeDto?> GetEmployee(int employeeId);
-    Task<IEnumerable<EmployeeSalaryDto>> GetEmployeesSalaryById(IEnumerable<int> employeeIds);
+    Task<Employee?> GetEmployeesAsync(int employeeId);
+    Task<IEnumerable<Employee>> GetEmployeesAsync(IEnumerable<int> employeesIds);
 }

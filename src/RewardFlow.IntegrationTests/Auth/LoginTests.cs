@@ -15,19 +15,11 @@ namespace RewardFlow.IntegrationTests.Auth;
 /// Integration tests for the Login endpoint.
 /// Tests various scenarios for user login including validation, authentication, and error handling.
 /// </summary>
-[Collection("UserTests")]
-public class LoginTests : IAsyncLifetime
+public class LoginTests(TestWebApplicationFactory factory) : BaseAuthTestFixture(factory), IAsyncLifetime
 {
-    private readonly Faker _faker = new();
-    private readonly TestWebApplicationFactory _factory;
     private HttpClient _client;
     private Reward_Flow_v2.User.Data.User _testUser;
     private string _testPassword;
-
-    public LoginTests(UserTestFixture factory)
-    {
-        _factory = factory;
-    }
 
     public async Task InitializeAsync()
     {

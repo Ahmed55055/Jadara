@@ -27,4 +27,8 @@ public class SessionRewardRules : ISessionRewardRules
                NumberOfStudents > 0;
     }
 
+    public int GetAllowedSessionCount(int sessionCount)
+    {
+        return IsWithInMaximumNumberOfSession(sessionCount) && MaxSessionNumberRuleEnabled ? sessionCount : MaxSessionsNumber;
+    }
 }

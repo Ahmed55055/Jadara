@@ -17,13 +17,13 @@ namespace RewardFlow_API.Migrations.RewardDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("dbo")
+                .HasDefaultSchema("DbReward")
                 .HasAnnotation("ProductVersion", "9.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.EmployeeReward", b =>
+            modelBuilder.Entity("RewardFlow_API.Rewards.Data.Course", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -32,32 +32,116 @@ namespace RewardFlow_API.Migrations.RewardDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int")
-                        .HasColumnName("employee_id");
+                    b.Property<string>("Code")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar")
+                        .HasColumnName("code");
 
-                    b.Property<bool>("IsUpdated")
-                        .HasColumnType("bit");
+                    b.Property<bool>("IsPractical")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_practical");
 
-                    b.Property<int?>("RewardEntityId")
-                        .HasColumnType("int");
+                    b.Property<bool>("IsTheoretical")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_theoretical");
 
-                    b.Property<int>("RewardId")
-                        .HasColumnType("int")
-                        .HasColumnName("reward_id");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar")
+                        .HasColumnName("name");
 
-                    b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("total");
+                    b.Property<decimal>("SubjectPrice")
+                        .HasColumnType("decimal(9,2)")
+                        .HasColumnName("subject_price");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("tenant_id");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RewardEntityId");
+                    b.HasIndex("TenantId");
 
-                    b.ToTable("employee_rewards", "dbo");
+                    b.ToTable("courses", "DbReward");
                 });
 
-            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.EmployeeSessionRewardEntity", b =>
+            modelBuilder.Entity("RewardFlow_API.Rewards.Data.CourseSnapshot", b =>
+                {
+                    b.Property<Guid>("SnapshotId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("snapshot_id");
+
+                    b.Property<DateTime>("CapturedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasColumnName("captured_at")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<bool>("IsPractical")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_practical");
+
+                    b.Property<bool>("IsTheoretical")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_theoretical");
+
+                    b.Property<byte>("Semester")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("semester");
+
+                    b.Property<int>("SemesterSubjectId")
+                        .HasColumnType("int")
+                        .HasColumnName("semester_subject_id");
+
+                    b.Property<string>("SubjectName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar")
+                        .HasColumnName("subject_name");
+
+                    b.Property<byte>("Year")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("year");
+
+                    b.HasKey("SnapshotId");
+
+                    b.HasIndex("SemesterSubjectId");
+
+                    b.ToTable("subject_snapshots", "DbReward");
+                });
+
+            modelBuilder.Entity("RewardFlow_API.Rewards.Data.EmployeeSessions", b =>
+                {
+                    b.Property<int>("SessionRewardId")
+                        .HasColumnType("int")
+                        .HasColumnName("session_reward_id");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int")
+                        .HasColumnName("employee_id");
+
+                    b.Property<Guid>("EmployeeSnapshotId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("employee_snapshot_id");
+
+                    b.Property<int>("SessionsCount")
+                        .HasColumnType("int")
+                        .HasColumnName("sessions_count");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("SessionRewardId", "EmployeeId");
+
+                    b.HasIndex("EmployeeSnapshotId");
+
+                    b.ToTable("employee_session_rewards", "DbReward");
+                });
+
+            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.CourseAssignment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -66,28 +150,182 @@ namespace RewardFlow_API.Migrations.RewardDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("EmployeeId")
+                    b.Property<Guid>("CourseSnapshotSnapshotId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("MainEmployeeId")
                         .HasColumnType("int")
-                        .HasColumnName("employee_id");
+                        .HasColumnName("main_employee_id");
 
-                    b.Property<int>("NumberOfSessions")
-                        .HasColumnType("int");
+                    b.Property<short>("MaxNumberOfEmployees")
+                        .HasColumnType("smallint")
+                        .HasColumnName("max_number_of_employees");
 
-                    b.Property<float>("Salary")
-                        .HasColumnType("real");
+                    b.Property<int>("NumberOfStudents")
+                        .HasColumnType("int")
+                        .HasColumnName("number_of_students");
 
+                    b.Property<int>("SemesterSubjectId")
+                        .HasColumnType("int")
+                        .HasColumnName("semester_subject_id");
+
+                    b.Property<int>("SessionCount")
+                        .HasColumnType("int")
+                        .HasColumnName("number_of_sessions");
+
+                    b.Property<int>("SessionRewardId")
+                        .HasColumnType("int")
+                        .HasColumnName("session_reward_id");
+
+                    b.Property<Guid>("SubjectSnapshotId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("subject_snapshot_id");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("tenant_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseSnapshotSnapshotId");
+
+                    b.HasIndex("SemesterSubjectId");
+
+                    b.HasIndex("SubjectSnapshotId");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("subject_session_rewards", "DbReward");
+                });
+
+            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.CourseEmployee", b =>
+                {
                     b.Property<int>("SubjectSessionRewardId")
                         .HasColumnType("int")
                         .HasColumnName("subject_session_reward_id");
 
-                    b.HasKey("Id");
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int")
+                        .HasColumnName("employee_id");
 
-                    b.HasIndex("SubjectSessionRewardId");
+                    b.Property<int?>("CourseAssignmentId")
+                        .HasColumnType("int");
 
-                    b.ToTable("employee_session_rewards", "dbo");
+                    b.Property<Guid>("EmployeeSnapshotId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("employee_snapshot_id");
+
+                    b.HasKey("SubjectSessionRewardId", "EmployeeId");
+
+                    b.HasIndex("CourseAssignmentId");
+
+                    b.HasIndex("EmployeeSnapshotId");
+
+                    b.ToTable("employee_session_subjects", "DbReward");
                 });
 
-            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.RewardEntity", b =>
+            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.EmployeeReward", b =>
+                {
+                    b.Property<int>("RewardId")
+                        .HasColumnType("int")
+                        .HasColumnName("reward_id");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int")
+                        .HasColumnName("employee_id");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(9,2)")
+                        .HasColumnName("amount");
+
+                    b.Property<Guid>("EmployeeSnapshotId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("snapshot_id");
+
+                    b.Property<bool>("IsUpdated")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_updated");
+
+                    b.Property<int?>("RewardId1")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("tenant_id");
+
+                    b.HasKey("RewardId", "EmployeeId");
+
+                    b.HasIndex("EmployeeSnapshotId");
+
+                    b.HasIndex("RewardId1");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("employee_rewards", "DbReward");
+                });
+
+            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.EmployeeSnapshot", b =>
+                {
+                    b.Property<Guid>("SnapshotId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("snapshot_id");
+
+                    b.Property<string>("AccountNumber")
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("account_number");
+
+                    b.Property<string>("AccountNumberHash")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("account_number_hash");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int")
+                        .HasColumnName("employee_id");
+
+                    b.Property<byte?>("JobTitle")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("job_title");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("NationalNumber")
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("national_number");
+
+                    b.Property<string>("NationalNumberHash")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("national_number_hash");
+
+                    b.Property<decimal?>("Salary")
+                        .HasColumnType("decimal(9,2)")
+                        .HasColumnName("salary");
+
+                    b.Property<DateTime>("SnapshotDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasColumnName("snapshot_date")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.HasKey("SnapshotId");
+
+                    b.HasIndex("EmployeeId", "SnapshotDate")
+                        .HasDatabaseName("IX_EmployeeSnapshot_EmployeeId_SnapshotDate");
+
+                    b.ToTable("employee_snapshots", "DbReward");
+                });
+
+            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.Reward", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -119,7 +357,7 @@ namespace RewardFlow_API.Migrations.RewardDb
 
                     b.Property<string>("Name")
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("name");
 
                     b.Property<int>("NumberOfEmployees")
@@ -130,16 +368,55 @@ namespace RewardFlow_API.Migrations.RewardDb
                         .HasColumnType("int")
                         .HasColumnName("reward_type");
 
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("tenant_id");
+
                     b.Property<decimal>("Total")
-                        .HasColumnType("smallmoney")
+                        .HasColumnType("decimal(9,2)")
                         .HasColumnName("total");
 
                     b.HasKey("Id");
 
-                    b.ToTable("rewards", "dbo");
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("rewards", "DbReward");
                 });
 
-            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.SemesterSubject", b =>
+            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.SessionRewardEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("session_reward_id");
+
+                    b.Property<decimal>("Percentage")
+                        .HasColumnType("decimal(5,2)")
+                        .HasColumnName("percentage");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("tenant_id");
+
+                    b.Property<short?>("Year")
+                        .HasColumnType("smallint")
+                        .HasColumnName("year");
+
+                    b.Property<byte?>("semester")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("semester");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("session_rewards", "DbReward", t =>
+                        {
+                            t.HasCheckConstraint("CK_Session_Reward_Percentage_Min", "[percentage] >= 0");
+                        });
+                });
+
+            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.TermCourse", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -152,10 +429,10 @@ namespace RewardFlow_API.Migrations.RewardDb
                         .HasColumnType("int")
                         .HasColumnName("number_of_students");
 
-                    b.Property<float?>("Price")
-                        .HasColumnType("real");
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<byte>("SemesterNumber")
+                    b.Property<byte>("Semester")
                         .HasColumnType("tinyint")
                         .HasColumnName("semester_number");
 
@@ -163,170 +440,147 @@ namespace RewardFlow_API.Migrations.RewardDb
                         .HasColumnType("int")
                         .HasColumnName("subject_id");
 
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("tenant_id");
+
+                    b.Property<short>("Year")
+                        .HasColumnType("smallint")
+                        .HasColumnName("year");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("subject_semesters", "dbo");
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("subject_semesters", "DbReward");
                 });
 
-            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.SessionRewardEntity", b =>
+            modelBuilder.Entity("RewardFlow_API.Rewards.Data.CourseSnapshot", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int")
-                        .HasColumnName("session_reward_id");
+                    b.HasOne("Reward_Flow_v2.Rewards.Data.TermCourse", "TermCourse")
+                        .WithMany()
+                        .HasForeignKey("SemesterSubjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.Property<float>("Percentage")
-                        .HasColumnType("real")
-                        .HasColumnName("percentage");
-
-                    b.Property<byte?>("semester")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("Semester");
-
-                    b.Property<int?>("year")
-                        .HasColumnType("int")
-                        .HasColumnName("Year");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("session_rewards", "dbo");
+                    b.Navigation("TermCourse");
                 });
 
-            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.Subject", b =>
+            modelBuilder.Entity("RewardFlow_API.Rewards.Data.EmployeeSessions", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
+                    b.HasOne("Reward_Flow_v2.Rewards.Data.EmployeeSnapshot", "EmployeeSnapshot")
+                        .WithMany()
+                        .HasForeignKey("EmployeeSnapshotId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsPractical")
-                        .HasColumnType("bit")
-                        .HasColumnName("is_practical");
-
-                    b.Property<bool>("IsTheoretical")
-                        .HasColumnType("bit")
-                        .HasColumnName("is_theoretical");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("name");
-
-                    b.Property<decimal>("SubjectPrice")
-                        .HasColumnType("smallmoney")
-                        .HasColumnName("subject_price");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("subjects", "dbo");
+                    b.Navigation("EmployeeSnapshot");
                 });
 
-            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.SubjectSessionRewardEntity", b =>
+            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.CourseAssignment", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
+                    b.HasOne("RewardFlow_API.Rewards.Data.CourseSnapshot", "CourseSnapshot")
+                        .WithMany()
+                        .HasForeignKey("CourseSnapshotSnapshotId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.HasOne("Reward_Flow_v2.Rewards.Data.TermCourse", null)
+                        .WithMany()
+                        .HasForeignKey("SemesterSubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<int?>("MainEmployeeId")
-                        .HasColumnType("int")
-                        .HasColumnName("main_employee_id");
+                    b.HasOne("RewardFlow_API.Rewards.Data.CourseSnapshot", null)
+                        .WithMany()
+                        .HasForeignKey("SubjectSnapshotId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
-                    b.Property<int>("MaxNumberOfEmployees")
-                        .HasColumnType("int")
-                        .HasColumnName("max_number_of_employees");
-
-                    b.Property<int>("NumberOfSessions")
-                        .HasColumnType("int")
-                        .HasColumnName("number_of_sessions");
-
-                    b.Property<int>("SemesterSubjectId")
-                        .HasColumnType("int")
-                        .HasColumnName("subject_id");
-
-                    b.Property<int>("SessionRewardId")
-                        .HasColumnType("int")
-                        .HasColumnName("session_reward_id");
-
-                    b.Property<int>("StudentsNumber")
-                        .HasColumnType("int")
-                        .HasColumnName("students_number");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SemesterSubjectId");
-
-                    b.ToTable("subject_session_rewards", "dbo");
+                    b.Navigation("CourseSnapshot");
                 });
 
-            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.EmployeeReward", b =>
+            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.CourseEmployee", b =>
                 {
-                    b.HasOne("Reward_Flow_v2.Rewards.Data.RewardEntity", null)
-                        .WithMany("EmployeeRewards")
-                        .HasForeignKey("RewardEntityId");
-                });
+                    b.HasOne("Reward_Flow_v2.Rewards.Data.CourseAssignment", null)
+                        .WithMany("StaffMembers")
+                        .HasForeignKey("CourseAssignmentId");
 
-            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.EmployeeSessionRewardEntity", b =>
-                {
-                    b.HasOne("Reward_Flow_v2.Rewards.Data.SubjectSessionRewardEntity", "SubjectSessionReward")
-                        .WithMany("Employees")
+                    b.HasOne("Reward_Flow_v2.Rewards.Data.EmployeeSnapshot", "EmployeeSnapshot")
+                        .WithMany()
+                        .HasForeignKey("EmployeeSnapshotId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Reward_Flow_v2.Rewards.Data.CourseAssignment", "Course")
+                        .WithMany()
                         .HasForeignKey("SubjectSessionRewardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("SubjectSessionReward");
+                    b.Navigation("Course");
+
+                    b.Navigation("EmployeeSnapshot");
                 });
 
-            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.SemesterSubject", b =>
+            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.EmployeeReward", b =>
                 {
-                    b.HasOne("Reward_Flow_v2.Rewards.Data.Subject", "Subject")
-                        .WithMany("SubjectSemesters")
-                        .HasForeignKey("SubjectId")
+                    b.HasOne("Reward_Flow_v2.Rewards.Data.EmployeeSnapshot", "EmployeeSnapshot")
+                        .WithMany()
+                        .HasForeignKey("EmployeeSnapshotId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Reward_Flow_v2.Rewards.Data.Reward", null)
+                        .WithMany()
+                        .HasForeignKey("RewardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Subject");
+                    b.HasOne("Reward_Flow_v2.Rewards.Data.Reward", null)
+                        .WithMany("EmployeeRewards")
+                        .HasForeignKey("RewardId1");
+
+                    b.Navigation("EmployeeSnapshot");
                 });
 
             modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.SessionRewardEntity", b =>
                 {
-                    b.HasOne("Reward_Flow_v2.Rewards.Data.RewardEntity", "Reward")
-                        .WithOne()
-                        .HasForeignKey("Reward_Flow_v2.Rewards.Data.SessionRewardEntity", "Id")
+                    b.HasOne("Reward_Flow_v2.Rewards.Data.Reward", "Reward")
+                        .WithMany()
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Reward");
                 });
 
-            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.SubjectSessionRewardEntity", b =>
+            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.TermCourse", b =>
                 {
-                    b.HasOne("Reward_Flow_v2.Rewards.Data.SemesterSubject", null)
-                        .WithMany()
-                        .HasForeignKey("SemesterSubjectId")
+                    b.HasOne("RewardFlow_API.Rewards.Data.Course", "Course")
+                        .WithMany("SubjectSemesters")
+                        .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.RewardEntity", b =>
-                {
-                    b.Navigation("EmployeeRewards");
-                });
-
-            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.Subject", b =>
+            modelBuilder.Entity("RewardFlow_API.Rewards.Data.Course", b =>
                 {
                     b.Navigation("SubjectSemesters");
                 });
 
-            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.SubjectSessionRewardEntity", b =>
+            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.CourseAssignment", b =>
                 {
-                    b.Navigation("Employees");
+                    b.Navigation("StaffMembers");
+                });
+
+            modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.Reward", b =>
+                {
+                    b.Navigation("EmployeeRewards");
                 });
 #pragma warning restore 612, 618
         }

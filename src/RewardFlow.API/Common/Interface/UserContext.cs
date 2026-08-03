@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Reward_Flow_v2.Common;
 using Reward_Flow_v2.User.Data.Database;
 
 namespace RewardFlow_API.Common.Interface;
@@ -6,17 +7,19 @@ namespace RewardFlow_API.Common.Interface;
 public class UserContext(IHttpContextAccessor httpContextAccessor, UserDbContext dbContext) : IUserContext
 {
     private const string TenantIdHeaderName = "TenantId";
+    private Guid? _tenantId;
+
     public Guid Uuid
     {
         get
         {
-            throw new NotImplementedException();
+            return httpContextAccessor.GetCurrentUserGuidId();
         }
     }
 
-    public int GetUserId()
+    public async Task<int> GetUserIdAsync()
     {
-        throw new NotImplementedException();
+        return await httpContextAccessor.GetCurrentUserIntIdAsync();
     }
 
     /// <summary>
@@ -26,16 +29,28 @@ public class UserContext(IHttpContextAccessor httpContextAccessor, UserDbContext
     /// <exception cref="ApplicationException">Thrown when the tenant ID header is not present</exception>
     public Guid GetTenantId()
     {
-        var tenantIdHeader = httpContextAccessor.HttpContext?
-            .Request
-            .Headers[TenantIdHeaderName];
+        if(_tenantId is not null)
+            return _tenantId.Value;
+        
+        var tenantIdClaim = httpContextAccessor.HttpContext?
+            .User
+            .FindFirst(TenantIdHeaderName)
+            .Value;
 
-        if (!tenantIdHeader.HasValue ||
-            !Guid.TryParse(tenantIdHeader, out var tenantId))
+        if (tenantIdClaim is null || !Guid.TryParse(tenantIdClaim, out var tenantId))
         {
             throw new ApplicationException($"Required header '{TenantIdHeaderName}' is missing.");
         }
-        
+
+        _tenantId = tenantId;
         return tenantId;
     }
+
+    /// <summary>
+    /// WARNING: Sets the tenant ID directly, bypassing the HTTP context.
+    /// Use only in non-HTTP contexts such as background services or tests.
+    /// </summary>
+    /// <param name="tenantId">The tenant ID to set.</param>
+    public void SetTenantId(Guid tenantId) =>  _tenantId = tenantId;
+
 }

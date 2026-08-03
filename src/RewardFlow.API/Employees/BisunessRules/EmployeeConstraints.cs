@@ -10,8 +10,8 @@ public static class EmployeeConstraints
 
     public static class Salary
     {
-        public const float Min = 0f;
-        public const float Max = 100000.00f;
+        public const decimal Min = 0;
+        public const decimal Max = 100000.0m;
     }
 
     public static class NationalNum

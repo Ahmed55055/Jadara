@@ -79,11 +79,12 @@ namespace RewardFlow_API.Migrations.UserDb
 
             modelBuilder.Entity("Reward_Flow_v2.User.Data.User", b =>
                 {
-                    b.Property<Guid>("UUID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("user_id")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -95,13 +96,6 @@ namespace RewardFlow_API.Migrations.UserDb
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("email");
-
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit")
@@ -143,13 +137,25 @@ namespace RewardFlow_API.Migrations.UserDb
                         .HasColumnType("int")
                         .HasColumnName("role_id");
 
+                    b.Property<Guid>("TenantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("tenant_id")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<Guid>("UUID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("user_id")
+                        .HasDefaultValueSql("NEWID()");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("username");
 
-                    b.HasKey("UUID");
+                    b.HasKey("Id");
 
                     b.HasIndex("PlanId");
 

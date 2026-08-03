@@ -1,17 +1,19 @@
 namespace Reward_Flow_v2.Rewards;
 
-internal static class RewardApiPath
+public static class RewardApiPath
 {
-    public const string Tag = "Rewards";
+    // ============= ROOT =============
+    public const string Tag = "rewards";
     private const string RewardRootApi = $"{ApiPath.Route}/{Tag}";
-
-    public const string SessionsReward = $"{RewardRootApi}/sessions";
-    public const string CreateSessionsReward = $"{SessionsReward}";
-    public const string GetAllSessionsRewards = $"{SessionsReward}";
-    public const string GetSessionsRewardById = $"{SessionsReward}/{{id}}";
-    public const string UpdateSessionsReward = $"{SessionsReward}/{{id}}";
-    public const string DeleteSessionsReward = $"{SessionsReward}/{{id}}";
-    public const string GetSessionsRewardsByRewardId = $"{SessionsReward}/reward/{{rewardId}}";
-    public const string AddEmployeeSessions = $"{SessionsReward}/{{id}}/employees";
-    public const string AddMultipleEmployeeSessions = $"{SessionsReward}/{{id}}/employees/batch";
+    
+    // ============= SESSION REWARD =============
+    public const string SessionRewards = $"{RewardRootApi}/sessions";
+    public const string SessionRewardsById = $"{SessionRewards}/{{id}}";
+    
+    // --- Business Data ---
+    
+    // Course Assignment
+    public const string CourseAssignments = $"{SessionRewardsById}/course-assignments";
+    public const string CourseAssignmentsById = $"{SessionRewardsById}/course-assignments/{{course-assignment-id}}";
+    
 }

@@ -13,18 +13,9 @@ using Xunit;
 
 namespace RewardFlow.IntegrationTests.Employees.BulkOperations;
 
-[Collection("EmployeeTests")]
-public class BulkUpdateTests : IAsyncLifetime
+public class BulkUpdateTests(TestWebApplicationFactory factory) : BaseEmployeeTestFixture(factory), IAsyncLifetime
 {
-    private readonly TestWebApplicationFactory _factory;
-    private readonly DbUtility _dbUtility;
     private UserClient _userClient;
-
-    public BulkUpdateTests(EmployeeTestFixture factory)
-    {
-        _factory = factory;
-        _dbUtility = new DbUtility(_factory);
-    }
 
     public async Task InitializeAsync()
     {
@@ -55,21 +46,21 @@ public class BulkUpdateTests : IAsyncLifetime
         }).ToList();
 
         // Act
-        var response = await _userClient.Client.PostAsJsonAsync("/api/Employees/BulkUpdate", updateRequests);
+        var response = await _userClient.Client.PutAsJsonAsync("/api/Employees/BulkUpdate", updateRequests);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Accepted);
         var result = await response.Content.ReadFromJsonAsync<BulkInsert.Response>();
         result.Should().NotBeNull();
-        result!.Success.Should().Be(3);
-        result.FailsIndexes.Should().BeEmpty();
+        result!.Summary.SuccessfulRecords.Should().Be(3);
+        result.Errors.Should().BeEmpty();
 
         // Verify employees were updated
-        var allEmployees = await _dbUtility.Set<Employee>().ToListAsync();
+        var allEmployees = await _dbUtility.Query<Employee>().ToListAsync();
         allEmployees.Should().Contain(e => e.Name == "Updated Name" && e.CreatedBy == _userClient.User.Id);
         
         // Verify tokens were updated in the Employee Name Tokens table
-        var tokensExist = await _dbUtility.Set<EmployeeNameToken>().AnyAsync(
+        var tokensExist = await _dbUtility.Query<EmployeeNameToken>().AnyAsync(
             t => t.EmployeeId == allEmployees[0].EmployeeId && t.UserId == _userClient.User.Id);
         tokensExist.Should().BeTrue();
     }

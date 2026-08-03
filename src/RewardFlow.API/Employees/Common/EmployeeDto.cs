@@ -1,11 +1,11 @@
-namespace Reward_Flow_v2.Employees.Common;
+namespace RewardFlow_API.Employees.Common;
 
 public record EmployeeDto{
     public int Id { get; set; }
     public string Name { get; set; }
     public string? NationalNumber { get; set; }
     public string? AccountNumber { get; set; }
-    public float? Salary { get; set; }
+    public decimal? Salary { get; set; }
     public string? Faculty { get; set; }
     public string? Department { get; set; }
     public DateTime CreatedAt { get; set; }

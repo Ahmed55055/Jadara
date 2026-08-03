@@ -23,6 +23,78 @@ namespace RewardFlow_API.Migrations.EmployeeDb
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Reward_Flow_v2.Employees.Data.BulkImportBatch", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RawPayloadJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SuccessCount")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("tenant_id");
+
+                    b.Property<int>("TotalRecords")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("BulkImportBatches", "dbo");
+                });
+
+            modelBuilder.Entity("Reward_Flow_v2.Employees.Data.BulkImportResult", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid>("BatchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ErrorMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ErrorTypeCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsSuccess")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("Tracker")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BulkImportResults", "dbo");
+                });
+
             modelBuilder.Entity("Reward_Flow_v2.Employees.Data.Department", b =>
                 {
                     b.Property<int>("DepartmentId")
@@ -55,6 +127,10 @@ namespace RewardFlow_API.Migrations.EmployeeDb
 
             modelBuilder.Entity("Reward_Flow_v2.Employees.Data.Employee", b =>
                 {
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("tenant_id");
+
                     b.Property<int>("EmployeeId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
@@ -118,15 +194,15 @@ namespace RewardFlow_API.Migrations.EmployeeDb
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("national_number_hash");
 
-                    b.Property<float?>("Salary")
-                        .HasColumnType("real")
+                    b.Property<decimal?>("Salary")
+                        .HasColumnType("decimal(18,2)")
                         .HasColumnName("salary");
 
                     b.Property<byte?>("Status")
                         .HasColumnType("tinyint")
                         .HasColumnName("status");
 
-                    b.HasKey("EmployeeId");
+                    b.HasKey("TenantId", "EmployeeId");
 
                     b.HasIndex("DepartmentId");
 
@@ -135,6 +211,8 @@ namespace RewardFlow_API.Migrations.EmployeeDb
                     b.HasIndex("JobTitle");
 
                     b.HasIndex("Status");
+
+                    b.HasIndex("TenantId");
 
                     b.HasIndex("CreatedBy", "AccountNumberHash")
                         .IsUnique()
@@ -169,6 +247,10 @@ namespace RewardFlow_API.Migrations.EmployeeDb
                         .HasColumnType("tinyint")
                         .HasColumnName("n");
 
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("tenant_id");
+
                     b.Property<string>("TokenHashed")
                         .IsRequired()
                         .HasMaxLength(64)
@@ -181,7 +263,11 @@ namespace RewardFlow_API.Migrations.EmployeeDb
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId", "TokenHashed");
+                    b.HasIndex("TenantId");
+
+                    b.HasIndex("TenantId", "EmployeeId");
+
+                    b.HasIndex("TenantId", "TokenHashed");
 
                     b.ToTable("employee_name_tokens", "dbo");
                 });
@@ -352,9 +438,23 @@ namespace RewardFlow_API.Migrations.EmployeeDb
                     b.Navigation("StatusNavigation");
                 });
 
+            modelBuilder.Entity("Reward_Flow_v2.Employees.Data.EmployeeNameToken", b =>
+                {
+                    b.HasOne("Reward_Flow_v2.Employees.Data.Employee", null)
+                        .WithMany("NameTokens")
+                        .HasForeignKey("TenantId", "EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Reward_Flow_v2.Employees.Data.Department", b =>
                 {
                     b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("Reward_Flow_v2.Employees.Data.Employee", b =>
+                {
+                    b.Navigation("NameTokens");
                 });
 
             modelBuilder.Entity("Reward_Flow_v2.Employees.Data.EmployeeStatus", b =>

@@ -23,5 +23,6 @@ public static class EmployeeEndpoints
         app.MapUpdateEmployee();
         app.MapDeleteEmployee();
         app.MapBulkInsertEmployee();
+        app.MapBulkInsertEmployeeV2();
     }
 }

@@ -14,7 +14,8 @@ public static class TokenService
         {
             new Claim (ClaimTypes.NameIdentifier, user.UUID.ToString()),
             new Claim (ClaimTypes.Name, user.Username),
-            new Claim (ClaimTypes.Role, Enum.GetName(typeof( UserRoleEnum),user.RoleId)!)
+            new Claim (ClaimTypes.Role, Enum.GetName(typeof( UserRoleEnum),user.RoleId)!),
+            new Claim("TenantId", user.TenantId.ToString())
         };
 
         var key = new SymmetricSecurityKey(

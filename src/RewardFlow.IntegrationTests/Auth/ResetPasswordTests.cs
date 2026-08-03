@@ -16,10 +16,8 @@ namespace RewardFlow.IntegrationTests.Auth;
 /// Integration tests for the Reset Password functionality.
 /// Tests various scenarios for password reset including request, verification, confirmation, and error handling.
 /// </summary>
-[Collection("UserTests")]
-public class ResetPasswordTests(UserTestFixture factory) : IAsyncLifetime
+public class ResetPasswordTests(TestWebApplicationFactory factory) : BaseAuthTestFixture(factory), IAsyncLifetime
 {
-    private readonly Faker _faker = new();
     private HttpClient _client = null!;
     private User _testUser= null!;
 

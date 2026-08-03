@@ -4,8 +4,9 @@ public record SessionRewardDto(
     int SessionRewardId,
     string Name,
     string? Code,
-    int? Year,
+    short? Year,
     byte? Semester,
-    float Percentage,
-    float Total
+    decimal Percentage,
+    decimal Total,
+    int CreatedBy
 );
