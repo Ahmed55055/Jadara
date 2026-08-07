@@ -28,6 +28,7 @@ using RewardFlow_API.Rewards.Data;
 using RewardFlow_API.Common.Interface;
 using RewardFlow_API.Employees.Common;
 using RewardFlow_API.Rewards.Courses;
+using RewardFlow_API.User.AuthService;
 using Scalar.AspNetCore;
 using UserContext = RewardFlow_API.Common.Interface.UserContext;
 
@@ -61,6 +62,9 @@ public sealed class Program
         builder.Services.AddScoped<IBulkEmployeesImporter,BulkEmployeesImportJob>();
         builder.Services.AddScoped<ITokenBackgroundJob,TokenBackgroundJob>();
         builder.Services.AddScoped<IBulkInserter<EmployeeNameToken>, EmployeeTokenBulkInsert>();
+
+        builder.Services.AddSingleton(TimeProvider.System);
+        builder.Services.AddSingleton<TokenService>();
         
         // Register Interceptors
         builder.Services

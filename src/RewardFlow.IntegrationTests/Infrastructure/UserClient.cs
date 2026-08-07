@@ -3,6 +3,7 @@ using RewardFlow_API.User.AuthService;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -47,7 +48,9 @@ public class UserClient
     
     public void Authanticate()
     {
-        var jwtToken = TokenService.CreateToken(User, _factory.Configuration);
+        var tokenService =  _factory.Services.GetRequiredService<TokenService>();
+        
+        var jwtToken = tokenService.CreateToken(User);
         Client.DefaultRequestHeaders.Authorization =
         new AuthenticationHeaderValue("Bearer", jwtToken);
     }

@@ -6,9 +6,9 @@ using System.Text;
 
 namespace RewardFlow_API.User.AuthService;
 
-public static class TokenService
+public class TokenService(TimeProvider timeProvider, IConfiguration configuration)
 {
-    public static string CreateToken(Reward_Flow_v2.User.Data.User user, IConfiguration configuration)
+    public string CreateToken(Reward_Flow_v2.User.Data.User user)
     {
         var Claims = new Claim[]
         {
@@ -27,14 +27,14 @@ public static class TokenService
             issuer: configuration.GetValue<string>("JWT:Issuer"),
             audience: configuration.GetValue<string>("JWT:Audience"),
             claims: Claims,
-            expires: DateTime.UtcNow.AddHours(1),
+            expires: timeProvider.GetUtcNow().DateTime.AddMinutes(10),
             signingCredentials: creds
         );
 
         return new JwtSecurityTokenHandler().WriteToken(tokenDescripter);
     }
 
-    public static string GenerateRefreshToken()
+    public string GenerateRefreshToken()
     {
         var randomBytes = new byte[32];
         using var rng = System.Security.Cryptography.RandomNumberGenerator.Create();

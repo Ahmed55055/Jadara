@@ -19,9 +19,5 @@ public class BaseAuthTestFixture: IClassFixture<TestWebApplicationFactory>
         _dbUtility = new DbUtility(_factory);
     }
 
-    public async Task InitializeAsync()
-    {
-        // Initialize any common test data here if needed
-        // For example, create default roles or setup initial database state
-    }
+    public async Task InitializeAsync() => await Task.CompletedTask;
 }
