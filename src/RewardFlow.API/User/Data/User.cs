@@ -24,7 +24,7 @@ namespace Reward_Flow_v2.User.Data
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiry { get; set; }
         
-        internal void PrepareNewUser(string username, string hashedPassword, string? email)
+        internal void PrepareNewUser(string username, string hashedPassword, string refreshToken, string? email)
         {
             this.Username = username;
             this.PasswordHash = hashedPassword;
@@ -32,12 +32,25 @@ namespace Reward_Flow_v2.User.Data
 
             RoleId = ((int)UserRoleEnum.User);
             UserRole = null;
-            CreatedAt = DateTime.Now;
-            LastVisit = DateTime.Now;
+            CreatedAt = DateTime.UtcNow;
             IsActive = true;
             ProfilePictureUrl = null;
             PlanId = ((int)PlanEnum.Free);
             Plan = null;
+
+            UpdateRefreshToken(refreshToken);
+            LastVisitedNow();
+        }
+
+        internal void UpdateRefreshToken(string refreshToken)
+        {
+            RefreshToken = refreshToken;
+            RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
+        }
+
+        internal void LastVisitedNow()
+        {
+            LastVisit = DateTime.UtcNow;
         }
     }
 }

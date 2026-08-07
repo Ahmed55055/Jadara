@@ -27,7 +27,7 @@ public static class Login
             .WithTags(AuthApiPath.Tag);
     }
 
-    private static async Task<IResult> HandlerAsync(Login.Request request, UserDbContext _dbContext, IConfiguration configuration, CancellationToken cancellationToken)
+    private static async Task<IResult> HandlerAsync(Login.Request request, TokenService tokenService, UserDbContext _dbContext, IConfiguration configuration, CancellationToken cancellationToken)
     {
         var validationResult = new LoginUserRequestValidator().Validate(request);
         
@@ -46,8 +46,8 @@ public static class Login
         if (result == PasswordVerificationResult.Failed)
             return Results.BadRequest("Invalid username or password");
 
-        var token = TokenService.CreateToken(user, configuration);
-        var refreshToken = TokenService.GenerateRefreshToken();
+        var token = tokenService.CreateToken(user);
+        var refreshToken = tokenService.GenerateRefreshToken();
         
         user.LastVisit = DateTime.UtcNow;
         user.RefreshToken = refreshToken;

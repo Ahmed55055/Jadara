@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Reward_Flow_v2.User;
 using RewardFlow.IntegrationTests.Infrastructure;
 using RewardFlow.IntegrationTests.Auth.Common;
 using Reward_Flow_v2.User.AuthService.Register;
@@ -36,7 +37,7 @@ public class RegisterTests(TestWebApplicationFactory factory) : BaseAuthTestFixt
         var request = RequestCreator.CreateRegisterRequest(userData, password);
 
         // Act
-        var response = await _client.PostAsJsonAsync("/api/Auth/Register", request);
+        var response = await _client.PostAsJsonAsync(AuthApiPath.Register, request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);

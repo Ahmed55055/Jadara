@@ -2,6 +2,7 @@ using Bogus;
 using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
+using Reward_Flow_v2.User;
 using RewardFlow.IntegrationTests.Infrastructure;
 using RewardFlow.IntegrationTests.Auth.Common;
 using Reward_Flow_v2.User.AuthService.Login;
@@ -102,5 +103,21 @@ public class LoginTests(TestWebApplicationFactory factory) : BaseAuthTestFixture
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task Login_ShouldReturnAuenticationTokens()
+    {
+        // Arrange
+        var request = RequestCreator.CreateLoginRequest(_testUser, _testPassword);
+
+        // Act
+        var response = await _client.PostAsJsonAsync(AuthApiPath.Login, request);
+
+        // Assert
+        var result = await response.Content.ReadFromJsonAsync<Login.Response>();
+        result.Should().NotBeNull();
+        result.JWTToken.Should().NotBeNullOrEmpty();
+        result.RefreshToken.Should().NotBeNullOrEmpty();
     }
 }
