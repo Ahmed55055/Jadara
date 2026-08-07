@@ -27,7 +27,7 @@ public class TokenService(TimeProvider timeProvider, IConfiguration configuratio
             issuer: configuration.GetValue<string>("JWT:Issuer"),
             audience: configuration.GetValue<string>("JWT:Audience"),
             claims: Claims,
-            expires: timeProvider.GetUtcNow().DateTime.AddMinutes(10),
+            expires: timeProvider.GetUtcNow().UtcDateTime.AddMinutes(10),
             signingCredentials: creds
         );
 
