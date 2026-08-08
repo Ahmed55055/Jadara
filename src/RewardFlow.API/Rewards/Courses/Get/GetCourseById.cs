@@ -3,7 +3,7 @@ using Reward_Flow_v2.Common.EndpointValidation;
 using Reward_Flow_v2.Rewards.Data.Database;
 using RewardFlow_API.Rewards.Data;
 
-namespace RewardFlow_API.Rewards.Courses;
+namespace RewardFlow_API.Rewards.Courses.Get;
 
 public static class GetCourseById
 {

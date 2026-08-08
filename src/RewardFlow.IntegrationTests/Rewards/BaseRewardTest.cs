@@ -5,6 +5,7 @@ using Reward_Flow_v2.Employees.BulkInsertEmployees;
 using Reward_Flow_v2.Employees.Data;
 using Reward_Flow_v2.Rewards;
 using RewardFlow_API.Rewards.Courses;
+using RewardFlow_API.Rewards.Courses.Create;
 using RewardFlow_API.Rewards.Data;
 using RewardFlow_API.Rewards.SessionsReward.EndPoints.Reward.CreateReward;
 using RewardFlow.IntegrationTests.Infrastructure;

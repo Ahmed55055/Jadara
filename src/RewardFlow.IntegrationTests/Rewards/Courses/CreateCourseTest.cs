@@ -1,6 +1,7 @@
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using RewardFlow_API.Rewards.Courses;
+using RewardFlow_API.Rewards.Courses.Create;
 using RewardFlow_API.Rewards.Data;
 using RewardFlow.IntegrationTests.Infrastructure;
 using RewardFlow.IntegrationTests.Rewards;

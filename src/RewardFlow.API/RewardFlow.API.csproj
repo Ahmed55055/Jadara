@@ -37,6 +37,8 @@
     <Folder Include="Employees\BisunessRules\" />
     <Folder Include="Migrations\EmployeeDb\" />
     <Folder Include="Migrations\RewardDb\" />
+    <Folder Include="Rewards\Courses\Delete\" />
+    <Folder Include="Rewards\Courses\Update\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
