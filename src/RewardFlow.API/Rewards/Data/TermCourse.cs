@@ -7,7 +7,7 @@ public sealed class TermCourse: ITenantEntity
 {
     public int Id { get; private set; }
     public Guid TenantId { get; set; }
-    public int SubjectId { get; init; }
+    public int CourseId { get; init; }
     public byte Semester { get; init; }
     public int NumberOfStudents { get; set; }
     public decimal? Price {  get; set; }

@@ -3,7 +3,7 @@ using Reward_Flow_v2.Common.EndpointValidation;
 using Reward_Flow_v2.Rewards.Data.Database;
 using RewardFlow_API.Rewards.Data;
 
-namespace RewardFlow_API.Rewards.Courses;
+namespace RewardFlow_API.Rewards.Courses.Create;
 public static class CreateCourse
 {
     public static void MapCreateCourse(this IEndpointRouteBuilder app)

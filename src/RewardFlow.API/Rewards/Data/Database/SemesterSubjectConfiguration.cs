@@ -15,7 +15,7 @@ public class SemesterSubjectConfiguration : IEntityTypeConfiguration<TermCourse>
             .ValueGeneratedOnAdd()
             .HasColumnName("id");
         
-        builder.Property(ss => ss.SubjectId)
+        builder.Property(ss => ss.CourseId)
             .HasColumnName("subject_id")
             .IsRequired();
         
@@ -37,7 +37,7 @@ public class SemesterSubjectConfiguration : IEntityTypeConfiguration<TermCourse>
 
         builder.HasOne(ss => ss.Course)
             .WithMany(s => s.SubjectSemesters)
-            .HasForeignKey(ss => ss.SubjectId)
+            .HasForeignKey(ss => ss.CourseId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

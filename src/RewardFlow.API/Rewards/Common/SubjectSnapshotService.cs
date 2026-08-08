@@ -41,7 +41,7 @@ public class SubjectSnapshotService(RewardDbContext context) : ISnapshotService<
     {
         // Compare the core values. If any differ, the snapshot is out of date.
         // Note: We access entity.Subject properties assuming they were Included in the query.
-        return entity.SubjectId == latest.SemesterSubjectId &&
+        return entity.CourseId == latest.SemesterSubjectId &&
                entity.Course.Name == latest.SubjectName &&
                entity.Course.IsTheoretical == latest.IsTheoretical &&
                entity.Course.IsPractical == latest.IsPractical &&
