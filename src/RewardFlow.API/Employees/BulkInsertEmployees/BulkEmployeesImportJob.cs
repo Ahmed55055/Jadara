@@ -65,8 +65,8 @@ internal class BulkEmployeesImportJob(EmployeeDbContext dbContext, IUserContext 
 
         foreach ((Guid tracker, Employee employee) in entitiesToInsert)
         {
-            results.Add(employee.EmployeeId > 0
-                ? BulkImportResult.CreateSuccess(batch.Id, tracker, employee.EmployeeId, employee.Name)
+            results.Add(employee.Id > 0
+                ? BulkImportResult.CreateSuccess(batch.Id, tracker, employee.Id, employee.Name)
                 : BulkImportResult.CreateFailure(batch.Id, tracker, BulkInsert.ErrorTypes.Unexpected,
                     "Unexpected error occurred."));
         }
@@ -170,13 +170,13 @@ internal class BulkEmployeesImportJob(EmployeeDbContext dbContext, IUserContext 
         var nationalConflicts = await dbContext.Employee
             .AsNoTracking()
             .Where(e => e.NationalNumberHash != null && nationalHashesToQuery.Contains(e.NationalNumberHash))
-            .Select(e => new { e.EmployeeId, e.NationalNumber })
+            .Select(e => new { EmployeeId = e.Id, e.NationalNumber })
             .ToDictionaryAsync(e => e.EmployeeId, cancellationToken);
 
         var accountConflicts = await dbContext.Employee
             .AsNoTracking()
             .Where(e => e.AccountNumberHash != null && accountHashesToQuery.Contains(e.AccountNumberHash))
-            .Select(e => new { e.EmployeeId, e.AccountNumber })
+            .Select(e => new { EmployeeId = e.Id, e.AccountNumber })
             .ToDictionaryAsync(e => e.EmployeeId, cancellationToken);
 
         var allEmployeeIds = nationalConflicts.Select(n => n.Key).Union(accountConflicts.Keys);

@@ -95,11 +95,11 @@ public static class BulkInsert
 
             // Populate successful records
             successfulRecords.AddRange(from kvp in entitiesToInsert
-                where kvp.Value.EmployeeId > 0
-                select new SuccessfulRecord(kvp.Key, kvp.Value.EmployeeId, kvp.Value.Name));
+                where kvp.Value.Id > 0
+                select new SuccessfulRecord(kvp.Key, kvp.Value.Id, kvp.Value.Name));
 
             errors.AddRange(from kvp in entitiesToInsert
-                where kvp.Value.EmployeeId == 0
+                where kvp.Value.Id == 0
                 select new BulkError(kvp.Key, ErrorTypes.DatabaseConflict, "Failed to insert into database."));
         }
 
@@ -211,13 +211,13 @@ public static class BulkInsert
         var nationalConflicts = await dbContext.Employee
             .AsNoTracking()
             .Where(e => e.NationalNumberHash != null && nationalHashesToQuery.Contains(e.NationalNumberHash))
-            .Select(e => new { e.EmployeeId, e.NationalNumber })
+            .Select(e => new { EmployeeId = e.Id, e.NationalNumber })
             .ToDictionaryAsync(e=> e.EmployeeId, cancellationToken);
 
         var accountConflicts = await dbContext.Employee
             .AsNoTracking()
             .Where(e => e.AccountNumberHash != null && accountHashesToQuery.Contains(e.AccountNumberHash))
-            .Select(e => new { e.EmployeeId, e.AccountNumber })
+            .Select(e => new { EmployeeId = e.Id, e.AccountNumber })
             .ToDictionaryAsync(e=> e.EmployeeId, cancellationToken);
 
         var allEmployeeIds = nationalConflicts.Select(n => n.Key)

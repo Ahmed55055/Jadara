@@ -79,6 +79,16 @@ namespace RewardFlow_API.Migrations.RewardDb
                         .HasColumnName("captured_at")
                         .HasDefaultValueSql("GETDATE()");
 
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int")
+                        .HasColumnName("course_id");
+
+                    b.Property<string>("CourseName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar")
+                        .HasColumnName("course_name");
+
                     b.Property<bool>("IsPractical")
                         .HasColumnType("bit")
                         .HasColumnName("is_practical");
@@ -87,29 +97,28 @@ namespace RewardFlow_API.Migrations.RewardDb
                         .HasColumnType("bit")
                         .HasColumnName("is_theoretical");
 
-                    b.Property<byte>("Semester")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("semester");
+                    b.Property<int?>("StudentCount")
+                        .HasColumnType("int");
 
-                    b.Property<int>("SemesterSubjectId")
+                    b.Property<byte>("Term")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("term");
+
+                    b.Property<int>("TermCourseId")
                         .HasColumnType("int")
-                        .HasColumnName("semester_subject_id");
+                        .HasColumnName("term_course_id");
 
-                    b.Property<string>("SubjectName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("subject_name");
-
-                    b.Property<byte>("Year")
-                        .HasColumnType("tinyint")
+                    b.Property<short>("Year")
+                        .HasColumnType("smallint")
                         .HasColumnName("year");
 
                     b.HasKey("SnapshotId");
 
-                    b.HasIndex("SemesterSubjectId");
+                    b.HasIndex("CourseId");
 
-                    b.ToTable("subject_snapshots", "DbReward");
+                    b.HasIndex("TermCourseId");
+
+                    b.ToTable("course_snapshots", "DbReward");
                 });
 
             modelBuilder.Entity("RewardFlow_API.Rewards.Data.EmployeeSessions", b =>
@@ -150,6 +159,10 @@ namespace RewardFlow_API.Migrations.RewardDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<Guid>("CourseSnapshotId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("course_snapshot_id");
+
                     b.Property<Guid>("CourseSnapshotSnapshotId")
                         .HasColumnType("uniqueidentifier");
 
@@ -161,14 +174,6 @@ namespace RewardFlow_API.Migrations.RewardDb
                         .HasColumnType("smallint")
                         .HasColumnName("max_number_of_employees");
 
-                    b.Property<int>("NumberOfStudents")
-                        .HasColumnType("int")
-                        .HasColumnName("number_of_students");
-
-                    b.Property<int>("SemesterSubjectId")
-                        .HasColumnType("int")
-                        .HasColumnName("semester_subject_id");
-
                     b.Property<int>("SessionCount")
                         .HasColumnType("int")
                         .HasColumnName("number_of_sessions");
@@ -177,25 +182,29 @@ namespace RewardFlow_API.Migrations.RewardDb
                         .HasColumnType("int")
                         .HasColumnName("session_reward_id");
 
-                    b.Property<Guid>("SubjectSnapshotId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("subject_snapshot_id");
+                    b.Property<int>("StudentCount")
+                        .HasColumnType("int")
+                        .HasColumnName("number_of_students");
 
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("tenant_id");
 
+                    b.Property<int>("TermCourseId")
+                        .HasColumnType("int")
+                        .HasColumnName("term_course_id");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CourseSnapshotId");
 
                     b.HasIndex("CourseSnapshotSnapshotId");
 
-                    b.HasIndex("SemesterSubjectId");
-
-                    b.HasIndex("SubjectSnapshotId");
-
                     b.HasIndex("TenantId");
 
-                    b.ToTable("subject_session_rewards", "DbReward");
+                    b.HasIndex("TermCourseId");
+
+                    b.ToTable("course_assignments", "DbReward");
                 });
 
             modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.CourseEmployee", b =>
@@ -398,13 +407,13 @@ namespace RewardFlow_API.Migrations.RewardDb
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("tenant_id");
 
+                    b.Property<byte?>("Term")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("semester");
+
                     b.Property<short?>("Year")
                         .HasColumnType("smallint")
                         .HasColumnName("year");
-
-                    b.Property<byte?>("semester")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("semester");
 
                     b.HasKey("Id");
 
@@ -425,24 +434,24 @@ namespace RewardFlow_API.Migrations.RewardDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("NumberOfStudents")
+                    b.Property<int>("CourseId")
                         .HasColumnType("int")
-                        .HasColumnName("number_of_students");
+                        .HasColumnName("course_id");
 
                     b.Property<decimal?>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<byte>("Semester")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("semester_number");
-
-                    b.Property<int>("SubjectId")
+                    b.Property<int?>("StudentCount")
                         .HasColumnType("int")
-                        .HasColumnName("subject_id");
+                        .HasColumnName("number_of_students");
 
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("tenant_id");
+
+                    b.Property<byte>("Term")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("term");
 
                     b.Property<short>("Year")
                         .HasColumnType("smallint")
@@ -450,18 +459,24 @@ namespace RewardFlow_API.Migrations.RewardDb
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SubjectId");
+                    b.HasIndex("CourseId");
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("subject_semesters", "DbReward");
+                    b.ToTable("term_course", "DbReward");
                 });
 
             modelBuilder.Entity("RewardFlow_API.Rewards.Data.CourseSnapshot", b =>
                 {
+                    b.HasOne("RewardFlow_API.Rewards.Data.Course", null)
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Reward_Flow_v2.Rewards.Data.TermCourse", "TermCourse")
                         .WithMany()
-                        .HasForeignKey("SemesterSubjectId")
+                        .HasForeignKey("TermCourseId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -481,6 +496,12 @@ namespace RewardFlow_API.Migrations.RewardDb
 
             modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.CourseAssignment", b =>
                 {
+                    b.HasOne("RewardFlow_API.Rewards.Data.CourseSnapshot", null)
+                        .WithMany()
+                        .HasForeignKey("CourseSnapshotId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("RewardFlow_API.Rewards.Data.CourseSnapshot", "CourseSnapshot")
                         .WithMany()
                         .HasForeignKey("CourseSnapshotSnapshotId")
@@ -489,14 +510,8 @@ namespace RewardFlow_API.Migrations.RewardDb
 
                     b.HasOne("Reward_Flow_v2.Rewards.Data.TermCourse", null)
                         .WithMany()
-                        .HasForeignKey("SemesterSubjectId")
+                        .HasForeignKey("TermCourseId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RewardFlow_API.Rewards.Data.CourseSnapshot", null)
-                        .WithMany()
-                        .HasForeignKey("SubjectSnapshotId")
-                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("CourseSnapshot");
@@ -560,9 +575,9 @@ namespace RewardFlow_API.Migrations.RewardDb
             modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.TermCourse", b =>
                 {
                     b.HasOne("RewardFlow_API.Rewards.Data.Course", "Course")
-                        .WithMany("SubjectSemesters")
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("TermCourse")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Course");
@@ -570,7 +585,7 @@ namespace RewardFlow_API.Migrations.RewardDb
 
             modelBuilder.Entity("RewardFlow_API.Rewards.Data.Course", b =>
                 {
-                    b.Navigation("SubjectSemesters");
+                    b.Navigation("TermCourse");
                 });
 
             modelBuilder.Entity("Reward_Flow_v2.Rewards.Data.CourseAssignment", b =>

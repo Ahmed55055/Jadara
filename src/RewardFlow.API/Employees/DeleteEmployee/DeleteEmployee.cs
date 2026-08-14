@@ -31,7 +31,7 @@ public static partial class DeleteEmployee
         try
         {
             var employee = await dbContext.Employee
-                .Where(e => e.EmployeeId == id && e.CreatedBy == userId)
+                .Where(e => e.Id == id && e.CreatedBy == userId)
                 .FirstOrDefaultAsync(cancellationToken);
 
             if (employee == null)

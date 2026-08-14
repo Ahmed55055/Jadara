@@ -61,7 +61,7 @@ public static class CreateEmployee
 
             await tokenService.CreateTokensAsync(employee, currentUserId, cancellationToken);
 
-            return Results.Created($"{EmployeeApiPath.GetById.Replace("{id}", employee.EmployeeId.ToString())}",
+            return Results.Created($"{EmployeeApiPath.GetById.Replace("{id}", employee.Id.ToString())}",
                 employee.ToDto());
         }
         catch (UniqueConstraintException)

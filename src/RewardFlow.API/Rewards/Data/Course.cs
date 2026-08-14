@@ -13,5 +13,5 @@ public sealed class Course : ITenantEntity
     public bool IsPractical { get; set; }
     public decimal SubjectPrice { get; set; }
     
-    public ICollection<TermCourse> SubjectSemesters { get; set; } = new List<TermCourse>();
+    public ICollection<TermCourse> TermCourse { get; set; } = new List<TermCourse>();
 }

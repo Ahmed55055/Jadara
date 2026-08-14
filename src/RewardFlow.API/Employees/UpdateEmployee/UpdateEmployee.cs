@@ -46,7 +46,7 @@ public static partial class UpdateEmployee
         try
         {
             var employee = await dbContext.Employee
-                .Where(e => e.EmployeeId == id && e.CreatedBy == currentUserId)
+                .Where(e => e.Id == id && e.CreatedBy == currentUserId)
                 .FirstOrDefaultAsync(cancellationToken);
 
             if (employee == null)

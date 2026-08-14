@@ -7,7 +7,7 @@ using Reward_Flow_v2.Rewards;
 using RewardFlow_API.Rewards.Courses;
 using RewardFlow_API.Rewards.Courses.Create;
 using RewardFlow_API.Rewards.Data;
-using RewardFlow_API.Rewards.SessionsReward.EndPoints.Reward.CreateReward;
+using RewardFlow_API.Rewards.SessionsReward.EndPoints.RewardManage.CreateReward;
 using RewardFlow.IntegrationTests.Infrastructure;
 using RewardFlow.TestUtilities.DataGenerators;
 using RewardFlow.TestUtilities.DataGenerators.Fakers.Employees;

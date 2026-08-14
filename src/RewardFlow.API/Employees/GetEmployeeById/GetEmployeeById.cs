@@ -28,7 +28,7 @@ public static class GetEmployeeById
         try
         {
             var employee = await dbContext.Employee
-                .Where(e => e.EmployeeId == id && e.CreatedBy == currentUserId)
+                .Where(e => e.Id == id && e.CreatedBy == currentUserId)
                 .FirstOrDefaultAsync(cancellationToken);
 
             return employee == null ? Results.NotFound() : Results.Ok(employee.ToDto());

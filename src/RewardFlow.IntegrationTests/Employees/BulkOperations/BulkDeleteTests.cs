@@ -39,7 +39,7 @@ public class BulkDeleteTests(TestWebApplicationFactory factory) : BaseEmployeeTe
             await ApiManager.CreateEmployee(employee, _userClient.Client);
         }
 
-        var employeeIds = employees.Select(e => e.EmployeeId).ToList();
+        var employeeIds = employees.Select(e => e.Id).ToList();
 
         // Act
         var response = await _userClient.Client.PostAsJsonAsync("/api/Employees/BulkDelete", employeeIds);
@@ -53,7 +53,7 @@ public class BulkDeleteTests(TestWebApplicationFactory factory) : BaseEmployeeTe
 
         // Verify employees were deleted
         var allEmployees = await _dbUtility.Query<Employee>().ToListAsync();
-        allEmployees.Should().NotContain(e => employeeIds.Contains(e.EmployeeId));
+        allEmployees.Should().NotContain(e => employeeIds.Contains(e.Id));
     }
 
     private CreateEmployee.Request CreateEmployeeRequest(Employee employee)

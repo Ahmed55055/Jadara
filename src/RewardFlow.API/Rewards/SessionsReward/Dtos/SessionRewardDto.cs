@@ -7,6 +7,5 @@ public record SessionRewardDto(
     short? Year,
     byte? Semester,
     decimal Percentage,
-    decimal Total,
-    int CreatedBy
+    decimal Total
 );

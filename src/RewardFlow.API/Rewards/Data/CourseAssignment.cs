@@ -9,13 +9,13 @@ namespace Reward_Flow_v2.Rewards.Data;
 public sealed class CourseAssignment : ITenantEntity
 {
     private readonly List<CourseEmployee> _employeeSessionSubjects = new();
-    
+
     public int Id { get; private init; }
     public Guid TenantId { get; set; }
     public int SessionRewardId { get; private set; }
-    public int SemesterSubjectId { get; private set; }
-    public Guid SubjectSnapshotId { get; private set; }
-    public int NumberOfStudents { get; private set; }
+    public int TermCourseId { get; private set; }
+    public Guid CourseSnapshotId { get; private set; }
+    public int StudentCount { get; private set; }
     public int SessionCount { get; private set; }
 
     public int? MainEmployeeId { get; private set; }
@@ -34,14 +34,13 @@ public sealed class CourseAssignment : ITenantEntity
         MainEmployeeId = mainEmployeeId;
 
         CourseSnapshot = courseSnapshot;
-        SemesterSubjectId = courseSnapshot.SemesterSubjectId;
-        SubjectSnapshotId = courseSnapshot.SnapshotId;
+        TermCourseId = courseSnapshot.TermCourseId;
+        CourseSnapshotId = courseSnapshot.SnapshotId;
 
         UpdateNumberOfStudents(numberOfStudents);
     }
 
-    public static Result<CourseAssignment> Create(int sessionRewardId, int numberOfStudents,
-        CourseSnapshot courseSnapshot,
+    public static Result<CourseAssignment> Create(int sessionRewardId, CourseSnapshot courseSnapshot,
         int? mainEmployeeId = null, int maxNumberOfEmployees = 3)
     {
         if (courseSnapshot is null)
@@ -50,7 +49,7 @@ public sealed class CourseAssignment : ITenantEntity
         if (maxNumberOfEmployees <= 0)
             return Result.Fail<CourseAssignment>("Max number of employees must be greater than zero.");
 
-        var entity = new CourseAssignment(sessionRewardId, numberOfStudents, courseSnapshot, mainEmployeeId,
+        var entity = new CourseAssignment(sessionRewardId, courseSnapshot.StudentCount.Value, courseSnapshot, mainEmployeeId,
             maxNumberOfEmployees);
         return Result.Ok(entity);
     }
@@ -63,7 +62,7 @@ public sealed class CourseAssignment : ITenantEntity
     public Result UpdateEmployees(IEnumerable<EmployeeSnapshot> employeeSnapshot)
     {
         var employeeSnapshots = employeeSnapshot as EmployeeSnapshot[] ?? employeeSnapshot.ToArray();
-        employeeSnapshots = employeeSnapshots.DistinctBy(s=>s.EmployeeId).ToArray();
+        employeeSnapshots = employeeSnapshots.DistinctBy(s => s.EmployeeId).ToArray();
 
         var count = employeeSnapshots.Length;
 
@@ -73,7 +72,7 @@ public sealed class CourseAssignment : ITenantEntity
 
         if (count <= 0)
             return Result.Fail($"No employees added");
-        
+
         var incomingSnapshotsIds = employeeSnapshots.Select(e => e.SnapshotId).ToArray();
         var outComing = _employeeSessionSubjects
             .Where(e => !incomingSnapshotsIds.Contains(e.EmployeeSnapshotId))
@@ -114,7 +113,7 @@ public sealed class CourseAssignment : ITenantEntity
 
     private CourseEmployee CreateEmployeeSessionSubject(EmployeeSnapshot employeeSnapshot)
     {
-        return new CourseEmployee(course : this,employeeSnapshot : employeeSnapshot) ;
+        return new CourseEmployee(course: this, employeeSnapshot: employeeSnapshot);
     }
 
     /// <summary>
@@ -128,14 +127,14 @@ public sealed class CourseAssignment : ITenantEntity
             return Result.Fail($"Subject is null");
 
         CourseSnapshot = courseSnapshot;
-        SemesterSubjectId = courseSnapshot.SemesterSubjectId;
+        TermCourseId = courseSnapshot.TermCourseId;
 
         return Result.Ok();
     }
 
     public void UpdateNumberOfStudents(int numberOfStudents)
     {
-        NumberOfStudents = numberOfStudents;
+        StudentCount = numberOfStudents;
         SessionCount = CalculateSessions(numberOfStudents);
     }
 

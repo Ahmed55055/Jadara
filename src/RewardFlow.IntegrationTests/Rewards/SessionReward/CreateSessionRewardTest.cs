@@ -2,7 +2,7 @@ using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Reward_Flow_v2.Rewards;
 using Reward_Flow_v2.Rewards.Data;
-using RewardFlow_API.Rewards.SessionsReward.EndPoints.Reward.CreateReward;
+using RewardFlow_API.Rewards.SessionsReward.EndPoints.RewardManage.CreateReward;
 using RewardFlow.IntegrationTests.Infrastructure;
 using RewardFlow.IntegrationTests.Infrastructure.Rewards;
 using RewardFlow.TestUtilities.DataGenerators;
@@ -93,7 +93,7 @@ public class CreateSessionRewardTest(TestWebApplicationFactory factory) : BaseRe
         reward.Reward.Name.Should().Be(request.Name);
         reward.Reward.Code.Should().Be(request.Code);
         reward.Year.Should().Be(request.Year);
-        reward.semester.Should().Be(request.Semester);
+        reward.Term.Should().Be(request.Semester);
         reward.Percentage.Should().Be(request.Percentage);
 
         reward.Reward.CreatedBy.Should().Be(_userClient.User.Id);
