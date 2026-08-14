@@ -1,9 +1,9 @@
-using RewardFlow_API.Rewards.SessionsReward.EndPoints.Reward.CreateReward;
-using RewardFlow_API.Rewards.SessionsReward.EndPoints.Reward.DeleteSessionsReward;
-using RewardFlow_API.Rewards.SessionsReward.EndPoints.Reward.GetAllSessionsRewards;
-using RewardFlow_API.Rewards.SessionsReward.EndPoints.Reward.GetSessionsRewardById;
-using RewardFlow_API.Rewards.SessionsReward.EndPoints.Reward.UpdateSessionsReward;
-using RewardFlow_API.Rewards.SessionsReward.EndPoints.SessionReward.CourseAssignments;
+using RewardFlow_API.Rewards.SessionsReward.EndPoints.CourseAssignments.Create;
+using RewardFlow_API.Rewards.SessionsReward.EndPoints.RewardManage.CreateReward;
+using RewardFlow_API.Rewards.SessionsReward.EndPoints.RewardManage.DeleteSessionsReward;
+using RewardFlow_API.Rewards.SessionsReward.EndPoints.RewardManage.GetAllSessionsRewards;
+using RewardFlow_API.Rewards.SessionsReward.EndPoints.RewardManage.GetSessionsRewardById;
+using RewardFlow_API.Rewards.SessionsReward.EndPoints.RewardManage.UpdateSessionsReward;
 
 namespace Reward_Flow_v2.Rewards;
 
@@ -16,6 +16,5 @@ public static class RewardEndpoints
         app.MapGetSessionsRewardById();
         app.MapUpdateSessionsReward();
         app.MapDeleteSessionsReward();
-        app.MapAddEmployeeSessions();
     }
 }

@@ -17,7 +17,7 @@ public class EmployeeLookupService : IEmployeeLookupService
     public async Task<Employee?> GetEmployeesAsync(int employeeId)
     {
         var employee = await _dbContext.Employee
-            .Where(e => e.EmployeeId == employeeId)
+            .Where(e => e.Id == employeeId)
             .FirstOrDefaultAsync();
 
         return employee;    
@@ -26,7 +26,7 @@ public class EmployeeLookupService : IEmployeeLookupService
     public async Task<IEnumerable<Employee>> GetEmployeesAsync(IEnumerable<int> employeesIds)
     {
         var employees = await _dbContext.Employee
-            .Where(e => employeesIds.Contains( e.EmployeeId) )
+            .Where(e => employeesIds.Contains( e.Id) )
             .ToListAsync();
 
         return employees;    

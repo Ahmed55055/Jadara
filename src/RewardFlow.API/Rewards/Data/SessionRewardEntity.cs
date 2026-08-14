@@ -11,7 +11,7 @@ public sealed class SessionRewardEntity: ITenantEntity
     public int Id { get; set; }
     public Guid TenantId { get; set; }
     public short? Year { get; set; }
-    public byte? semester { get; set; }
+    public byte? Term { get; set; }
     public decimal Percentage { get; set; }
 
     public Reward Reward { get; init; } = null!;
@@ -20,10 +20,10 @@ public sealed class SessionRewardEntity: ITenantEntity
     {
     }
 
-    private SessionRewardEntity(short? year, byte? semester, decimal percentage, Reward reward)
+    private SessionRewardEntity(short? year, byte? term, decimal percentage, Reward reward)
     {
         this.Year = year;
-        this.semester = semester;
+        this.Term = term;
         Percentage = percentage;
 
         Reward = reward;

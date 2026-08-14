@@ -23,7 +23,7 @@ public class EmployeeTokenService : IEmployeeTokenService
 
         foreach (var employee in employees)
         {
-            tokens.AddRange(GenerateTokens(employee.Name, employee.EmployeeId, userId));
+            tokens.AddRange(GenerateTokens(employee.Name, employee.Id, userId));
         }
 
         return tokens;
@@ -34,21 +34,21 @@ public class EmployeeTokenService : IEmployeeTokenService
     {
         var tokens = new List<EmployeeNameToken>();
 
-        tokens.AddRange(GenerateTokens(employee.Name, employee.EmployeeId, userId));
+        tokens.AddRange(GenerateTokens(employee.Name, employee.Id, userId));
 
         return tokens;
     }
 
     public async Task CreateTokensAsync(Employee employee, int userId, CancellationToken cancellationToken = default)
     {
-        var tokens = GenerateTokens(employee.Name, employee.EmployeeId, userId);
+        var tokens = GenerateTokens(employee.Name, employee.Id, userId);
         _dbContext.EmployeeNameToken.AddRange(tokens);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task UpdateTokensAsync(Employee employee, int userId, CancellationToken cancellationToken = default)
     {
-        await DeleteTokensAsync(employee.EmployeeId, userId, cancellationToken);
+        await DeleteTokensAsync(employee.Id, userId, cancellationToken);
         await CreateTokensAsync(employee, userId, cancellationToken);
     }
 

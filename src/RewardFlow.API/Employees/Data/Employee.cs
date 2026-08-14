@@ -9,7 +9,7 @@ public class Employee : ITenantEntity
 {
     private List<EmployeeNameToken> _nameTokens = new();
 
-    public int EmployeeId { get; set; }
+    public int Id { get; set; }
     public Guid TenantId { get; set; }
     public string Name { get; set; } = null!;
 

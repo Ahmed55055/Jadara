@@ -33,14 +33,14 @@ public sealed class RewardDbContext(DbContextOptions<RewardDbContext> options,  
         modelBuilder.HasDefaultSchema(schema: Schema);
         modelBuilder.ApplyConfiguration(new CourseConfiguration());
         modelBuilder.ApplyConfiguration(new RewardConfiguration());
-        modelBuilder.ApplyConfiguration(new SubjectSemesterConfiguration());
+        modelBuilder.ApplyConfiguration(new TermCourseConfiguration());
 
         modelBuilder.ApplyConfiguration(new SessionRewardConfiguration());
-        modelBuilder.ApplyConfiguration(new SubjectSessionRewardConfiguration());
+        modelBuilder.ApplyConfiguration(new CourseAssignmentConfiguration());
         modelBuilder.ApplyConfiguration(new EmployeeSessionRewardConfiguration());
         modelBuilder.ApplyConfiguration(new EmployeeRewardConfiguration());
         modelBuilder.ApplyConfiguration(new EmployeeSessionSubjectConfiguration());
-        modelBuilder.ApplyConfiguration(new SubjectSnapshotConfiguration());
+        modelBuilder.ApplyConfiguration(new CourseSnapshotConfiguration());
         modelBuilder.ApplyConfiguration(new EmployeeSnapshotConfiguration());
 
         foreach (var entity in modelBuilder.GetEntityBuilders<ITenantEntity>())

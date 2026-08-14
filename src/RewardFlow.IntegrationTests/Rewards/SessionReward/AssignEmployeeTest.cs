@@ -4,7 +4,8 @@ using Reward_Flow_v2.Rewards;
 using Reward_Flow_v2.Rewards.Common;
 using Reward_Flow_v2.Rewards.SessionsReward.Dtos;
 using RewardFlow_API.Rewards.Courses;
-using RewardFlow_API.Rewards.SessionsReward.EndPoints.SessionReward.CourseAssignments;
+using RewardFlow_API.Rewards.SessionsReward.EndPoints.CourseAssignments.Create;
+using RewardFlow_API.Rewards.SessionsReward.EndPoints.CourseAssignments.Get;
 using RewardFlow.IntegrationTests.Infrastructure;
 using System.Net;
 using System.Net.Http.Json;
@@ -18,7 +19,7 @@ public class AssignEmployeeTest(TestWebApplicationFactory _factory) : BaseReward
     private CourseResponseDto _termCourse;
     private List<Employee> _employees;
 
-    private List<int> _employeesIds => _employees.Select(e => e.EmployeeId).ToList();
+    private List<int> _employeesIds => _employees.Select(e => e.Id).ToList();
 
 
     public async Task InitializeAsync()
@@ -116,15 +117,14 @@ public class AssignEmployeeTest(TestWebApplicationFactory _factory) : BaseReward
     public async Task AssignEmployee_WhenMainEmployeeIsNotInEmployeesIds_ShouldReturnValidationError()
     {
         // Arrange
-        var request = new AddCourseAssignmentDto
+        var request = CreateAssignmentRequest(
+            _rewardId,
+            _termCourse.Id,
+            _employeesIds.Skip(1));
+
+        request = request with
         {
-            RewardId = _rewardId,
-            TermCourseId = _termCourse.Id,
-            NumberOfStudents = 100,
-            MainEmployeeId = _employees.First().EmployeeId,
-            EmployeesIds = _employeesIds
-                .Skip(1)
-                .ToList()
+            MainEmployeeId = _employees.First().Id
         };
 
         // Act
@@ -144,10 +144,10 @@ public class AssignEmployeeTest(TestWebApplicationFactory _factory) : BaseReward
         var request = new AddCourseAssignmentDto
         {
             RewardId = _rewardId,
-            TermCourseId = _termCourse.Id,
-            NumberOfStudents = 100,
-            MainEmployeeId = _employees.First().EmployeeId,
-            EmployeesIds = []
+            CourseId = _termCourse.Id,
+            StudentCount = 100,
+            MainEmployeeId = _employees.First().Id,
+            Employees = []
         };
 
         // Act
@@ -257,15 +257,14 @@ public class AssignEmployeeTest(TestWebApplicationFactory _factory) : BaseReward
         // Arrange
         var employees = await AddEmployeesAndGetEmployeesAsync(6);
 
-        var request = new AddCourseAssignmentDto
+        var request = CreateAssignmentRequest(
+            _rewardId,
+            _termCourse.Id,
+            employees.Select(e => e.Id));
+
+        request = request with
         {
-            RewardId = _rewardId,
-            TermCourseId = _termCourse.Id,
-            NumberOfStudents = 100,
-            MainEmployeeId = employees.First().EmployeeId,
-            EmployeesIds = employees
-                .Select(e => e.EmployeeId)
-                .ToList()
+            MainEmployeeId = employees.First().Id
         };
 
         // Act
@@ -280,15 +279,20 @@ public class AssignEmployeeTest(TestWebApplicationFactory _factory) : BaseReward
 
     private AddCourseAssignmentDto CreateAssignmentRequest(
         int rewardId,
-        int termCourseId)
+        int termCourseId,
+        IEnumerable<int>? employeeIds = null)
     {
+        employeeIds ??= _employeesIds;
+
         return new AddCourseAssignmentDto
         {
             RewardId = rewardId,
-            TermCourseId = termCourseId,
-            NumberOfStudents = 100,
-            MainEmployeeId = _employees.First().EmployeeId,
-            EmployeesIds = _employeesIds
+            CourseId = termCourseId,
+            StudentCount = 100,
+            MainEmployeeId = employeeIds.First(),
+            Employees = employeeIds.Select(id => new AssignEmployeeDto(
+                EmployeeId: id,
+                Salary: null))
         };
     }
 

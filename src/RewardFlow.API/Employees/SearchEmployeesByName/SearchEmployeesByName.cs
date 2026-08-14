@@ -31,10 +31,10 @@ public static class SearchEmployeesByName
             var ids = employeeIds.ToList();
 
             var employees = await dbContext.Employee
-                .Where(e => employeeIds.Contains(e.EmployeeId) && e.CreatedBy == currentUserId)
+                .Where(e => employeeIds.Contains(e.Id) && e.CreatedBy == currentUserId)
                 .ToListAsync(cancellationToken);
 
-            var orderedEmployees = employees.OrderBy(e => ids.IndexOf(e.EmployeeId)).Select(e => e.ToDto());
+            var orderedEmployees = employees.OrderBy(e => ids.IndexOf(e.Id)).Select(e => e.ToDto());
 
             return Results.Ok(orderedEmployees);
         }

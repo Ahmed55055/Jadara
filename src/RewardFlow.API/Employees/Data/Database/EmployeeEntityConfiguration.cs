@@ -9,11 +9,11 @@ public class EmployeeEntityConfiguration : IEntityTypeConfiguration<Employee>
     public void Configure(EntityTypeBuilder<Employee> builder)
     {
         builder.ToTable("employees");
-        builder.HasKey(e => new {e.TenantId, e.EmployeeId});
+        builder.HasKey(e => new {e.TenantId, EmployeeId = e.Id});
         
-        builder.Property(e => e.EmployeeId).ValueGeneratedOnAdd();
+        builder.Property(e => e.Id).ValueGeneratedOnAdd();
         
-        builder.Property(e => e.EmployeeId).HasColumnName("employee_id");
+        builder.Property(e => e.Id).HasColumnName("employee_id");
         builder.Property(e => e.Name).HasColumnName("name").HasMaxLength(255)
             .HasConversion(
                 v => AesEncryptionService.EncryptString(v),

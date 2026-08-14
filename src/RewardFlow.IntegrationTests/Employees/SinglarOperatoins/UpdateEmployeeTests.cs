@@ -189,7 +189,7 @@ public class UpdateEmployeeTests(TestWebApplicationFactory factory) : BaseEmploy
 
         // Act
         var response =
-            await _userClient.Client.PatchAsJsonAsync($"/api/Employees/{employeeData.EmployeeId}", updateRequest);
+            await _userClient.Client.PatchAsJsonAsync($"/api/Employees/{employeeData.Id}", updateRequest);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -262,7 +262,7 @@ public class UpdateEmployeeTests(TestWebApplicationFactory factory) : BaseEmploy
     {
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-        var updatedEmployee = await _dbUtility.Query<Employee>().FirstOrDefaultAsync(e=>e.EmployeeId == employeeId);
+        var updatedEmployee = await _dbUtility.Query<Employee>().FirstOrDefaultAsync(e=>e.Id == employeeId);
         updatedEmployee.Should().NotBeNull();
         
         List<string> fieldsNames = new();

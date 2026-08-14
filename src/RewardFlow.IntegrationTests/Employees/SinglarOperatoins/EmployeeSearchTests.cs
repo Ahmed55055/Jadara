@@ -151,6 +151,6 @@ public class EmployeeSearchTests(TestWebApplicationFactory factory) : BaseEmploy
 
         employeesResponse.Select(e => e.Id)
             .Should()
-            .Equal(expectedEmployees.Select(e => e.EmployeeId));
+            .Equal(expectedEmployees.Select(e => e.Id));
     }
 }

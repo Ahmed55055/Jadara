@@ -61,7 +61,7 @@ public class BulkUpdateTests(TestWebApplicationFactory factory) : BaseEmployeeTe
         
         // Verify tokens were updated in the Employee Name Tokens table
         var tokensExist = await _dbUtility.Query<EmployeeNameToken>().AnyAsync(
-            t => t.EmployeeId == allEmployees[0].EmployeeId && t.UserId == _userClient.User.Id);
+            t => t.EmployeeId == allEmployees[0].Id && t.UserId == _userClient.User.Id);
         tokensExist.Should().BeTrue();
     }
 

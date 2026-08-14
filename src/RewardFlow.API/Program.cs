@@ -28,6 +28,7 @@ using RewardFlow_API.Rewards.Data;
 using RewardFlow_API.Common.Interface;
 using RewardFlow_API.Employees.Common;
 using RewardFlow_API.Rewards.Courses;
+using RewardFlow_API.Rewards.SessionsReward.Services;
 using RewardFlow_API.User.AuthService;
 using Scalar.AspNetCore;
 using UserContext = RewardFlow_API.Common.Interface.UserContext;
@@ -56,7 +57,7 @@ public sealed class Program
         builder.Services.AddScoped<IEmployeeLookupService,EmployeeLookupService>();
         builder.Services.AddScoped<ISessionRewardService,SessionRewardService>();
         builder.Services.AddScoped<ISnapshotService<Employee,EmployeeSnapshot>,EmployeeSnapshotService>();
-        builder.Services.AddScoped<ISnapshotService<TermCourse,CourseSnapshot>,SubjectSnapshotService>();
+        builder.Services.AddScoped<ISnapshotService<TermCourse,CourseSnapshot>,CourseSnapshotService>();
         builder.Services.AddScoped<ScopedUserContext>();
         builder.Services.AddScoped<IUserContext,UserContext>();
         builder.Services.AddScoped<IBulkEmployeesImporter,BulkEmployeesImportJob>();

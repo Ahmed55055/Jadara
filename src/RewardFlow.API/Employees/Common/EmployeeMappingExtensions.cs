@@ -6,7 +6,7 @@ public static class EmployeeMappingExtensions
 {
     public static EmployeeDto ToDto(this Employee e) => new()
     {
-        Id = e.EmployeeId,
+        Id = e.Id,
         Name = e.Name,
         NationalNumber = e.NationalNumber,
         AccountNumber = e.AccountNumber,

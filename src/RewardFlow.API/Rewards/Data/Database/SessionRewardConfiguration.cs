@@ -21,7 +21,7 @@ public class SessionRewardConfiguration : IEntityTypeConfiguration<SessionReward
             .HasColumnName("year")
             .HasColumnType("smallint");
         
-        builder.Property(sr => sr.semester)
+        builder.Property(sr => sr.Term)
             .HasColumnName("semester");
 
         builder.Property(sr => sr.Percentage)

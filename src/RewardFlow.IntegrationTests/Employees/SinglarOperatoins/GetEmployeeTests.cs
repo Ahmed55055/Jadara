@@ -35,13 +35,13 @@ public class GetEmployeeTests(TestWebApplicationFactory factory) : BaseEmployeeT
         await _dbUtility.InsertAsync(employeeData);
 
         // Act
-        var response = await _userClient.Client.GetAsync($"/api/Employees/{employeeData.EmployeeId}");
+        var response = await _userClient.Client.GetAsync($"/api/Employees/{employeeData.Id}");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var employee = await response.Content.ReadFromJsonAsync<EmployeeDto>();
         employee.Should().NotBeNull();
-        employee!.Id.Should().Be(employeeData.EmployeeId);
+        employee!.Id.Should().Be(employeeData.Id);
         employee.Name.Should().Be(employeeData.Name);
     }
 

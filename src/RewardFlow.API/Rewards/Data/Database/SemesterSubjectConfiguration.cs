@@ -19,11 +19,11 @@ public class SemesterSubjectConfiguration : IEntityTypeConfiguration<TermCourse>
             .HasColumnName("subject_id")
             .IsRequired();
         
-        builder.Property(ss => ss.Semester)
+        builder.Property(ss => ss.Term)
             .HasColumnName("semester_number")
             .IsRequired();
         
-        builder.Property(ss => ss.NumberOfStudents)
+        builder.Property(ss => ss.StudentCount)
             .HasColumnName("number_of_students");
         
         builder.Property(ss => ss.Price)
@@ -36,7 +36,7 @@ public class SemesterSubjectConfiguration : IEntityTypeConfiguration<TermCourse>
             .IsRequired();
 
         builder.HasOne(ss => ss.Course)
-            .WithMany(s => s.SubjectSemesters)
+            .WithMany(s => s.TermCourse)
             .HasForeignKey(ss => ss.CourseId)
             .OnDelete(DeleteBehavior.Cascade);
     }

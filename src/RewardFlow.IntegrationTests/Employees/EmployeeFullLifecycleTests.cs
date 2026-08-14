@@ -94,7 +94,7 @@ public class EmployeeFullLifecycleTests(TestWebApplicationFactory factory)
 
     private async Task GetEmployeeByNationalNumber(int employeeId)
     {
-        var employee = await _dbUtility.Query<Employee>().FirstOrDefaultAsync(e => e.EmployeeId == employeeId);
+        var employee = await _dbUtility.Query<Employee>().FirstOrDefaultAsync(e => e.Id == employeeId);
         var getByNationalResponse = await _userClient.Client.GetAsync($"/api/Employees/national/{employee.NationalNumber}");
         getByNationalResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         
@@ -105,7 +105,7 @@ public class EmployeeFullLifecycleTests(TestWebApplicationFactory factory)
 
     private async Task GetEmployeeByName(int employeeId)
     {
-        var employee = await _dbUtility.Query<Employee>().FirstOrDefaultAsync(e=>e.EmployeeId == employeeId);
+        var employee = await _dbUtility.Query<Employee>().FirstOrDefaultAsync(e=>e.Id == employeeId);
         var getByNameResponse = await _userClient.Client.GetAsync($"/api/Employees/name/{Uri.EscapeDataString(employee.Name)}");
         getByNameResponse.StatusCode.Should().Be(HttpStatusCode.OK);
     }
