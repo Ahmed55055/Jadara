@@ -46,7 +46,7 @@ public class BulkDeleteTests(TestWebApplicationFactory factory) : BaseEmployeeTe
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Accepted);
-        var result = await response.Content.ReadFromJsonAsync<BulkInsert.Response>();
+        var result = await response.Content.ReadFromJsonAsync<BulkResponse>();
         result.Should().NotBeNull();
         result!.Summary.SuccessfulRecords.Should().Be(3);
         result.Errors.Should().BeEmpty();

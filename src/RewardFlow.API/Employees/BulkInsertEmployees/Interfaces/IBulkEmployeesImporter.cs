@@ -1,4 +1,4 @@
-namespace Reward_Flow_v2.Employees.BulkInsertEmployees;
+namespace RewardFlow_API.Employees.BulkInsertEmployees.Interfaces;
 
 internal interface IBulkEmployeesImporter
 {

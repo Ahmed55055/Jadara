@@ -1,10 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using Reward_Flow_v2.Employees.BulkInsertEmployees;
 using Reward_Flow_v2.Employees.Data;
 using Reward_Flow_v2.Employees.Data.Database;
 using RewardFlow_API.Common.Interface;
+using RewardFlow_API.Employees.BulkInsertEmployees.Interfaces;
 using System.Text.Json;
 
-namespace Reward_Flow_v2.Employees.BulkInsertEmployees;
+namespace RewardFlow_API.Employees.BulkInsertEmployees.BackgroundJobs;
 
 internal class BulkEmployeesImportJob(EmployeeDbContext dbContext, IUserContext userContext) : IBulkEmployeesImporter
 {
@@ -67,7 +69,7 @@ internal class BulkEmployeesImportJob(EmployeeDbContext dbContext, IUserContext 
         {
             results.Add(employee.Id > 0
                 ? BulkImportResult.CreateSuccess(batch.Id, tracker, employee.Id, employee.Name)
-                : BulkImportResult.CreateFailure(batch.Id, tracker, BulkInsert.ErrorTypes.Unexpected,
+                : BulkImportResult.CreateFailure(batch.Id, tracker, ErrorTypes.Unexpected,
                     "Unexpected error occurred."));
         }
     }
@@ -86,12 +88,12 @@ internal class BulkEmployeesImportJob(EmployeeDbContext dbContext, IUserContext 
             var entity = PrepareEmployee(rawEntity, currentUserId);
 
             // If creation failed, the name was empty or too short after regex cleaning
-            if (entity == null)
+            if (entity is null || string.IsNullOrEmpty(entity.Name))
             {
                 trackingResults.Add(BulkImportResult.CreateFailure(
                     batchId,
                     trackerId,
-                    BulkInsert.ErrorTypes.InvalidName,
+                    ErrorTypes.InvalidName,
                     "Name is invalid or too short after cleanup."
                 ));
                 continue;
@@ -105,7 +107,7 @@ internal class BulkEmployeesImportJob(EmployeeDbContext dbContext, IUserContext 
                     trackingResults.Add(BulkImportResult.CreateFailure(
                         batchId,
                         trackerId,
-                        BulkInsert.ErrorTypes.DuplicateNationalNumber,
+                        ErrorTypes.DuplicateNationalNumber,
                         "Duplicate national number detected within the request."
                     ));
                     continue;
@@ -122,7 +124,7 @@ internal class BulkEmployeesImportJob(EmployeeDbContext dbContext, IUserContext 
                     trackingResults.Add(BulkImportResult.CreateFailure(
                         batchId,
                         trackerId,
-                        BulkInsert.ErrorTypes.DuplicateAccountNumber,
+                        ErrorTypes.DuplicateAccountNumber,
                         "Duplicate account number detected within the request."
                     ));
                     continue;
@@ -216,7 +218,7 @@ internal class BulkEmployeesImportJob(EmployeeDbContext dbContext, IUserContext 
                 ? "An employee with the same national number already exists in the database."
                 : "An employee with the same account number already exists in the database.";
 
-            results.Add(BulkImportResult.CreateFailure(batch.Id, trackerId, BulkInsert.ErrorTypes.DatabaseConflict,
+            results.Add(BulkImportResult.CreateFailure(batch.Id, trackerId, ErrorTypes.DatabaseConflict,
                 message));
         }
     }

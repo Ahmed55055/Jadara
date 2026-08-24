@@ -26,6 +26,8 @@ using Reward_Flow_v2.User.Data.Database;
 using RewardFlow_API.Rewards.Common;
 using RewardFlow_API.Rewards.Data;
 using RewardFlow_API.Common.Interface;
+using RewardFlow_API.Employees.BulkInsertEmployees.BackgroundJobs;
+using RewardFlow_API.Employees.BulkInsertEmployees.Interfaces;
 using RewardFlow_API.Employees.Common;
 using RewardFlow_API.Rewards.Courses;
 using RewardFlow_API.Rewards.SessionsReward.Services;

@@ -1,4 +1,7 @@
+using Reward_Flow_v2.Employees.BatchGet;
 using Reward_Flow_v2.Employees.BulkInsertEmployees;
+using Reward_Flow_v2.Employees.BulkInsertEmployees.CheckEmployeesConflicts;
+using Reward_Flow_v2.Employees.BulkInsertEmployees.CkeckBatchResult;
 using Reward_Flow_v2.Employees.CreateEmployee;
 using Reward_Flow_v2.Employees.DeleteEmployee;
 using Reward_Flow_v2.Employees.GetAllEmployees;
@@ -7,6 +10,7 @@ using Reward_Flow_v2.Employees.GetEmployeeByName;
 using Reward_Flow_v2.Employees.GetEmployeeByNationalNumber;
 using Reward_Flow_v2.Employees.SearchEmployeesByName;
 using Reward_Flow_v2.Employees.UpdateEmployee;
+using RewardFlow_API.Employees.BulkInsertEmployees.Insert;
 
 namespace Reward_Flow_v2.Employees;
 
@@ -22,7 +26,9 @@ public static class EmployeeEndpoints
         app.MapSearchEmployeesByName();
         app.MapUpdateEmployee();
         app.MapDeleteEmployee();
-        app.MapBulkInsertEmployee();
         app.MapBulkInsertEmployeeV2();
+        app.MapBatchInsertEmployeeResult();
+        app.MapEmployeeConflictCheck();
+        app.MapGetBatchEmployees();
     }
 }

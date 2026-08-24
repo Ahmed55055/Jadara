@@ -6,9 +6,9 @@ using RewardFlow.TestUtilities.RequestExtentionHandler.Employees;
 namespace RewardFlow_UnitTest.Employees.RequestValidators;
 
 public class BulkInsertEmployeeValidatorTest: 
-    RequestValidatorTestBase<Employee,BulkInsertEmployeeRequestValidator,BulkInsert.Request, IEnumerable<Employee>>
+    RequestValidatorTestBase<Employee,BulkInsertEmployeeRequestValidator,BulkRequest, IEnumerable<Employee>>
 {
-    protected override BulkInsert.Request MapToRequest(IEnumerable<Employee> entity) =>
+    protected override BulkRequest MapToRequest(IEnumerable<Employee> entity) =>
         entity.ToRequest().BulkInsert();
 
     // DEV NOTE:
