@@ -28,7 +28,7 @@ public class BulkImportResult
         };
     }
 
-    public static BulkImportResult CreateFailure(Guid batchId, Guid tracker, BulkInsert.ErrorTypes errorType, string message)
+    public static BulkImportResult CreateFailure(Guid batchId, Guid tracker, ErrorTypes errorType, string message)
     {
         return new BulkImportResult
         {

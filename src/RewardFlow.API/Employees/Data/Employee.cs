@@ -19,7 +19,7 @@ public class Employee : ITenantEntity
         set
         {
             field = value;
-            NationalNumberHash = value != null ? XxHasher.Hash(value) : null;
+            NationalNumberHash = HashField(value);
         }
     }
 
@@ -29,7 +29,7 @@ public class Employee : ITenantEntity
         set
         {
             field = value;
-            AccountNumberHash = value != null ? XxHasher.Hash(value) : null;
+            AccountNumberHash = HashField(value);
         }
     }
 
@@ -112,5 +112,10 @@ public class Employee : ITenantEntity
         string cleanedNumber = Regex.Replace(nationalNumber, @"[^0-9]", "");
 
         NationalNumber = string.IsNullOrEmpty(cleanedNumber) ? null : cleanedNumber;
+    }
+    
+    public static string? HashField(string? value)
+    {
+        return value != null ? XxHasher.Hash(value) : null;
     }
 }

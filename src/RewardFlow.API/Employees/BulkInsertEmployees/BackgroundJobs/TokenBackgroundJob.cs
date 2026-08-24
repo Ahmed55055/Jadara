@@ -1,13 +1,12 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Reward_Flow_v2.Employees.Data;
 using Reward_Flow_v2.Employees.Data.Database;
 using RewardFlow_API.Common.Interface;
+using RewardFlow_API.Employees.BulkInsertEmployees.Interfaces;
 using RewardFlow_API.Employees.Common;
-using System.Data.Common;
 using System.Threading.Channels;
 
-namespace Reward_Flow_v2.Employees.BulkInsertEmployees;
+namespace RewardFlow_API.Employees.BulkInsertEmployees.BackgroundJobs;
 
 internal class TokenBackgroundJob(
     EmployeeDbContext dbContext,

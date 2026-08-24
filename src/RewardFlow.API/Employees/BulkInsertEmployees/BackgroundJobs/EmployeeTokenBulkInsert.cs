@@ -1,11 +1,10 @@
 using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using Reward_Flow_v2.Common;
 using Reward_Flow_v2.Employees.Data;
-using Reward_Flow_v2.Employees.Data.Database;
+using RewardFlow_API.Employees.BulkInsertEmployees.Interfaces;
 using System.Data;
 
-namespace Reward_Flow_v2.Employees.BulkInsertEmployees;
+namespace RewardFlow_API.Employees.BulkInsertEmployees.BackgroundJobs;
 
 internal class EmployeeTokenBulkInsert(IConfiguration configuration, ILogger<EmployeeTokenBulkInsert> logger) : IBulkInserter<EmployeeNameToken>
 {

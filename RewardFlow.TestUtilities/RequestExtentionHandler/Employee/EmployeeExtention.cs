@@ -25,11 +25,11 @@ public struct EmployeeBulkRequest
         Employees = employees;
     }
 
-    public BulkInsert.Request BulkInsert()
+    public BulkRequest BulkInsert()
     {
         var emps = Employees
             .Select(e => new BatchEmployee(Guid.NewGuid(), e.Name, e.NationalNumber, e.AccountNumber, e.Salary));
         
-        return new BulkInsert.Request(emps.ToList());
+        return new BulkRequest(emps.ToList());
     }
 }

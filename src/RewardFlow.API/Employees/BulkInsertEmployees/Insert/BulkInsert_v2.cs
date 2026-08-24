@@ -1,28 +1,28 @@
 using Hangfire;
-using Microsoft.AspNetCore.Http;
-using Reward_Flow_v2.Common;
 using Reward_Flow_v2.Common.EndpointValidation;
+using Reward_Flow_v2.Employees;
+using Reward_Flow_v2.Employees.BulkInsertEmployees;
 using Reward_Flow_v2.Employees.Data;
 using Reward_Flow_v2.Employees.Data.Database;
 using RewardFlow_API.Common.Interface;
+using RewardFlow_API.Employees.BulkInsertEmployees.Interfaces;
 using System.Text.Json;
 
-namespace Reward_Flow_v2.Employees.BulkInsertEmployees;
+namespace RewardFlow_API.Employees.BulkInsertEmployees.Insert;
 
 public static class BulkInsert_v2
 {
     public static void MapBulkInsertEmployeeV2(this IEndpointRouteBuilder app)
     {
-        app.MapPost(EmployeeApiPath.BulkInsertV2, HandlerAsync)
+        app.MapPost(EmployeeApiPath.BulkInsert, HandlerAsync)
             .RequireAuthorization()
             .Produces<BulkImportBatch>(StatusCodes.Status202Accepted)
             .Produces(StatusCodes.Status400BadRequest)
             .WithTags(EmployeeApiPath.Tag)
-            .WithMetadata(new { Version = "2.0" })
             .PreloadUser();
     }
 
-    private static async Task<IResult> HandlerAsync(BulkInsert.Request request, IUserContext userContext,
+    private static async Task<IResult> HandlerAsync(BulkRequest request, IUserContext userContext,
         EmployeeDbContext dbContext, CancellationToken cancellationToken)
     {
         var batch = new BulkImportBatch

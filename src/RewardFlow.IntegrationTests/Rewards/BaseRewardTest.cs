@@ -37,7 +37,7 @@ public class BaseRewardTest: IClassFixture<TestWebApplicationFactory>
             .WithValue(EmployeeFields.Salary)
             .Generate(count);
         
-        BulkInsert.Request bulkRequest = BulkInsertEmployeeRequest(employees);
+        BulkRequest bulkRequest = BulkInsertEmployeeRequest(employees);
         
         // Act
         var response = await userClient.Client.PostAsJsonAsync(EmployeeApiPath.BulkInsertV2, bulkRequest);
@@ -53,9 +53,9 @@ public class BaseRewardTest: IClassFixture<TestWebApplicationFactory>
         return response;
     }
     
-    protected BulkInsert.Request BulkInsertEmployeeRequest(IEnumerable<Employee> employees)
+    protected BulkRequest BulkInsertEmployeeRequest(IEnumerable<Employee> employees)
     {
-        return new BulkInsert.Request(
+        return new BulkRequest(
             employees.Select(e => new BatchEmployee(
                     Tracker: Guid.NewGuid(),
                     Name: e.Name,
